@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# FILES AND FOLDERS ADDED BY COLLABORATORS OF THIS GIT REPOSITORY
+.vscode/
+db.sqlite3
+venv/
