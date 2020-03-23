@@ -351,5 +351,5 @@ MigrationBackup/
 
 # FILES AND FOLDERS ADDED BY COLLABORATORS OF THIS GIT REPOSITORY
 .vscode/
-db.sqlite3
+db*
 venv/
