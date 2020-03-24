@@ -1,5 +1,5 @@
 asgiref==3.2.5
-Django==3.0.4
+Django==2.2.11
 numpy==1.18.2
 opencv-python==4.2.0.32
 pytz==2019.3
