@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
+from django.core.mail import send_mail
+
 from .managers import UserManager
 
 class User (AbstractBaseUser, PermissionsMixin):
@@ -46,15 +48,21 @@ class User (AbstractBaseUser, PermissionsMixin):
             'Unselect this instead of deleting accounts.'
         ),
     )
-    
-    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
-    is_admin = models.BooleanField(
-        _('admin status'),
-        default = False,
+    activation_key = models.CharField(
+        _('activation key'),
+        max_length = 10,
         help_text = _(
-            'Designates whether this user has admin privileges'
-        )
+            'This saves the activation key sent at the creation of the account.'
+            'When logged in, if this is True, the user is asked to activate the account.'
+        ),
+        blank = True,
+    )
+    
+    key_expiry = models.DateTimeField(
+        _('key expiry'),
+        null = True,
+        default = None,
     )
 
     is_staff = models.BooleanField(
@@ -73,3 +81,14 @@ class User (AbstractBaseUser, PermissionsMixin):
 
     def __str__ (self):
         return self.username
+
+    def activate_user(self):
+        self.activation_key = ''
+        self.key_expiry = None
+        self.save()
+
+    def is_account_activated(self):
+        return True if self.activation_key == '' else False
+
+    def email_user(self, subject, message, from_email = None, **kwargs):
+        send_mail(subject, message, from_email, [self.email,], **kwargs)

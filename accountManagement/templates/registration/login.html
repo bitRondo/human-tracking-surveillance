@@ -9,6 +9,7 @@
     <h1>Login</h1>
     {% if form.errors %}
     <p>There are errors!</p>
+    {{ form.errors }}
     {% endif %}
 
     <form method= "POST" action="{% url 'login' %}">
