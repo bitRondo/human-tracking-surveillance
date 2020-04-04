@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Records</title>
+</head>
+
+<body>
+    <h1>Records within a range of dates</h1>
+
+    <form action="{% url 'daily_records' %}" method="POST">
+        {% csrf_token %}
+
+        <label for="id_start_date">Start Date: </label> {{ form.start_date }}
+        <label for="id_start_date">End Date: </label> {{ form.end_date }}
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <h2>Results:</h2>
+    {% if all_results %}
+        <table>
+            <th align="center">Date</th>
+            <th align="center">Total Count</th>
+            <th align="center">Peak hour</th>
+
+            {% for each in all_results %}
+                <tr {% if each in peak_results %} style="background-color: palevioletred;" {% endif %}>
+                    <td align="center">{{ each.record_date|date:"Y-m-d" }}</td>
+                    <td align="center">{{ each.total_count }}</td>
+                    <td align="center">{{ each.peak_hour_start|date:"H:i" }} to {{ each.peak_hour_end|date:"H:i" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h3 style="color: red;">Peak day{% if peak_results|length > 1 %}s{% endif %}: </h3>
+        {% for each in peak_results %}
+            <p>{{ each.record_date|date:"Y-m-d"}} (Total Count = {{ each.total_count }})</p>
+        {% endfor %}
+    {% else %}
+    <p>Sorry, No Results </p>
+    {% endif %}
+</body>
+
+</html>
