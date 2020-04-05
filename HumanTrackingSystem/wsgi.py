@@ -11,6 +11,9 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from videoAnalysis.videoAnalysis import runThreads
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HumanTrackingSystem.settings')
 
 application = get_wsgi_application()
+runThreads()
