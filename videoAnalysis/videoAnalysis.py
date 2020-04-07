@@ -48,12 +48,13 @@ cthread = Recorder(2, "Recorder")
 
 def record():
     now = timezone.now()
-    rec = TimelyRecord(
-        record_date = now.date(), 
-        record_time = now.time().replace(microsecond = 0), 
-        record_count = counter,
-    )
-    rec.save()
+    # # Uncomment following lines 52-57 to actually save data into database
+    # rec = TimelyRecord(
+    #     record_date = now.date(), 
+    #     record_time = now.time().replace(microsecond = 0), 
+    #     record_count = counter,
+    # )
+    # rec.save()
     print("Counter = %d"%counter, now.strftime("%H:%M:%S"))
 
 def schedule_recording():

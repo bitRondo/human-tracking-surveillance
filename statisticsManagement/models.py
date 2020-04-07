@@ -16,6 +16,10 @@ class TimelyRecord(models.Model):
         _('Count of people'),
     )
 
+    @classmethod
+    def getRecordsOnDate(cls, date):
+        return cls.objects.filter(record_date__exact = date)
+
 class DailyRecord(models.Model):
 
     record_date = models.DateField(

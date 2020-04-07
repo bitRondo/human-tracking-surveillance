@@ -17,3 +17,14 @@ class DateRangeSearchForm(forms.Form):
         widget = DateInput,
         initial = (timezone.now() - timedelta(days = 1)).date(),
     )
+
+    single_date = forms.DateField(
+        widget = DateInput,
+        initial = timezone.now().today().date(),
+    )
+
+    auto_adjust = forms.BooleanField(
+        required = False,
+        widget = forms.CheckboxInput,
+        initial = True,
+    )
