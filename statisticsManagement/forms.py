@@ -8,19 +8,22 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 class DateRangeSearchForm(forms.Form):
+    maxEndDate = (timezone.now().today() - timedelta(days = 1)).date()
+    maxStartDate = (timezone.now().today() - timedelta(days = 2)).date()
     start_date = forms.DateField(
-        widget = DateInput,
-        initial = (timezone.now() - timedelta(days = 14)).date(),
+        initial = (timezone.now().today() - timedelta(days = 15)).date(),
+        widget = DateInput(attrs = {"max" : maxStartDate.isoformat}),
     )
 
     end_date = forms.DateField(
-        widget = DateInput,
-        initial = (timezone.now() - timedelta(days = 1)).date(),
+        initial = maxEndDate,
+        widget = DateInput(attrs = {"max" : maxEndDate.isoformat}),
     )
 
+    today = timezone.now().today().date()
     single_date = forms.DateField(
-        widget = DateInput,
-        initial = timezone.now().today().date(),
+        widget = DateInput(attrs = {"max" : today.isoformat}),
+        initial = today,
     )
 
     auto_adjust = forms.BooleanField(

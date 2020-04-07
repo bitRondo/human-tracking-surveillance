@@ -58,6 +58,9 @@
                         {% for each in peak_results %}
                         <p>{{ each.record_date|date:"Y-m-d"}} (Total Count = {{ each.total_count }})</p>
                         {% endfor %}
+
+                        {% elif invalid_date_range %}
+                        <p style="color: red;">Invalid Date Range!</p>
                         {% else %}
                         <p>Sorry, No Results </p>
                         {% endif %}

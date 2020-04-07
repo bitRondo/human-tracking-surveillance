@@ -40,10 +40,12 @@ class DailyRecord(models.Model):
 
     @classmethod
     def fetchWithinRange(cls, start_date, end_date):
-        return cls.objects.filter(record_date__range = (start_date, end_date))
+        if start_date < end_date:
+            return cls.objects.filter(record_date__range = (start_date, end_date))
 
     @classmethod
     def findPeakWithinRange(cls, start_date, end_date):
-        result = cls.objects.filter(record_date__range = (start_date, end_date)).aggregate(models.Max('total_count'))
-        peakValue = result['total_count__max']
-        return cls.objects.filter(total_count = peakValue)
+        if start_date < end_date:
+            result = cls.objects.filter(record_date__range = (start_date, end_date))
+            peakValue = result.aggregate(models.Max('total_count'))['total_count__max']
+            return result.filter(total_count = peakValue)

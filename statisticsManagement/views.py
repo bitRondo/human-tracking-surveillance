@@ -66,6 +66,7 @@ def viewStatistics(request):
         'single_date_timely_results' : single_date_timely_results,
         'single_date_daily_result' : single_date_daily_result,
         'single_date_peak_times' : single_date_peak_times,
+        'invalid_date_range': start_date >= end_date,
     }
     return render(request, 'statisticsManagement/viewDailyRecords.html', content)
 
