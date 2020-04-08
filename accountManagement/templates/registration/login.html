@@ -8,8 +8,7 @@
 <body>
     <h1>Login</h1>
     {% if form.errors %}
-    <p>There are errors!</p>
-    {{ form.errors }}
+    <p style="color: red;">Please enter correct credentials!</p>
     {% endif %}
 
     <form method= "POST" action="{% url 'login' %}">

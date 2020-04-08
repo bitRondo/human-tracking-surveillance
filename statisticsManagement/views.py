@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
 
@@ -9,6 +10,7 @@ from .forms import DateRangeSearchForm
 
 from .models import DailyRecord, TimelyRecord
 
+@login_required
 def viewStatistics(request):
     timezone.activate('Asia/Colombo')
 
