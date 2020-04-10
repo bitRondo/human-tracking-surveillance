@@ -12,7 +12,13 @@
         {% csrf_token %}
 
         <label for="id_change_mode">Change Mode to </label>
-        <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}>{{ validMode }}</button>
+        <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}>
+            {{ validMode }}</button>
+    
+        {{ form.business_start }}
+        <button type="submit" id="id_auto_switch" name="auto_switch">
+            Auto-Switching</button>
+
     </form>
 </body>
 </html>

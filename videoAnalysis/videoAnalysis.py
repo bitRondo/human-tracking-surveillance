@@ -7,9 +7,13 @@ from django.utils import timezone
 from statisticsManagement.models import TimelyRecord
 
 counter = 0
-modes = {0 : 'Started', 1 : 'Business', 2 : 'Security', 3 : 'Auto-Switching', 4 : 'Terminated'}
+modes = {0 : 'Idle', 1 : 'Business', 2 : 'Security', 3 : 'Terminated'}
 mode = 0
+autoSwitch = False
 activeTimers = []
+
+autoSwitchingScheduler = schedule.Scheduler()
+reportingScheduler = schedule.Scheduler()
 
 
 def setMode(n = 1):
@@ -23,10 +27,14 @@ def setMode(n = 1):
         mode = 4
     if mode == 1: startTimer()
     else : endTimers()
-    print("Mode set to %d"%mode)
+    print("Mode set to %d at %s"%(mode, timezone.localtime().strftime("%Y-%m-%d %H:%M")))
 
 def getMode():
     return mode, modes.get(mode)
+
+def setAutoSwitch(condition = True):
+    global autoSwitch
+    autoSwitch = condition
 
 class Analyzer(threading.Thread):
     def __init__(self):
@@ -43,7 +51,7 @@ class Analyzer(threading.Thread):
             except:
                 if key != 'q': print("Please give a value")
             time.sleep(1)
-        mode = 4
+        mode = 3
         endTimers()
         print("Exitting Analyzer")
 
@@ -52,11 +60,13 @@ class Reporter(threading.Thread):
         threading.Thread.__init__(self, name = "Reporter")
 
     def run(self):
-        global counter, mode
+        global counter, mode, autoSwitch
         print("Starting Reporter")
-        while (mode != 4):
+        while (mode != 3):
+            if autoSwitch:
+                autoSwitchingScheduler.run_pending()
             if (mode == 1):
-                schedule.run_pending()
+                reportingScheduler.run_pending()
             elif (mode == 2):
                 if counter:
                     print("Alert!")
@@ -77,7 +87,7 @@ def record():
 def schedule_recording():
     record()
     print("Scheduled at: " + timezone.now().strftime("%H:%M:%S"))
-    schedule.every(1).minutes.do(record)
+    reportingScheduler.every(30).seconds.do(record)
 
 def startTimer():
     endTimers()
@@ -102,11 +112,19 @@ def endTimers():
     for timer in activeTimers:
         timer.cancel()
 
+def switch_mode(business_start, security_start, idle_start):
+    autoSwitchingScheduler.every().day.at(business_start).do(setMode, 1)
+    autoSwitchingScheduler.every().day.at(security_start).do(setMode, 2)
+    autoSwitchingScheduler.every().day.at(idle_start).do(setMode, 0)
+
 def runMain():
     setMode(1)
     Reporter().start()
     Analyzer().start()
 
+
+# The following 2 classes and runThreads method are not used.
+'''
 class Business(threading.Thread):
     def __init__(self, threadID, name):
         threading.Thread.__init__(self)
@@ -148,3 +166,12 @@ def runThreads():
     
     pthread = Analyzer(0, "Video analyzer")
     pthread.start()
+
+'''
+
+'''
+import videoAnalysis.videoAnalysis as v
+v.switch_mode()
+v.setAutoSwitch()
+v.runMain()
+'''
