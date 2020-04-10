@@ -73,6 +73,11 @@ class User (AbstractBaseUser, PermissionsMixin):
         )
     )
 
+    receive_reports = models.BooleanField(
+        _('reception of Monthly Reports'),
+        default = True,
+    )
+
     objects = UserManager()
 
     EMAIL_FIELD = 'email'
