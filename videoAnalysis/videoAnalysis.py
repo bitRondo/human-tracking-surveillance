@@ -7,44 +7,61 @@ from django.utils import timezone
 from statisticsManagement.models import TimelyRecord
 
 counter = 0
-mode = True
+modes = {0 : 'Started', 1 : 'Business', 2 : 'Security', 3 : 'Auto-Switching', 4 : 'Terminated'}
+mode = 0
+activeTimers = []
+
+
+def setMode(n = 1):
+    global mode, counter
+    counter = 0
+
+    if n in modes.keys():
+        mode = n
+    else: 
+        print("Invalid mode!")
+        mode = 4
+    if mode == 1: startTimer()
+    else : endTimers()
+    print("Mode set to %d"%mode)
+
+def getMode():
+    return mode, modes.get(mode)
 
 class Analyzer(threading.Thread):
-    def __init__(self, threadID, name):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
+    def __init__(self):
+        threading.Thread.__init__(self,  name = "Analyzer")
 
     def run(self):
-        print("Starting " + self.name)
+        print("Starting Analyzer")
         global counter, mode
-        key = input("Press S to start, Q to stop.\n")
+        key = 's'
         while(key != 'q'):
+            key = input("Increment: ")
             try:
-                key = int(input("Increment: "))
-                counter += key
+                counter += int(key)
             except:
-                print("Please give a value")
+                if key != 'q': print("Please give a value")
             time.sleep(1)
-        mode = False
-        print("Exiting " + self.name)
+        mode = 4
+        endTimers()
+        print("Exitting Analyzer")
 
-class Recorder(threading.Thread):
-    def __init__(self, threadID, name):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
+class Reporter(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self, name = "Reporter")
 
     def run(self):
-        print("Starting " + self.name)
         global counter, mode
-        while(mode):
-            schedule.run_pending()
+        print("Starting Reporter")
+        while (mode != 4):
+            if (mode == 1):
+                schedule.run_pending()
+            elif (mode == 2):
+                if counter:
+                    print("Alert!")
             time.sleep(1)
-        print("Exiting " + self.name)
-
-pthread = Analyzer(1, "Video analyzer")
-cthread = Recorder(2, "Recorder")
+        print("Exitting Reporter")
 
 def record():
     now = timezone.now()
@@ -60,9 +77,10 @@ def record():
 def schedule_recording():
     record()
     print("Scheduled at: " + timezone.now().strftime("%H:%M:%S"))
-    schedule.every(10).minutes.do(record)
+    schedule.every(1).minutes.do(record)
 
-def runThreads():
+def startTimer():
+    endTimers()
     # Calculating the delay in which Scheduling should start at a 'ROUND' time
     now = timezone.now()
     if now.minute < 30:     # e.g. if now is 11:16, scheduling should start at 11:30
@@ -75,9 +93,58 @@ def runThreads():
 
     # Delaying the Scheduling until the next 'ROUND' time
     nownow = timezone.now() # the exact moment after the above calculations
-    threading.Timer((exec_time - nownow).total_seconds(), schedule_recording).start()
+    timer = threading.Timer((exec_time - nownow).total_seconds(), schedule_recording)
+    timer.start()
+    print("Scheduling will start at: " + exec_time.strftime("%H:%M:%S"))
+    activeTimers.append(timer)
 
-    print("Timer started at: " + nownow.strftime("%H:%M:%S"))
+def endTimers():
+    for timer in activeTimers:
+        timer.cancel()
+
+def runMain():
+    setMode(1)
+    Reporter().start()
+    Analyzer().start()
+
+class Business(threading.Thread):
+    def __init__(self, threadID, name):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+
+    def run(self):
+        print("Starting " + self.name)
+
+        global counter, mode
+        while (mode != 4):
+            if (mode == 1):
+                schedule.run_pending()
+            time.sleep(1)
+        print("Exiting " + self.name)
+
+class Security(threading.Thread):
+    def __init__(self, threadID, name):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+
+    def run(self):
+        print("Starting " + self.name)
+        global counter, mode
+        while(mode != 4):
+            if (mode == 2):
+                if counter:
+                    print("Alert!")
+            time.sleep(1)
+        print("Exiting " + self.name)    
+
+def runThreads():
+    bthread = Business(1, "Business")
+    bthread.start()
+
+    sthread = Security(2, "Security")
+    sthread.start()
     
+    pthread = Analyzer(0, "Video analyzer")
     pthread.start()
-    cthread.start()

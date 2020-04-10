@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'accountManagement.apps.AccountmanagementConfig',
     'statisticsManagement.apps.StatisticsmanagementConfig',
+    'systemManagement.apps.SystemmanagementConfig'
 ]
 
 MIDDLEWARE = [

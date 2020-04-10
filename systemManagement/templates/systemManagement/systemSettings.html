@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=`">
+    <title>System Settings</title>
+</head>
+<body>
+    <p>Current mode: {{ mode }}</p>
+
+    <form action="{% url 'system_settings' %}" method="POST">
+        {% csrf_token %}
+
+        <label for="id_change_mode">Change Mode to </label>
+        <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}>{{ validMode }}</button>
+    </form>
+</body>
+</html>
