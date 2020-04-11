@@ -23,15 +23,15 @@ reportingScheduler = schedule.Scheduler()
 def setMode(n = 1):
     global mode, counter
     counter = 0
-
-    if n in modes.keys():
-        mode = n
-    else: 
-        print("Invalid mode!")
-        mode = 4
-    if mode == 1: start_timer()
-    else : end_timers()
-    print("Mode set to %d at %s"%(mode, timezone.localtime().strftime("%Y-%m-%d %H:%M")))
+    if n != mode:
+        if n in modes.keys():
+            mode = n
+        else: 
+            print("Invalid mode!")
+            mode = 4
+        if mode == 1: start_timer()
+        else : end_timers()
+        print("Mode set to %s at %s"%(modes.get(mode), timezone.localtime().strftime("%Y-%m-%d %H:%M")))
 
 def getMode():
     return modes.get(mode)
@@ -42,12 +42,13 @@ def getNextValidMode():
     else: return None
 
 def toggleAutoSwitch(condition, times = None):
-    global autoSwitch
+    global autoSwitch, autoSwitchingTimes
     autoSwitch = condition
     if autoSwitch:
-        set_auto_switching_times(times)
-        schedule_auto_switch_mode()
-        print("Auto-Switching ON")
+        if times != autoSwitchingTimes:
+            set_auto_switching_times(times)
+            schedule_auto_switch_mode()
+            print("Auto-Switching ON")
 
 def isAutoSwitching():
     return autoSwitch
@@ -137,12 +138,18 @@ def end_timers():
 
 def schedule_auto_switch_mode():
     global autoSwitchingTimes
-    autoSwitchingScheduler.every().day.at(autoSwitchingTimes['b_start']).do(setMode, 1)
-    autoSwitchingScheduler.every().day.at(autoSwitchingTimes['s_start']).do(setMode, 2)
-    if autoSwitchingTimes['b_end'] != autoSwitchingTimes['s_start']:
-        autoSwitchingScheduler.every().day.at(autoSwitchingTimes['b_end']).do(setMode, 0)
-    if autoSwitchingTimes['s_end'] != autoSwitchingTimes['b_start']:
-        autoSwitchingScheduler.every().day.at(autoSwitchingTimes['s_end']).do(setMode, 0)
+    if autoSwitchingTimes['b_start']:
+        autoSwitchingScheduler.every().day.at(autoSwitchingTimes['b_start']).do(setMode, 1)
+        print("Scheduled to set Mode to Business at %s" % autoSwitchingTimes['b_start'])
+        if autoSwitchingTimes['b_end'] != autoSwitchingTimes['s_start']:
+            autoSwitchingScheduler.every().day.at(autoSwitchingTimes['b_end']).do(setMode, 0)
+            print("Scheduled to go Idle at %s" % autoSwitchingTimes['b_end'])
+    if autoSwitchingTimes['s_start']:
+        autoSwitchingScheduler.every().day.at(autoSwitchingTimes['s_start']).do(setMode, 2)
+        print("Scheduled to set Mode to Security at %s" % autoSwitchingTimes['s_start'])
+        if autoSwitchingTimes['s_end'] != autoSwitchingTimes['b_start']:
+            autoSwitchingScheduler.every().day.at(autoSwitchingTimes['s_end']).do(setMode, 0)
+            print("Scheduled to go Idle at %s" % autoSwitchingTimes['s_end'])
 
 def runMain():
     setMode(1)

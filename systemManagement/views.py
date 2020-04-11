@@ -30,7 +30,6 @@ def system(request):
 
     if request.method == 'POST':
         form = SystemSettingsForm(request.POST)
-
         if 'change_mode' in request.POST.keys():
             program.toggleAutoSwitch(False)
             program.setMode(modeDict.get(request.POST['change_mode']))

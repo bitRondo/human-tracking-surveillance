@@ -10,7 +10,7 @@
 <body>
     <p>Current mode: {{ mode }}</p>
 
-    <form action="{% url 'system_settings' %}" method="POST" id="system_settings">
+    <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
         {% csrf_token %}
         <div>
             <h3>Automatic Switching</h3>
@@ -21,21 +21,31 @@
             <h4>Business Mode</h4>
             {{ form.business_start.label }}{{ form.business_start }}
             {{ form.business_end.label }}{{ form.business_end }}
+            <span id="business_error" style="color: red;"></span>
+
             <h4>Security Mode</h4>
             {{ form.security_start.label }}{{ form.security_start }}
             {{ form.security_end.label }}{{ form.security_end }}
-            
-            <p><input type="submit" id="id_auto_switch" name="auto_switch" value="Save Changes"></p>
+            <span id="security_error" style="color: red;"></span>
+            <br>
+            <br>
+            <span id="errors" style="color: red;"></span>
+
+            <p><button type="submit" id="id_auto_switch" name="auto_switch" value="Save Changes">
+                    Save Changes</button>
+                <input type="reset" value="Cancel" onclick="location.reload(true)">
+            </p>
         </div>
         <div>
             <h3>Manual Switching</h3>
             <label for="id_change_mode">Change Mode to </label>
-            <input type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}>
+            <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}>
+                {{ validMode }}</button>
         </div>
 
     </form>
 
-    <script>
+    <script type="text/javascript">
         b_start = document.getElementById('id_business_start');
         s_start = document.getElementById('id_security_start');
         b_end = document.getElementById('id_business_end');
@@ -53,9 +63,85 @@
         }
         toggleAutoSwitching();
 
-        function validate(){
+        function validate() {
+            if (enableSwitch.checked) {
+                err = document.getElementById('errors');
+                err.innerHTML = null;
+                if (b_start.value + b_end.value + s_start.value + s_end.value == '') {
+                    err.innerHTML = "Please give times!";
+                    return false;
+                } 
+                if (!checkIndividualTimeRanges()) return false;
 
+                if ((b_start.value != '') && (s_start.value != '')) {
+
+                    if (b_start.value == s_start.value) {
+                        err.innerHTML = "Time Ranges overlap1!";
+                        return false;
+                    } else {
+                        if (b_start.value < b_end.value) {
+                            if (s_start.value < s_end.value){
+                                if (!((s_end.value <= b_start.value) || (b_end.value <= s_start.value))){
+                                    err.innerHTML = "Time Ranges overlap2!";
+                                    return false;
+                                }
+                            } else {
+                                if ((s_start.value < b_end.value) || (b_start.value < s_end.value)) {
+                                    err.innerHTML = "Time Ranges overlap3!";
+                                    return false;
+                                }
+                            }
+                        } else {
+                            if(!((b_end.value <= s_start.value) && (s_start.value < s_end.value) &&
+                                (s_end.value <= b_start.value))) {
+                                    err.innerHTML = "Time Ranges overlap4!";
+                                    return false;
+                                }
+                        }
+                    }
+
+                }
+                if (!b_start.value) {
+                    if (!confirm("Confirm Not operating in Business mode?")) return false;
+                } else if (!s_start.value) {
+                    if (!confirm("Confirm Not operating in Security mode?")) return false;
+                }
+            }
+            return true;
         }
+
+        function checkIndividualTimeRanges() {
+            var valid = true;
+            b_err = document.getElementById('business_error');
+            s_err = document.getElementById('security_error');
+            b_err.innerHTML = s_err.innerHTML = null;
+            b_concat = b_start.value + b_end.value;
+            s_concat = s_start.value + s_end.value;
+            if (b_concat != '') {
+                if (b_start.value == b_end.value) {
+                    b_err.innerHTML = "Invalid Time Range!";
+                    valid = false;
+                } else {
+                    if ((b_concat == b_start.value) || (b_concat == b_end.value)) {
+                        b_err.innerHTML = "Incomplete Time Range!";
+                        valid = false;
+                    }
+                }
+            }
+            if (s_concat != '') {
+                if (s_start.value == s_end.value) {
+                    s_err.innerHTML = "Invalid Time Range!";
+                    valid = false;
+                } else {
+                    if ((s_concat == s_start.value) || (s_concat == s_end.value)) {
+                        s_err.innerHTML = "Incomplete Time Range!";
+                        valid = false;
+                    }
+                }
+            }
+            return valid;
+        }
+
     </script>
 </body>
 

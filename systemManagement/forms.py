@@ -17,19 +17,23 @@ class SystemSettingsForm(forms.Form):
     business_start = forms.TimeField(
         widget = TimeInput,
         label = 'Start: ',
+        required = False,
     )
 
     business_end = forms.TimeField(
         widget = TimeInput,
         label = 'Stop: ',
+        required = False,
     )
 
     security_start = forms.TimeField(
         widget = TimeInput,
         label = 'Start: ',
+        required = False,
     )
 
     security_end = forms.TimeField(
         widget = TimeInput,
         label = 'Stop: ',
+        required = False,
     )
