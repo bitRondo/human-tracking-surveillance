@@ -7,9 +7,13 @@ from django.utils import timezone
 from statisticsManagement.models import TimelyRecord
 
 counter = 0
+
 modes = {0 : 'Idle', 1 : 'Business', 2 : 'Security', 3 : 'Terminated'}
 mode = 0
+
 autoSwitch = False
+autoSwitchingTimes = {'b_start' : None, 's_start' : None, 'b_end' : None, 's_end' : None}
+
 activeTimers = []
 
 autoSwitchingScheduler = schedule.Scheduler()
@@ -25,16 +29,35 @@ def setMode(n = 1):
     else: 
         print("Invalid mode!")
         mode = 4
-    if mode == 1: startTimer()
-    else : endTimers()
+    if mode == 1: start_timer()
+    else : end_timers()
     print("Mode set to %d at %s"%(mode, timezone.localtime().strftime("%Y-%m-%d %H:%M")))
 
 def getMode():
-    return mode, modes.get(mode)
+    return modes.get(mode)
 
-def setAutoSwitch(condition = True):
+def getNextValidMode():
+    if mode == 1: return 'Security'
+    elif mode == 2: return 'Business'
+    else: return None
+
+def toggleAutoSwitch(condition, times = None):
     global autoSwitch
     autoSwitch = condition
+    if autoSwitch:
+        set_auto_switching_times(times)
+        schedule_auto_switch_mode()
+        print("Auto-Switching ON")
+
+def isAutoSwitching():
+    return autoSwitch
+
+def getAutoSwitchingTimes():
+    return autoSwitchingTimes
+
+def set_auto_switching_times(times):
+    global autoSwitchingTimes
+    autoSwitchingTimes.update(times)
 
 class Analyzer(threading.Thread):
     def __init__(self):
@@ -52,7 +75,7 @@ class Analyzer(threading.Thread):
                 if key != 'q': print("Please give a value")
             time.sleep(1)
         mode = 3
-        endTimers()
+        end_timers()
         print("Exitting Analyzer")
 
 class Reporter(threading.Thread):
@@ -89,8 +112,8 @@ def schedule_recording():
     print("Scheduled at: " + timezone.now().strftime("%H:%M:%S"))
     reportingScheduler.every(30).seconds.do(record)
 
-def startTimer():
-    endTimers()
+def start_timer():
+    end_timers()
     # Calculating the delay in which Scheduling should start at a 'ROUND' time
     now = timezone.now()
     if now.minute < 30:     # e.g. if now is 11:16, scheduling should start at 11:30
@@ -108,14 +131,18 @@ def startTimer():
     print("Scheduling will start at: " + exec_time.strftime("%H:%M:%S"))
     activeTimers.append(timer)
 
-def endTimers():
+def end_timers():
     for timer in activeTimers:
         timer.cancel()
 
-def switch_mode(business_start, security_start, idle_start):
-    autoSwitchingScheduler.every().day.at(business_start).do(setMode, 1)
-    autoSwitchingScheduler.every().day.at(security_start).do(setMode, 2)
-    autoSwitchingScheduler.every().day.at(idle_start).do(setMode, 0)
+def schedule_auto_switch_mode():
+    global autoSwitchingTimes
+    autoSwitchingScheduler.every().day.at(autoSwitchingTimes['b_start']).do(setMode, 1)
+    autoSwitchingScheduler.every().day.at(autoSwitchingTimes['s_start']).do(setMode, 2)
+    if autoSwitchingTimes['b_end'] != autoSwitchingTimes['s_start']:
+        autoSwitchingScheduler.every().day.at(autoSwitchingTimes['b_end']).do(setMode, 0)
+    if autoSwitchingTimes['s_end'] != autoSwitchingTimes['b_start']:
+        autoSwitchingScheduler.every().day.at(autoSwitchingTimes['s_end']).do(setMode, 0)
 
 def runMain():
     setMode(1)
