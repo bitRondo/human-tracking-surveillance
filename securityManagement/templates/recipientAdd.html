@@ -1,0 +1,12 @@
+{% block content %}
+<body style="padding: 50px;">
+    <h1>Form</h1>
+    <form method="POST"> 
+        {%csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="ADD" />
+    </form>
+</body>
+
+
+{% endblock %}
