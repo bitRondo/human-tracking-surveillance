@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=`">
+    <title>System Settings</title>
+</head>
+
+<body>
+    <p>Current mode: {{ mode }}</p>
+
+    <form action="{% url 'system_settings' %}" method="POST" id="system_settings">
+        {% csrf_token %}
+        <div>
+            <h3>Automatic Switching</h3>
+            {% for mode in form.auto_switching %}
+            {{ mode }}
+            {% endfor %}
+
+            <h4>Business Mode</h4>
+            {{ form.business_start.label }}{{ form.business_start }}
+            {{ form.business_end.label }}{{ form.business_end }}
+            <h4>Security Mode</h4>
+            {{ form.security_start.label }}{{ form.security_start }}
+            {{ form.security_end.label }}{{ form.security_end }}
+            
+            <p><input type="submit" id="id_auto_switch" name="auto_switch" value="Save Changes"></p>
+        </div>
+        <div>
+            <h3>Manual Switching</h3>
+            <label for="id_change_mode">Change Mode to </label>
+            <input type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}>
+        </div>
+
+    </form>
+
+    <script>
+        b_start = document.getElementById('id_business_start');
+        s_start = document.getElementById('id_security_start');
+        b_end = document.getElementById('id_business_end');
+        s_end = document.getElementById('id_security_end');
+        enableSwitch = document.getElementById('id_auto_switching_0');
+
+        function toggleAutoSwitching() {
+            condition = enableSwitch.checked
+            b_start.disabled = !condition;
+            b_end.disabled = !condition;
+            s_start.disabled = !condition;
+            s_end.disabled = !condition;
+            document.getElementById('id_change_mode').disabled = condition;
+
+        }
+        toggleAutoSwitching();
+
+        function validate(){
+
+        }
+    </script>
+</body>
+
+</html>

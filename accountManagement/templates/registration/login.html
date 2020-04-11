@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+</head>
+<body>
+    <h1>Login</h1>
+    {% if form.errors %}
+    <p style="color: red;">Please enter correct credentials!</p>
+    {% endif %}
+
+    <form method= "POST" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <p>Username: {{ form.username }}</p>
+        <p>Password: {{ form.password }}</p>
+
+        <p><input type="submit" value="Login"></p>
+    </form>
+</body>
+</html>

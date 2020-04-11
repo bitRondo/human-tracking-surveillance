@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activation</title>
+</head>
+
+<body>
+    <h1>Account Activation</h1>
+
+    <form action="{% url 'activate' %}" method="POST">
+        {% csrf_token %}
+        {% if not expired %}
+        <p>{% if resend_requested == '' %}An {% else %}A new {% endif %}
+            activation link has been sent to the following email address:</p>
+        <p>{{ user_email }}</p>
+        <p><label for="id_key">Please enter the 6-digit code you received: </label></p>
+        <p><input type="text" id="id_key" name="key_given"></p>
+        <p><input type="submit" value="Submit"></p>
+        {% else %}
+        <h2>Your activation code has expired!</h2>
+        {% endif %}
+        {% if invalid %}
+        <h4>Invalid code!</h4>
+        {% elif empty %}
+        <h4>Please type the code!</h4>
+        {% endif %}
+        {% if resend %}
+        {% url 'resend_code' "new" as resend_url %}
+        <a href="{{ resend_url }}"><h3>Send New Activation Code</h3></a>
+        {% endif %}
+    </form>
+</body>
+
+</html>

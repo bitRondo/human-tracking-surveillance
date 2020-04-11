@@ -45,6 +45,9 @@ INSTALLED_APPS = [
 
     
     
+    'accountManagement.apps.AccountmanagementConfig',
+    'statisticsManagement.apps.StatisticsmanagementConfig',
+    'systemManagement.apps.SystemmanagementConfig'
 ]
 
 MIDDLEWARE = [
@@ -126,3 +129,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+
+AUTH_USER_MODEL = 'accountManagement.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+ADMINS = (
+    ('DisuraTest', 'disura.test@gmail.com'),
+)
+
+MANAGERS = ADMINS
+
+
+# When you are playing around with the app and you expect that an email should
+# have been sent, just run `./manage.py send_mail` and you will get the mail
+# to the ADMINS account, no matter who the real recipient was.
+TEST_EMAIL_BACKEND_RECIPIENTS = ADMINS
+
+FROM_EMAIL = ADMINS[0][1]
+EMAIL_SUBJECT_PREFIX = '[dev human-tracking-surveillance] '
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'disura.test@gmail.com'
+
+# Enter your gmail PW from the ADMINS email entered above.
+EMAIL_HOST_PASSWORD = 'disuratesttest@2020'
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
