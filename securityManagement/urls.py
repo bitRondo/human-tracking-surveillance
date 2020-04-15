@@ -4,5 +4,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('recipient/',views.RecipientAdd,name='RecipientAdd')
+    path('recipientadd/',views.RecipientAdd,name='RecipientAdd'),
+    path('email/',views.email,name='email'),
+    path('recipientremove/',views.RecipientRemove,name='RecipientRemove')
 ]

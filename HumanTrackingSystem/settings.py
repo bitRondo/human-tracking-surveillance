@@ -39,12 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'securityManagement.apps.SecuritymanagementConfig',
-
-
-
-
-    
-    
     'accountManagement.apps.AccountmanagementConfig',
     'statisticsManagement.apps.StatisticsmanagementConfig',
     'systemManagement.apps.SystemmanagementConfig'
@@ -151,12 +145,13 @@ TEST_EMAIL_BACKEND_RECIPIENTS = ADMINS
 
 FROM_EMAIL = ADMINS[0][1]
 EMAIL_SUBJECT_PREFIX = '[dev human-tracking-surveillance] '
-
+#EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'disura.test@gmail.com'
+EMAIL_HOST_USER = 'surveillancesystemcse@gmail.com'
 
 # Enter your gmail PW from the ADMINS email entered above.
-EMAIL_HOST_PASSWORD = 'disuratesttest@2020'
+EMAIL_HOST_PASSWORD = 'System-123'
 EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True

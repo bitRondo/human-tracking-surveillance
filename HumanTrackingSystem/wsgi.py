@@ -11,11 +11,11 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-from videoAnalysis.videoAnalysis import runMain
+#from videoAnalysis.videoAnalysis import runMain
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HumanTrackingSystem.settings')
 
 application = get_wsgi_application()
 
 # Uncomment the following line to load background processes which are in videoAnalysis module
-runMain()
+# runMain()
