@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.utils import timezone
 from datetime import timedelta
 
 from .forms import CustomizedUserCreationForm
 
-from .controllers import send_activation_key
+from .controllers import send_activation_key, checkIsAdmin
 
 import random
 
@@ -18,6 +18,7 @@ def index(request):
             return render(request, 'activation/notActivated.html')
     return render(request, 'accountManagement/index.html')
 
+@user_passes_test(checkIsAdmin)
 def register(request):
 
     if request.method == 'POST':
@@ -41,52 +42,48 @@ def register(request):
 
     return render(request, 'registration/register.html', context)
 
+@login_required
 def activateAccount(request, resend_requested = ''):
     user = request.user
+    if user.activation_key == '':
+        return redirect('index')
 
-    if user.is_authenticated:
+    else:
+        context = { 
+            'user_email' : user.email,
+            'invalid' : False,
+            'expired' : False,
+            'resend' : False,
+            'resend_requested' : resend_requested,
+            'empty' : False,
+        }
 
-        if user.activation_key == '':
-            return redirect('index')
+        if (resend_requested == 'new'):
+            print ("new")
+            send_activation_key(user, True)
 
-        else:
-            context = { 
-                'user_email' : user.email,
-                'invalid' : False,
-                'expired' : False,
-                'resend' : False,
-                'resend_requested' : resend_requested,
-                'empty' : False,
-            }
+        if request.method == 'POST':
+            key_given = request.POST['key_given']
+            keyString = ''.join(key_given.strip().split('-'))
 
-            if (resend_requested == 'new'):
-                print ("new")
-                send_activation_key(user, True)
-
-            if request.method == 'POST':
-                key_given = request.POST['key_given']
-                keyString = ''.join(key_given.strip().split('-'))
-
-                if keyString == user.activation_key:    
-                    difference = timezone.now() - user.key_expiry
-                    if (difference <= timedelta(hours = 24)):
-                        print("OK")
-                        user.activate_user()
-                        return redirect('index')
-
-                    else:
-                        context['expired'] = True
-                        context['resend'] = True
-                        print("code expired")
-
-                elif keyString == '':
-                    context['empty'] = True
+            if keyString == user.activation_key:    
+                difference = timezone.now() - user.key_expiry
+                if (difference <= timedelta(hours = 24)):
+                    print("OK")
+                    user.activate_user()
+                    return redirect('index')
 
                 else:
-                    context['invalid'] = True
+                    context['expired'] = True
                     context['resend'] = True
-                    print("invalid code")
+                    print("code expired")
 
-            return render(request, 'activation/activationForm.html', context)
-    else:
-        return redirect('index')
+            elif keyString == '':
+                context['empty'] = True
+
+            else:
+                context['invalid'] = True
+                context['resend'] = True
+                print("invalid code")
+
+        return render(request, 'activation/activationForm.html', context)

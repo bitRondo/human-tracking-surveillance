@@ -70,7 +70,7 @@ def viewStatistics(request):
         'single_date_peak_times' : single_date_peak_times,
         'invalid_date_range': start_date >= end_date,
     }
-    return render(request, 'statisticsManagement/viewDailyRecords.html', content)
+    return render(request, 'statisticsManagement/viewStatistics.html', content)
 
 def calculate_viewable_date_range(start_date, end_date):
     start_date = datetime.datetime.fromisoformat(start_date.isoformat())

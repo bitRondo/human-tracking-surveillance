@@ -42,7 +42,8 @@ def send_activation_key(user, resend = False):
 
     user.email_user(subject, "", from_email = from_email, html_message = message)
 
-    
+def checkIsAdmin(user):
+    return user.is_staff    
 
 # from accountManagement.controllers import a
 def test_mail():

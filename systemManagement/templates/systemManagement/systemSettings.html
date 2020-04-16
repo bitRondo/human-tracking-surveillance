@@ -12,6 +12,9 @@
 
     <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
         {% csrf_token %}
+        <h4>Admin password required to make changes in system settings:</h4>
+        <input type="password" name="password" id="id_password" required>
+        <p style="color: red;">{{ verification_failed }}</p>
         <div>
             <h3>Automatic Switching</h3>
             {% for mode in form.auto_switching %}
@@ -76,25 +79,25 @@
                 if ((b_start.value != '') && (s_start.value != '')) {
 
                     if (b_start.value == s_start.value) {
-                        err.innerHTML = "Time Ranges overlap1!";
+                        err.innerHTML = "Time Ranges overlap!";
                         return false;
                     } else {
                         if (b_start.value < b_end.value) {
                             if (s_start.value < s_end.value){
                                 if (!((s_end.value <= b_start.value) || (b_end.value <= s_start.value))){
-                                    err.innerHTML = "Time Ranges overlap2!";
+                                    err.innerHTML = "Time Ranges overlap!";
                                     return false;
                                 }
                             } else {
                                 if ((s_start.value < b_end.value) || (b_start.value < s_end.value)) {
-                                    err.innerHTML = "Time Ranges overlap3!";
+                                    err.innerHTML = "Time Ranges overlap!";
                                     return false;
                                 }
                             }
                         } else {
                             if(!((b_end.value <= s_start.value) && (s_start.value < s_end.value) &&
                                 (s_end.value <= b_start.value))) {
-                                    err.innerHTML = "Time Ranges overlap4!";
+                                    err.innerHTML = "Time Ranges overlap!";
                                     return false;
                                 }
                         }

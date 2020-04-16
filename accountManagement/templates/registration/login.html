@@ -6,6 +6,9 @@
     <title>Log in</title>
 </head>
 <body>
+    {% if request.GET.next %}
+        <h3 style="color: red;">You need to first login!</h3>
+    {% endif %}
     <h1>Login</h1>
     {% if form.errors %}
     <p style="color: red;">Please enter correct credentials!</p>
@@ -17,6 +20,9 @@
         <p>Username: {{ form.username }}</p>
         <p>Password: {{ form.password }}</p>
 
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}"
+        {% endif %}
         <p><input type="submit" value="Login"></p>
     </form>
 </body>
