@@ -1,24 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-</head>
-<body>
-    {% include 'header.html' %}
-    <h1>This is the index page!</h1>
+{% extends "mainbase.html "%}
+{% block title %}Home{% endblock %}
 
-    {% if user.is_authenticated %}
-    <h2>Welcome {{ user.first_name }} {{ user.last_name }}</h2>
-    <a href = "{% url 'logout' %}"><button>Log out</button></a>
-    {% else %}
-    <h2>You are not logged in</h2>
-    <a href = "{% url 'login' %}"><button>Log In</button></a>
-    <a href = "{% url 'register' %}"><button>Register</button></a>
-    {% endif %}
+{% block content %}
+    <h1 class="display-1">Human Tracking System</h1>
 
-
-
-</body>
-</html>
+{% endblock %}

@@ -1,151 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "mainbase.html "%}
+{% block title %}System{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=`">
-    <title>System Settings</title>
-</head>
+{% block content %}
+<div class="col-md-6 float-left">
+    <div id="user">
+        <h1 class="display-4">User Settings</h1>
+        <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-left">Register New User</a>
+        <div style="margin-bottom: 1vw;"></div>
+        <a href="#" class="col-md-6 btn btn-secondary text-left">Add recipient of Security Alerts</a>
+    </div>
+    <hr style="color: black;">
+    <div id="system">
+        <h1 class="display-4">System Settings</h1>
+        <h4 class="btn btn-outline-success">Current mode: {{ mode }}</h4>
 
-<body>
-    <p>Current mode: {{ mode }}</p>
+        <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
+            {% csrf_token %}
 
-    <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
-        {% csrf_token %}
-        <h4>Admin password required to make changes in system settings:</h4>
-        <input type="password" name="password" id="id_password" required>
-        <p style="color: red;">{{ verification_failed }}</p>
-        <div>
-            <h3>Automatic Switching</h3>
-            {% for mode in form.auto_switching %}
-            {{ mode }}
-            {% endfor %}
+            <div class="form-group was-validated">
+                <h5>Admin password required to make changes in system settings:</h5>
+                <input type="password" name="password" id="id_password" required class="form-control"
+                    style="width: 50%;">
+            </div>
+            <p class="invalid-feedback">{{ verification_failed }}</p>
+            <div class="form-group">
+                <h3>Automatic Switching</h3>
+                <div class="form-check-inline">
+                    {% for mode in form.auto_switching %}
+                    {{ mode }}
+                    {% endfor %}
+                </div>
+                <h4>Business Mode</h4><span id="business_error" style="color: red;"></span>
+                <div class="form-inline">
+                    {{ form.business_start.label }}{{ form.business_start }}
+                    {{ form.business_end.label }}{{ form.business_end }}
+                </div>
 
-            <h4>Business Mode</h4>
-            {{ form.business_start.label }}{{ form.business_start }}
-            {{ form.business_end.label }}{{ form.business_end }}
-            <span id="business_error" style="color: red;"></span>
 
-            <h4>Security Mode</h4>
-            {{ form.security_start.label }}{{ form.security_start }}
-            {{ form.security_end.label }}{{ form.security_end }}
-            <span id="security_error" style="color: red;"></span>
-            <br>
-            <br>
-            <span id="errors" style="color: red;"></span>
+                <h4>Security Mode</h4><span id="security_error" style="color: red;"></span>
+                <div class="form-inline">
+                    {{ form.security_start.label }}{{ form.security_start }}
+                    {{ form.security_end.label }}{{ form.security_end }}
+                </div>
 
-            <p><button type="submit" id="id_auto_switch" name="auto_switch" value="Save Changes">
-                    Save Changes</button>
-                <input type="reset" value="Cancel" onclick="location.reload(true)">
-            </p>
-        </div>
-        <div>
-            <h3>Manual Switching</h3>
-            <label for="id_change_mode">Change Mode to </label>
-            <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}>
-                {{ validMode }}</button>
-        </div>
+                <br>
+                <span id="errors" style="color: red;"></span>
 
-    </form>
+                <p><button type="submit" id="id_auto_switch" name="auto_switch" value="Save Changes"
+                        class="btn btn-primary">
+                        Save Changes</button>
+                    <input type="reset" value="Cancel" onclick="location.reload(true)" class="btn btn-danger">
+                </p>
+            </div>
+            <hr>
+            <div class="form-group">
+                <h3>Manual Switching</h3>
+                <label for="id_change_mode">Change Mode to </label>
+                <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}
+                    class="btn btn-success">
+                    {{ validMode }}</button>
+            </div>
+        </form>
+    </div>
 
-    <script type="text/javascript">
-        b_start = document.getElementById('id_business_start');
-        s_start = document.getElementById('id_security_start');
-        b_end = document.getElementById('id_business_end');
-        s_end = document.getElementById('id_security_end');
-        enableSwitch = document.getElementById('id_auto_switching_0');
+</div>
+<script type="text/javascript">
+    b_start = document.getElementById('id_business_start');
+    s_start = document.getElementById('id_security_start');
+    b_end = document.getElementById('id_business_end');
+    s_end = document.getElementById('id_security_end');
+    enableSwitch = document.getElementById('id_auto_switching_0');
 
-        function toggleAutoSwitching() {
-            condition = enableSwitch.checked
-            b_start.disabled = !condition;
-            b_end.disabled = !condition;
-            s_start.disabled = !condition;
-            s_end.disabled = !condition;
-            document.getElementById('id_change_mode').disabled = condition;
+    function toggleAutoSwitching() {
+        condition = enableSwitch.checked
+        b_start.disabled = !condition;
+        b_end.disabled = !condition;
+        s_start.disabled = !condition;
+        s_end.disabled = !condition;
+        document.getElementById('id_change_mode').disabled = condition;
 
-        }
-        toggleAutoSwitching();
+    }
+    toggleAutoSwitching();
 
-        function validate() {
-            if (enableSwitch.checked) {
-                err = document.getElementById('errors');
-                err.innerHTML = null;
-                if (b_start.value + b_end.value + s_start.value + s_end.value == '') {
-                    err.innerHTML = "Please give times!";
+    function validate() {
+        if (enableSwitch.checked) {
+            err = document.getElementById('errors');
+            err.innerHTML = null;
+            if (b_start.value + b_end.value + s_start.value + s_end.value == '') {
+                err.innerHTML = "Please give times!";
+                return false;
+            }
+            if (!checkIndividualTimeRanges()) return false;
+
+            if ((b_start.value != '') && (s_start.value != '')) {
+
+                if (b_start.value == s_start.value) {
+                    err.innerHTML = "Time Ranges overlap!";
                     return false;
-                } 
-                if (!checkIndividualTimeRanges()) return false;
-
-                if ((b_start.value != '') && (s_start.value != '')) {
-
-                    if (b_start.value == s_start.value) {
-                        err.innerHTML = "Time Ranges overlap!";
-                        return false;
-                    } else {
-                        if (b_start.value < b_end.value) {
-                            if (s_start.value < s_end.value){
-                                if (!((s_end.value <= b_start.value) || (b_end.value <= s_start.value))){
-                                    err.innerHTML = "Time Ranges overlap!";
-                                    return false;
-                                }
-                            } else {
-                                if ((s_start.value < b_end.value) || (b_start.value < s_end.value)) {
-                                    err.innerHTML = "Time Ranges overlap!";
-                                    return false;
-                                }
+                } else {
+                    if (b_start.value < b_end.value) {
+                        if (s_start.value < s_end.value) {
+                            if (!((s_end.value <= b_start.value) || (b_end.value <= s_start.value))) {
+                                err.innerHTML = "Time Ranges overlap!";
+                                return false;
                             }
                         } else {
-                            if(!((b_end.value <= s_start.value) && (s_start.value < s_end.value) &&
-                                (s_end.value <= b_start.value))) {
-                                    err.innerHTML = "Time Ranges overlap!";
-                                    return false;
-                                }
+                            if ((s_start.value < b_end.value) || (b_start.value < s_end.value)) {
+                                err.innerHTML = "Time Ranges overlap!";
+                                return false;
+                            }
+                        }
+                    } else {
+                        if (!((b_end.value <= s_start.value) && (s_start.value < s_end.value) &&
+                            (s_end.value <= b_start.value))) {
+                            err.innerHTML = "Time Ranges overlap!";
+                            return false;
                         }
                     }
+                }
 
-                }
-                if (!b_start.value) {
-                    if (!confirm("Confirm Not operating in Business mode?")) return false;
-                } else if (!s_start.value) {
-                    if (!confirm("Confirm Not operating in Security mode?")) return false;
-                }
             }
-            return true;
+            if (!b_start.value) {
+                if (!confirm("Confirm Not operating in Business mode?")) return false;
+            } else if (!s_start.value) {
+                if (!confirm("Confirm Not operating in Security mode?")) return false;
+            }
         }
+        return true;
+    }
 
-        function checkIndividualTimeRanges() {
-            var valid = true;
-            b_err = document.getElementById('business_error');
-            s_err = document.getElementById('security_error');
-            b_err.innerHTML = s_err.innerHTML = null;
-            b_concat = b_start.value + b_end.value;
-            s_concat = s_start.value + s_end.value;
-            if (b_concat != '') {
-                if (b_start.value == b_end.value) {
-                    b_err.innerHTML = "Invalid Time Range!";
+    function checkIndividualTimeRanges() {
+        var valid = true;
+        b_err = document.getElementById('business_error');
+        s_err = document.getElementById('security_error');
+        b_err.innerHTML = s_err.innerHTML = null;
+        b_concat = b_start.value + b_end.value;
+        s_concat = s_start.value + s_end.value;
+        if (b_concat != '') {
+            if (b_start.value == b_end.value) {
+                b_err.innerHTML = "Invalid Time Range!";
+                valid = false;
+            } else {
+                if ((b_concat == b_start.value) || (b_concat == b_end.value)) {
+                    b_err.innerHTML = "Incomplete Time Range!";
                     valid = false;
-                } else {
-                    if ((b_concat == b_start.value) || (b_concat == b_end.value)) {
-                        b_err.innerHTML = "Incomplete Time Range!";
-                        valid = false;
-                    }
                 }
             }
-            if (s_concat != '') {
-                if (s_start.value == s_end.value) {
-                    s_err.innerHTML = "Invalid Time Range!";
-                    valid = false;
-                } else {
-                    if ((s_concat == s_start.value) || (s_concat == s_end.value)) {
-                        s_err.innerHTML = "Incomplete Time Range!";
-                        valid = false;
-                    }
-                }
-            }
-            return valid;
         }
+        if (s_concat != '') {
+            if (s_start.value == s_end.value) {
+                s_err.innerHTML = "Invalid Time Range!";
+                valid = false;
+            } else {
+                if ((s_concat == s_start.value) || (s_concat == s_end.value)) {
+                    s_err.innerHTML = "Incomplete Time Range!";
+                    valid = false;
+                }
+            }
+        }
+        return valid;
+    }
 
-    </script>
-</body>
+</script>
 
-</html>
+{% endblock %}
