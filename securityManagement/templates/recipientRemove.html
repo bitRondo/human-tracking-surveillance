@@ -7,10 +7,16 @@
 </head>
 <body>
     
-    {% for recipient in Recipient%}
-    <p> {{recipient.id}}</p>
-    <!-- <p> {{recipient.email}}</p> -->
+   <p>Are you sure you want to delete "{{item.name}}"?</p>
 
-    {%endfor%}
+    <form action="{% url 'RecipientRemove' item.id %}" method = POST> 
+
+        {% csrf_token %} 
+        <a href ="{% url 'index' %}"> Cancel</a>
+
+        <input type="submit" name="Confirm">
+        
+    </form>
+      
 </body>
 </html>

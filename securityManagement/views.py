@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
 from django.core.mail import send_mail
 
 from django.http import HttpResponse
@@ -7,20 +7,32 @@ from  .forms import RecipientAddForm
 
 
 def index(request):
-    return render(request,'security.html')
+    recipient=Recipient.objects.all()
+    return render(request,'security.html',{'Recipient':recipient})
 
 def RecipientAdd(request):
     form =RecipientAddForm(request.POST)
     if form.is_valid():
         form.save()
+        return redirect('/securityManagement')
        
 
     form = RecipientAddForm()
     return render (request, 'recipientAdd.html',{'form':form})
 
-def RecipientRemove(request):
-    all_recipient=Recipient.objects.all()
-    return render(request,'recipientRemove.html',{'Recipient':all_recipient})
+def RecipientRemove(request,pk):
+    recipient=Recipient.objects.get(id=pk)
+    if request.method=="POST":
+        recipient.delete()
+        return redirect('/securityManagement')
+    contex={'item':recipient}
+    return render(request,'recipientRemove.html',contex)
+
+
+def RecipientEdit(request,pk):
+    form =RecipientAddForm()
+    return render (request, 'recipientAdd.html',{'form':form})
+
 
 def email(request):
    
