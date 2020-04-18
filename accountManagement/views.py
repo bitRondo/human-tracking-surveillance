@@ -16,7 +16,8 @@ def index(request):
     if request.user.is_authenticated:
         if request.user.activation_key != '':
             return render(request, 'activation/notActivated.html')
-    return render(request, 'accountManagement/index.html')
+        return render(request, 'accountManagement/index.html')
+    return redirect('login')
 
 @user_passes_test(checkIsAdmin)
 def register(request):
@@ -87,3 +88,22 @@ def activateAccount(request, resend_requested = ''):
                 print("invalid code")
 
         return render(request, 'activation/activationForm.html', context)
+
+@login_required
+def account(request):
+
+    context = {
+        'user' : request.user
+    }
+
+    if request.method == 'POST':
+        condition = request.POST['receive_reports']
+        if condition == 'on':
+            reception = True
+        else:
+            reception = False
+        request.user.receive_reports = reception
+        request.user.save()
+        return redirect('account')
+
+    return render(request, 'registration/account.html', context)

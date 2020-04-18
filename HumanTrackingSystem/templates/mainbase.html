@@ -8,29 +8,50 @@
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">
+        function refresh() {
+            var interval = 1000;
+            timer = setTimeout('showCurrentTime()', interval);
+        }
+
+        var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        function showCurrentTime() {
+            var t = new Date();
+            var dateString = dayNames[t.getDay()] + ", " + ("0" + t.getDate()).slice(-2) + " " + monthNames[t.getMonth()] + ", " +
+                t.getFullYear() + " " +
+                ("0" + t.getHours()).slice(-2) + ":" + ("0" + t.getMinutes()).slice(-2) + ":" + ("0" + t.getSeconds()).slice(-2);
+            document.getElementById('clock').innerHTML = dateString;
+            refresh();
+        }
+    </script>
 </head>
 
-<body>
+<body onload="showCurrentTime()">
+    {% if user.is_authenticated %}
+    <div id="header" class="fixed-top">
 
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <ul class="navbar-nav">
-                
                 <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
-                {% if user.is_authenticated %}
-                <li class="nav-item"><a href="#" class="nav-link">My Account</a></li>
+                <li class="nav-item"><a href="{% url 'statistics' %}" class="nav-link">Statistics</a></li>
+                <li class="nav-item"><a href="{% url 'account' %}" class="nav-link">My Account</a></li>
                 {% if user.is_staff %}
                 <li class="nav-item"><a href="{% url 'system_settings' %}" class="nav-link">System</a></li>
                 {% endif %}
                 <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Logout</a></li>
-                {% else %}
-                <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Login</a></li>
-                {% endif %}
             </ul>
-            
-    </nav>
-<div class="container-fluid" style="margin-top: 5%;">
-    {% block content %}{% endblock %}
-</div>
+        </nav>
+        <nav class="navbar navbar-expand-sm bg-light navbar-light">
+            <ul class="navbar-nav">
+                <li class="col"><span id="clock"></span></li>
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+    <div class="container-fluid" style="margin-top:8vw; margin-bottom: 3vw;">
+        {% block content %}{% endblock %}
+    </div>
 </body>
 
 </html>

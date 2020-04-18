@@ -10,12 +10,14 @@ urlpatterns = [
     path('register/', views.register, name = 'register'),
     path('activate/', views.activateAccount, name = 'activate'),
     path('activate/<resend_requested>', views.activateAccount, name = 'resend_code'),
+
+    path('account/', views.account, name = 'account'),
     
     path('password_change/', 
     auth_views.PasswordChangeView.as_view(template_name = 'password/password_change.html'), 
     name = 'password_change'),
 
     path('password_change/done',
-    auth_views.PasswordChangeDoneView.as_view(template_name = 'password/password_change_done.html'),
+    auth_views.PasswordChangeDoneView.as_view(template_name = 'registration/account.html'),
     name = 'password_change_done')
 ]

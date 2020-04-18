@@ -1,37 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'mainbase.html'%}
+{% block title %}Activation{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activation</title>
-</head>
+{% block content %}
+<div class="col-md-6">
+    <h1 class="display-3">Account Activation</h1>
 
-<body>
-    <h1>Account Activation</h1>
+    {% if not expired %}
+    <p>{% if resend_requested == '' %}An {% else %}A new {% endif %}
+        activation link has been sent to the following email address:</p>
+    <h3>{{ user_email }}</h3>
 
-    <form action="{% url 'activate' %}" method="POST">
+    <form action="{% url 'activate' %}" method="POST" style="margin-top: 3vw;">
         {% csrf_token %}
-        {% if not expired %}
-        <p>{% if resend_requested == '' %}An {% else %}A new {% endif %}
-            activation link has been sent to the following email address:</p>
-        <p>{{ user_email }}</p>
-        <p><label for="id_key">Please enter the 6-digit code you received: </label></p>
-        <p><input type="text" id="id_key" name="key_given"></p>
-        <p><input type="submit" value="Submit"></p>
+        <div class="form-group">
+            <label for="id_key">Please enter the 6-digit code you received: </label>
+            <input type="text" id="id_key" name="key_given" class="col-md-6 form-control">
+            <div style="color: red;">
+                {% if invalid %}
+                <p>Invalid code!</p>
+                {% elif empty %}
+                <p>Please give the code!</p>
+                {% endif %}
+            </div>
+        </div>
+        <input type="submit" value="Submit" class="btn btn-success">
+
         {% else %}
-        <h2>Your activation code has expired!</h2>
-        {% endif %}
-        {% if invalid %}
-        <h4>Invalid code!</h4>
-        {% elif empty %}
-        <h4>Please type the code!</h4>
+        <h2 style="color: red;">Your activation code has expired!</h2>
         {% endif %}
         {% if resend %}
         {% url 'resend_code' "new" as resend_url %}
-        <a href="{{ resend_url }}"><h3>Send New Activation Code</h3></a>
+        <a href="{{ resend_url }}">
+            <span class="btn btn-primary">Send New Activation Code</span>
+        </a>
         {% endif %}
     </form>
-</body>
-
-</html>
+</div>
+{% endblock %}
