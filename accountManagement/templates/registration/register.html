@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+</head>
+<body>
+    <h1>Register Account</h1>
+
+    <form action="{% url 'register' %}" method="POST">
+        {% csrf_token %}
+
+        <table>
+            {% for field in form %}
+                <tr>
+                    <td><b>{{ field.label_tag }}</b></td><td> {{ field }}</td><td>{{ field.errors }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>

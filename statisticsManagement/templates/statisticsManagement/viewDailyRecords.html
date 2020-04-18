@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Records</title>
+
+</head>
+
+<body>
+
+
+    <form action="{% url 'daily_records' %}" method="POST">
+        {% csrf_token %}
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>
+                        <h1>Records within a range of dates</h1>
+                        <label for="id_start_date">Start Date: </label> {{ form.start_date }}
+                        <label for="id_start_date">End Date: </label> {{ form.end_date }}
+                    </th>
+                    <th>
+                        <h1>Records on a given date</h1>
+                        <label for="id_single_date">Date: </label> {{ form.single_date }}
+                    </th>
+                    <th>
+                        {{ form.auto_adjust }}
+                        <label for="id_auto_adjust">Auto Adjust Date range to contain selected date</label>
+                        <br>
+                        <input type="submit" value="Search">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="display:block;">
+                        {% if all_results %}
+                        <table style="width: 90%;">
+                            <th align="center">Date</th>
+                            <th align="center">Total Count</th>
+                            <th align="center">Peak hour</th>
+
+                            {% for each in all_results %}
+                            <tr {% if each in peak_results %} style="background-color: palevioletred;" {% endif %}
+                                {% if each.record_date == single_date %} style="background-color: greenyellow;"
+                                {% endif %}>
+                                <td align="center">{{ each.record_date|date:"Y-m-d" }}</td>
+                                <td align="center">{{ each.total_count }}</td>
+                                <td align="center">{{ each.peak_hour_start|date:"H:i" }} to
+                                    {{ each.peak_hour_end|date:"H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+
+                        <h3 style="color: red;">Peak day{{ peak_results|pluralize }}: </h3>
+                        {% for each in peak_results %}
+                        <p>{{ each.record_date|date:"Y-m-d"}} (Total Count = {{ each.total_count }})</p>
+                        {% endfor %}
+
+                        {% elif invalid_date_range %}
+                        <p style="color: red;">Invalid Date Range!</p>
+                        {% else %}
+                        <p>Sorry, No Results </p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if single_date_timely_results %}
+                        <table style="width: 90%;">
+                            <th align="center">Time</th>
+                            <th align="center">Count</th>
+
+                            {% for each in single_date_timely_results %}
+                            <tr {% if each.record_time in single_date_peak_times %}
+                                style="background-color:palevioletred;" {% endif %}>
+                                <td align="center">{{ each.record_time|date:"H:i" }}</td>
+                                <td align="center">{{ each.record_count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+
+                        {% if single_date_daily_result %}
+                        <p>Total Count = {{ single_date_daily_result.total_count }}</p>
+                        <p>Peak hour =
+                            {{ single_date_peak_times|first|date:"H:i"}}
+                            to
+                            {{ single_date_peak_times|last|date:"H:i"}}</p>
+
+                        {% endif %}
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+
+</body>
+
+</html>

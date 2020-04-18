@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Management</title>
+    <style>
+    table, th, td {
+        border: 1px solid black;
+      }
+      </style>
+</head>
+<body>
+    <h1> Security Management System</h1>
+    <div class="row">
+        <div class="col-md">
+            <div class="card-body">
+                <h3>Recipients</h3>
+            </div>
+            <div class=addButton>
+                <button>Add recipient</button>
+            
+            </div>
+            <br>
+            <br>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>Register number     </th>
+                        <th>Name</th>
+                        <th>Email</th>
+            
+                        <th>Delete</th>
+                    </tr>
+                    {%for i in Recipient%}
+                    <tr>
+                        <td>{{i.register_num}}</td>
+                        <td>{{i.name}}</td>
+                        <td>{{i.email}}</td>
+                        <!-- <td><a href="{% url 'RecipientEdit' i.id %}">Edit</a></td> -->
+                        <td><a href="{% url 'RecipientRemove' i.id %}">Delete</a></td>
+
+                    </tr>
+                    
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
