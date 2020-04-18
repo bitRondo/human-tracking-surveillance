@@ -12,7 +12,7 @@
     <form action="{% url 'RecipientRemove' item.id %}" method = POST> 
 
         {% csrf_token %} 
-        <a href ="{% url 'index' %}"> Cancel</a>
+        <a href ="{% url 'Security' %}"> Cancel</a>
 
         <input type="submit" name="Confirm">
         

@@ -6,7 +6,7 @@ from .models import Recipient
 from  .forms import RecipientAddForm
 
 
-def index(request):
+def Security(request):
     recipient=Recipient.objects.all()
     return render(request,'security.html',{'Recipient':recipient})
 
