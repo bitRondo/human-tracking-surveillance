@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'securityManagement.apps.SecuritymanagementConfig',
-    'accountManagement.apps.AccountmanagementConfig',
+    #'accountManagement.apps.AccountmanagementConfig',
     'statisticsManagement.apps.StatisticsmanagementConfig',
-    'systemManagement.apps.SystemmanagementConfig'
+    #'systemManagement.apps.SystemmanagementConfig'
+    'predictionManagement.apps.PredictionmanagementConfig'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +128,7 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 
-AUTH_USER_MODEL = 'accountManagement.User'
+#AUTH_USER_MODEL = 'accountManagement.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

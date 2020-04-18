@@ -7,8 +7,7 @@ from  .forms import RecipientAddForm
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
-
+    return render(request,'security.html')
 
 def RecipientAdd(request):
     form =RecipientAddForm(request.POST)
@@ -20,21 +19,23 @@ def RecipientAdd(request):
     return render (request, 'recipientAdd.html',{'form':form})
 
 def RecipientRemove(request):
-    all_recipient=Recipient.objects.values_list('email')
+    all_recipient=Recipient.objects.all()
     return render(request,'recipientRemove.html',{'Recipient':all_recipient})
 
 def email(request):
+   
     all_recipient=Recipient.objects.values_list('email')
     for email in all_recipient:
 
         send_mail(
         'security Alerts', #subject
         'surveillance system', #message
-        'disura.test@gmail.com', #from
+        'surveillancesystemcse@gmail.com', #from
         email, #to
             fail_silently = False
         )
     return render(request,'email.html')
+    
  
   
   #print ( Recipient.objects.all())
