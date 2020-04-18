@@ -5,6 +5,7 @@ import datetime
 from django.utils import timezone
 
 from statisticsManagement.models import TimelyRecord
+from securityManagement.controllers import send_security_alert
 
 counter = 0
 
@@ -13,6 +14,8 @@ mode = 0
 
 autoSwitch = False
 autoSwitchingTimes = {'b_start' : None, 's_start' : None, 'b_end' : None, 's_end' : None}
+
+shouldAlert = True
 
 activeTimers = []
 
@@ -23,6 +26,7 @@ reportingScheduler = schedule.Scheduler()
 def setMode(n = 1):
     global mode, counter
     counter = 0
+    shouldAlert = True
     if n != mode:
         if n in modes.keys():
             mode = n
@@ -84,7 +88,7 @@ class Reporter(threading.Thread):
         threading.Thread.__init__(self, name = "Reporter")
 
     def run(self):
-        global counter, mode, autoSwitch
+        global counter, mode, autoSwitch, shouldAlert
         print("Starting Reporter")
         while (mode != 3):
             if autoSwitch:
@@ -94,6 +98,9 @@ class Reporter(threading.Thread):
             elif (mode == 2):
                 if counter:
                     print("Alert!")
+                    if shouldAlert:
+                        send_security_alert()
+                        shouldAlert = False
             time.sleep(1)
         print("Exitting Reporter")
 

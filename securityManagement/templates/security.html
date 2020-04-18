@@ -1,0 +1,28 @@
+{% extends 'mainbase.html' %}
+
+{% block title %}Security{% endblock %}
+
+{% block content %}
+<div class="col">
+    <h1 class="display-4">Recipients of Security Alerts</h1>
+
+    <table style="width: 60%;">
+        <tr>
+            <th>Reg. Number</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+        {%for i in Recipient%}
+        <tr>
+            <td>{{i.register_num}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.email}}</td>
+            <!-- <td><a href="{% url 'RecipientEdit' i.id %}">Edit</a></td> -->
+            <td><a href="{% url 'RecipientRemove' i.id %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'RecipientAdd' %}"><h1 class="btn btn-primary" style="margin-top: 3vw;">Add Recipient</h1></a>
+</div>
+{% endblock %}
