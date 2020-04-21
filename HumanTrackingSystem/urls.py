@@ -23,4 +23,6 @@ urlpatterns = [
     path('statistics/', include('statisticsManagement.urls')),
     path('system/', include('systemManagement.urls')),
     path('prediction/', include('predictionManagement.urls')),
+    
+    path('graph/', include('graphManagement.urls')),
 ]

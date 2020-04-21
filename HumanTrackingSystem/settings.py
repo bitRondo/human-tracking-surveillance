@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+  
 
     'securityManagement.apps.SecuritymanagementConfig',
     #'accountManagement.apps.AccountmanagementConfig',
     'statisticsManagement.apps.StatisticsmanagementConfig',
     #'systemManagement.apps.SystemmanagementConfig'
-    'predictionManagement.apps.PredictionmanagementConfig'
+    'predictionManagement.apps.PredictionmanagementConfig',
+    'graphManagement.apps.GraphmanagementConfig',
 ]
 
 MIDDLEWARE = [

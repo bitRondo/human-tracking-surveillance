@@ -6,8 +6,37 @@
     <title>Document</title>
 </head>
 <body>
-   <h1>Prediction</h1> 
-   <p>{{Prediction}}</p>
+   <form method="POST">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date"><br>
+        <label for="d_type">Date Type:</label>
+        <select id="d_type" name="d_type">
+            <option value="volvo">Sunday</option>
+            <option value="saab">Monday</option>
+            <option value="fiat">Tuesday</option>
+            <option value="audi">Wednesday</option>
+            <option value="saab">Thursday</option>
+            <option value="fiat">Friday</option>
+            <option value="audi">Sturday</option>
+
+        </select><br>
+
+
+        <label for="exclusions">Exclusions:</label><br>
+
+
+        <label for="from">From</label>
+        <input type="date" id="f_date" name="f_date"><br>
+        <label for="to">To</label>
+        <input type="date" id="t_date" name="t_date"><br>
+        <label for="exclusions">Exclusions:</label> 
+        
+        <button type="submit" form="nameform" value="Submit">Submit</button>
+        
+
+
+
+   </form>
 
 </body>
 </html>
