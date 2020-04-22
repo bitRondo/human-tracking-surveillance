@@ -15,7 +15,7 @@ class SystemSettingsForm(forms.Form):
             attrs = {
                 'oninput':'toggleAutoSwitching()', 
                 'class':'form-check-input',
-                'style' : 'margin-left: 20px'
+                'style' : 'margin-left: 10px; margin-right: 20px;'
             }
         ),
     )
