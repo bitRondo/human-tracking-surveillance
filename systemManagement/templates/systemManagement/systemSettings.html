@@ -2,6 +2,22 @@
 {% block title %}System{% endblock %}
 
 {% block content %}
+<style>
+    .mode-label {
+        font-size: x-large;
+        text-transform: uppercase;
+        margin-left: 1vw;
+    }
+    .mode-selected {
+        background-color: rgba(0,0,0, 0.3);
+        border-radius: 1vw;
+    }
+    .current-mode {
+        background-color: rgba(255,0,0,0.4);
+        padding: 0.4vw;
+        border-radius: 1vw;
+    }
+</style>
 <div class="col-md-6 float-left">
     <div id="user">
         <h1 class="display-4">User Settings</h1>
@@ -12,7 +28,6 @@
     <hr style="color: black;">
     <div id="system">
         <h1 class="display-4">System Settings</h1>
-        <h3>Current mode: <b>{{ mode }}</b></h3>
 
         <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
             {% csrf_token %}
@@ -23,11 +38,15 @@
                     style="width: 50%;">
             </div>
             <p class="invalid-feedback">{{ verification_failed }}</p>
+            <h3>Current mode: <span class="current-mode">{{ mode }}</span></h3>
             <div class="form-group">
                 <h3>Automatic Switching</h3>
                 <div class="form-check-inline">
                     {% for mode in form.auto_switching %}
-                    {{ mode }}
+                    <div id="div-of-{{ mode.choice_label }}">
+                        <label for="{{ mode.id_for_label }}" class="mode-label">{{ mode.choice_label }}</label>
+                        <span>{{ mode.tag }}</span>
+                    </div>
                     {% endfor %}
                 </div>
                 <h4>Business Mode</h4><span id="business_error" style="color: red;"></span>
@@ -70,15 +89,18 @@
     b_end = document.getElementById('id_business_end');
     s_end = document.getElementById('id_security_end');
     enableSwitch = document.getElementById('id_auto_switching_0');
+    onDiv = document.getElementById('div-of-On');
+    offDiv = document.getElementById('div-of-Off');
 
     function toggleAutoSwitching() {
+        onDiv.className = ''; offDiv.className = ''
         condition = enableSwitch.checked
         b_start.disabled = !condition;
         b_end.disabled = !condition;
         s_start.disabled = !condition;
         s_end.disabled = !condition;
         document.getElementById('id_change_mode').disabled = condition;
-
+        condition ? onDiv.className = 'mode-selected' : offDiv.className = 'mode-selected';
     }
     toggleAutoSwitching();
 

@@ -2,6 +2,19 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <h1 class="display-1 text-center">Human Tracking System</h1>
+<style>
+    #live-footage {
+        margin-top: 1vw;
+        width: 640px;
+        height: 360px;
+        border-style: solid;
+    }
+</style>
+<h1 class="display-1 text-center">Human Tracking System</h1>
+<div class="d-flex justify-content-center">
+    <div id="live-footage">
+        <p class="text-center">Live Footage comes here</p>
+    </div>
+</div>
 
 {% endblock %}
