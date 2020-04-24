@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    
+
+
+    <title></title>
+  </head>
+  <body>
+    <canvas id="myChart" width="4000" height="400"></canvas>
+    {{content}}
+    
+   
+    <script> 
+
+
+        const label = [{%for i in all_result%}'{{i.record_date}}',{% endfor%}];
+        const data =  [{%for i in all_result%}'{{i.total_count}}',{% endfor%}]
+
+
+
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: label,
+            datasets: [{
+                label: 'count',
+                data: data,
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+
+                ],
+                borderColor: [
+
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 4,
+                fill:false,
+                lineTension:0
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    </script>
+  </body>
+</html> 
