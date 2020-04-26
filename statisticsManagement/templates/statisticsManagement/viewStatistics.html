@@ -1,7 +1,6 @@
 {% extends 'mainbase.html' %}
 
 {% block title %}Statistics{% endblock %}
-
 {% block content %}
 
 <div class="col">
@@ -30,7 +29,49 @@
                     </tr>
                     {% endfor %}
                 </table>
-
+                <canvas id="myChart" width="400" height="400"></canvas>
+                <script> 
+            
+                    const label = [{%for i in all_results%}'{{i.record_date}}',{% endfor%}];
+                    const data =  [{%for i in all_results%}'{{i.total_count}}',{% endfor%}]
+                    
+                
+                
+                
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels:label,
+                        datasets: [{
+                            label: 'count',
+                            data:data,
+                
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                
+                            ],
+                            borderColor: [
+                
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 4,
+                            fill:false,
+                            lineTension:0
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+                </script>
+                
                 <h4 style="color: red; margin-top: 1vw;">Peak day{{ peak_results|pluralize }}: </h4>
                 {% for each in peak_results %}
                 <p>{{ each.record_date|date:"Y-m-d"}} (Total Count = {{ each.total_count }})</p>
@@ -60,6 +101,7 @@
                     </tr>
                     {% endfor %}
                 </table>
+                <canvas id="Chart" width="400" height="400"></canvas>
                 {% endif %}
 
                 {% if single_date_daily_result %}
@@ -88,4 +130,47 @@
         </div>
     </form>
 </div>
+<script> 
+            
+    const label = [{%for i in all_results%}'{{i.record_date}}',{% endfor%}];
+    const data =  [{%for i in all_results%}'{{i.total_count}}',{% endfor%}]
+    
+
+
+
+var ctx = document.getElementById('Chart').getContext('2d');
+var Chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels:label,
+        datasets: [{
+            label: 'count',
+            data:data,
+
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+
+            ],
+            borderColor: [
+
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 4,
+            fill:false,
+            lineTension:0
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+
 {% endblock %}

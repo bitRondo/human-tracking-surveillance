@@ -42,7 +42,8 @@ def viewStatistics(request):
         end_date = form.fields['end_date'].initial
         single_date = form.fields['single_date'].initial
     
-    all_results = DailyRecord.fetchWithinRange(start_date = start_date, end_date = end_date)
+    #all_results = DailyRecord.fetchWithinRange(start_date = start_date, end_date = end_date)
+    all_results=DailyRecord.objects.all()
     results_of_peak_days = DailyRecord.findPeakWithinRange(start_date = start_date, end_date = end_date)
     
     single_date_timely_results = TimelyRecord.getRecordsOnDate(single_date)

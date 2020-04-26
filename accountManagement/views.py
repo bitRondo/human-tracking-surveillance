@@ -9,7 +9,7 @@ from datetime import timedelta
 from .forms import CustomizedUserCreationForm
 
 from .controllers import send_activation_key, checkIsAdmin
-
+from .models import User
 import random
 
 def index(request):
@@ -18,6 +18,11 @@ def index(request):
             return render(request, 'activation/notActivated.html')
         return render(request, 'accountManagement/index.html')
     return redirect('login')
+
+@login_required
+def user(request):
+    all_users=User.objects.all()
+    return render(request,'registration/user.html',{'user':all_users})
 
 @user_passes_test(checkIsAdmin)
 def register(request):
@@ -107,3 +112,12 @@ def account(request):
         return redirect('account')
 
     return render(request, 'registration/account.html', context)
+
+@login_required
+def UserRemove(request,pk):
+    user = User.objects.get(id = pk)
+    if request.method=="POST":
+        user.delete()
+        return redirect('/user')
+    context = {'item' : user}
+    return render(request, 'registration/userRemove.html', context)
