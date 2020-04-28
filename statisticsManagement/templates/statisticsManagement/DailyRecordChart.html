@@ -1,57 +1,116 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    
+{% extends 'mainbase.html' %}
 
+{% block title %}Statistics{% endblock %}
+{% block content %}
 
-    <title></title>
-  </head>
-  <body>
-    <canvas id="myChart" width="4000" height="400"></canvas>
-    {{content}}
-    
-   
-    <script> 
+<div class="col">
+    <form action="{% url 'DailyRecords' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
 
+            <!-- To get records withing a range of date -->
+            <div id="date_range_view" class="col-md-5">
+                <h3 class="display-4 text-center">Records within a range of dates</h3>
+                
+                <div class="row">
+                    <div class="col-md-6"><label for="id_start_date">Start Date: </label> {{ form.start_date }}</div>
+                    <div class="col-md-6"><label for="id_start_date">End Date: </label> {{ form.end_date }}</div>
+                </div>
+                {% if all_results %} 
+                <table style="width: 100%; margin-top: 1vw;">
+                    <th>Date</th>
+                    <th>Total Count</th>
+                    <th>Peak hour</th>
 
-        const label = [{%for i in all_result%}'{{i.record_date}}',{% endfor%}];
-        const data =  [{%for i in all_result%}'{{i.total_count}}',{% endfor%}]
-
-
-
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: label,
-            datasets: [{
-                label: 'count',
-                data: data,
-
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-
-                ],
-                borderColor: [
-
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 4,
-                fill:false,
-                lineTension:0
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
+                    {% for each in all_results %}
+                    <!-- <tr {% if each in peak_results %} style="background-color: palevioletred;" {% endif %}
+                        {% if each.record_date == single_date %} style="background-color: greenyellow;" {% endif %}></tr> -->
+                        <td style="padding-left: 5px;">{{ each.record_date|date:"Y-m-d" }}</td>
+                        <td>{{ each.total_count }}</td>
+                        <td>{{ each.peak_hour_start|date:"H:i" }} to
+                            {{ each.peak_hour_end|date:"H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <canvas id="myChart" width="400" height="400"></canvas>
+                <script> 
+            
+                    const label = [{%for i in all_results%}'{{i.record_date}}',{% endfor%}];
+                    const data =  [{%for i in all_results%}'{{i.total_count}}',{% endfor%}]
+                    
+                
+                
+                
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels:label,
+                        datasets: [{
+                            label: 'count',
+                            data:data,
+                
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                
+                            ],
+                            borderColor: [
+                
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 4,
+                            fill:false,
+                            lineTension:0
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
                     }
-                }]
-            }
-        }
-    });
-    </script>
-  </body>
-</html> 
+                });
+                </script>
+                
+                <h4 style="color: red; margin-top: 1vw;">Peak day{{ peak_results|pluralize }}: </h4>
+                {% for each in peak_results %}
+                <p>{{ each.record_date|date:"Y-m-d"}} (Total Count = {{ each.total_count }})</p>
+                {% endfor %}
+
+                {% elif invalid_date_range %}
+                <p style="color: red;">Invalid Date Range!</p>
+                {% else %}
+                <p>Sorry, No Results </p>
+                {% endif %}
+            <!-- </form> -->
+            </div>
+
+            
+
+            <!-- Search panel -->
+
+
+            <div id="search_panel" class="col-md-3">
+                <h3 class="display-4 text-center">Search here</h3>
+                <div class="row">
+                    <div class="col">
+                        <label for="id_auto_adjust">Auto Adjust</label>
+                        {{ form.auto_adjust }}
+                        <br>
+                        <small>Automatically adjust date range to contain the selected date. <br>Disable this
+                            to view date ranges independently.
+                        </small>
+                    </div>
+                </div>
+                <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;">
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}

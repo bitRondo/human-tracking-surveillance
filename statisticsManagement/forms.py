@@ -21,6 +21,18 @@ class DateRangeSearchForm(forms.Form):
     )
 
     today = timezone.now().today().date()
+    
+
+    auto_adjust = forms.BooleanField(
+        required = False,
+        widget = forms.CheckboxInput,
+        initial = True,
+    )
+
+
+class DateForm(forms.Form):
+    
+    today = timezone.now().today().date()
     single_date = forms.DateField(
         widget = DateInput(attrs = {"max" : today.isoformat, 'class' : 'form-control'}),
         initial = today,

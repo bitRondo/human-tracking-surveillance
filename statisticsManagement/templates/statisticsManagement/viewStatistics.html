@@ -7,14 +7,17 @@
     <form action="{% url 'statistics' %}" method="POST">
         {% csrf_token %}
         <div class="row">
+
+            <!-- To get records withing a range of date -->
             <div id="date_range_view" class="col-md-5">
                 <h3 class="display-4 text-center">Records within a range of dates</h3>
+                <!-- <form action="{% url 'statistics' %}" method="POST"></form> -->
                 <div class="row">
                     <div class="col-md-6"><label for="id_start_date">Start Date: </label> {{ form.start_date }}</div>
                     <div class="col-md-6"><label for="id_start_date">End Date: </label> {{ form.end_date }}</div>
                 </div>
                 {% if all_results %}
-                <table style="width: 100%; margin-top: 1vw;">
+                <!-- <table style="width: 100%; margin-top: 1vw;">
                     <th>Date</th>
                     <th>Total Count</th>
                     <th>Peak hour</th>
@@ -28,7 +31,7 @@
                             {{ each.peak_hour_end|date:"H:i" }}</td>
                     </tr>
                     {% endfor %}
-                </table>
+                </table> -->
                 <canvas id="myChart" width="400" height="400"></canvas>
                 <script> 
             
@@ -82,9 +85,13 @@
                 {% else %}
                 <p>Sorry, No Results </p>
                 {% endif %}
+            <!-- </form> -->
             </div>
+
+            <!-- To get single day Records -->
             <div id="single_date_view" class="col-md-4">
                 <h3 class="display-4 text-center">Records on a given date</h3>
+                <!-- <form action="{% url 'statistics' %}" method="POST"></form> -->
                 <div class="row">
                     <div class="col-md-6"><label for="id_single_date">Date: </label> {{ form.single_date }}</div>
                 </div>
@@ -102,6 +109,47 @@
                     {% endfor %}
                 </table>
                 <canvas id="Chart" width="400" height="400"></canvas>
+                <script> 
+            
+                    const label = [{%for i in all_results%}'{{i.record_date}}',{% endfor%}];
+                    const data =  [{%for i in all_results%}'{{i.total_count}}',{% endfor%}]
+                    
+                
+                
+                
+                var ctx = document.getElementById('Chart').getContext('2d');
+                var Chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels:label,
+                        datasets: [{
+                            label: 'count',
+                            data:data,
+                
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                
+                            ],
+                            borderColor: [
+                
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 4,
+                            fill:false,
+                            lineTension:0
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+                </script>
                 {% endif %}
 
                 {% if single_date_daily_result %}
@@ -112,7 +160,12 @@
                     {{ single_date_peak_times|last|date:"H:i"}}</h5>
 
                 {% endif %}
+                <!-- </form>    -->
             </div>
+
+            <!-- Search panel -->
+
+
             <div id="search_panel" class="col-md-3">
                 <h3 class="display-4 text-center">Search here</h3>
                 <div class="row">
@@ -130,47 +183,7 @@
         </div>
     </form>
 </div>
-<script> 
-            
-    const label = [{%for i in all_results%}'{{i.record_date}}',{% endfor%}];
-    const data =  [{%for i in all_results%}'{{i.total_count}}',{% endfor%}]
-    
 
-
-
-var ctx = document.getElementById('Chart').getContext('2d');
-var Chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels:label,
-        datasets: [{
-            label: 'count',
-            data:data,
-
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-
-            ],
-            borderColor: [
-
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 4,
-            fill:false,
-            lineTension:0
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-});
-</script>
 
 
 {% endblock %}
