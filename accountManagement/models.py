@@ -1,3 +1,8 @@
+'''
+Copyright: CSE Group 28 - 2020
+(Module Project - Surveillance System to Detect and Track humans)
+Written by: Disura Warusawithana
+'''
 from django.db import models
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -9,6 +14,11 @@ from django.core.mail import send_mail
 
 from .managers import UserManager
 
+'''
+Model: User
+Extends: AbstractBaseUser, PermissionsMixin
+This is customized User model which is made to contain system-specific attrbibutes of a user.
+'''
 class User (AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(
         _('first name'),
