@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.http import HttpResponse
 
@@ -9,6 +9,11 @@ import datetime
 from .forms import DateRangeSearchForm
 
 from .models import DailyRecord, TimelyRecord
+
+from .controllers import sendMonthlyReport
+
+from accountManagement.controllers import checkIsAdmin
+from systemManagement.controllers import checkEmailConnectivity
 
 @login_required
 def viewStatistics(request):
@@ -89,3 +94,18 @@ def calculate_viewable_date_range(start_date, end_date):
     maxRight = end_date.date()
     maxLeft = (end_date - datetime.timedelta(days = (14))).date()
     return (maxLeft, maxRight)
+
+@user_passes_test(checkIsAdmin)
+def sendMonthlyReport(request):
+    today = datetime.datetime.today()
+    prevMonth = datetime.date(today.year, today.month - 1, 1)
+    context = {"prevMonth" : prevMonth.strftime("%B, %Y"), "success" : False}
+    if checkEmailConnectivity():
+        context["connectivity"] = True
+        if request.method == "POST":
+            sent = sendMonthlyReport()
+            if sent:
+                context['success'] = True
+    else:
+        context["connectivity"] = False
+    return render(request, 'statisticsManagement/sendMonthlyReport.html', context)

@@ -217,7 +217,7 @@ def record_at_end_of_day():
 
 def send_monthly_report():
     today = datetime.datetime.today()
-    if today.day != 1:
+    if today.day != 2:
         return
     else:
         if checkEmailConnectivity():

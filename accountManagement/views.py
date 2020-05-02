@@ -10,14 +10,19 @@ from .forms import CustomizedUserCreationForm
 
 from .controllers import send_activation_key, checkIsAdmin
 from systemManagement.controllers import checkEmailConnectivity
+import videoAnalysis.videoAnalysis as va
 
 import random
 
 def index(request):
     if request.user.is_authenticated:
+        context = {'notif' : []}
         if request.user.activation_key != '':
             return render(request, 'activation/notActivated.html')
-        return render(request, 'accountManagement/index.html')
+        if request.user.is_staff:
+            context['notif'] = va.getNotifications()
+            va.removeNotifications()
+        return render(request, 'accountManagement/index.html', context)
     return redirect('login')
 
 @user_passes_test(checkIsAdmin)
