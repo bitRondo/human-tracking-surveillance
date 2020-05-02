@@ -1,9 +1,129 @@
 from .models import DailyRecord, TimelyRecord
 
+import os.path
+from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph, PageBreak, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.charts.lineplots import LinePlot
+from reportlab.graphics.widgets.markers import makeMarker
+
 from django.utils import timezone
 import datetime
+import calendar
 
 import random
+
+'''
+from statisticsManagement.controllers import sendMonthlyReport
+sendMonthlyReport()
+'''
+
+def createChart(records, peakValue):
+    data = [[]]
+    for r in records:
+        data[0].append((r.record_date.day, r.total_count))
+
+    chart = LinePlot()
+    chart.data = data
+    chart.x, chart.y = 5, 5
+    chart.height, chart.width = 200, 400
+
+    chart.xValueAxis.valueMin = 1
+    chart.xValueAxis.valueStep = 1
+    chart.yValueAxis.valueMin = 0
+    chart.yValueAxis.valueMax = (peakValue//10)*10 + 10
+    chart.yValueAxis.valueStep = 10
+
+    chart.lines[0].symbol = makeMarker('Circle')
+    chart.lineLabelFormat = "%d"
+
+    drawing = Drawing()
+    drawing.add(chart) 
+
+    return drawing
+
+def createTable(records):
+    data = [
+        ["Date", "Total Count", "Peak Hour"],
+    ]
+
+    for r in records:
+        date = r.record_date.strftime("%Y-%m-%d")
+        peakHour = "%s to %s"%(r.peak_hour_start.strftime("%H:%M"),r.peak_hour_end.strftime("%H:%M"))
+        data.append([date, r.total_count, peakHour])
+
+    table = Table(data, colWidths=(1.5*inch, inch, 2*inch))
+
+    style = TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.grey),
+        ('ALIGN', (0,0), (-1,-1), 'CENTRE')
+    ])
+    table.setStyle(style)
+
+    return table
+
+def createPDF(firstDay):
+    folder = os.path.join("statisticsManagement", "monthly_reports")
+    filename = os.path.join(folder, "HTS_Monthly_Report_%s.pdf"%(firstDay.strftime("%B_%Y")))
+    pdf = SimpleDocTemplate(
+        filename=filename,
+        pagesize=letter,
+        rightmargin=72, leftmargin=72, topmargin=72, bottommargin=72
+    )
+
+    contents = []
+    styles = getSampleStyleSheet()
+
+    title1 = Paragraph("Monthly Report - %s"%(firstDay.strftime("%B, %Y")), styles['Heading1'])
+    title2 = Paragraph("Counting Statistics", styles['Heading2'])
+
+    contents.append(title1)
+    contents.append(title2)
+    noteString = Paragraph("This is a system-generated document.", styles['Normal'])
+    contents.append(noteString)
+    contents.append(Spacer(1, inch))
+
+    lastDay = firstDay.replace(day=calendar.monthrange(firstDay.year, firstDay.month)[1])
+    records = DailyRecord.fetchWithinRange(firstDay, lastDay)
+    peakDays = DailyRecord.findPeakWithinRange(firstDay, lastDay)
+    peakValue = peakDays[0].total_count
+
+    chart = createChart(records, peakValue)
+
+    contents.append(chart)
+
+    contents.append(Spacer(1, inch))
+
+    peakTitleString = "Peak Day" if len(peakDays) == 1 else "Peak Days"
+    peakTitleString += "\t(Total Count = %d) :"%(peakValue)
+    peakTitle = Paragraph(peakTitleString, styles['Heading3'])
+
+    contents.append(peakTitle)
+
+    for day in peakDays:
+        dayString = day.record_date.strftime("%Y-%m-%d")
+        peakDay = Paragraph(dayString, styles['Normal'])
+        contents.append(peakDay)
+
+    contents.append(PageBreak())
+
+    styles['Heading4'].alignment = 1
+    listViewTitle = Paragraph("Daily records in detail", styles['Heading4'])
+    contents.append(listViewTitle)
+    contents.append(Spacer(1, 0.25*inch))
+
+    table = createTable(records)
+    contents.append(table)
+
+    pdf.build(contents)
+
+def sendMonthlyReport():
+    today = datetime.datetime.today()
+    firstDayOfPastMonth = datetime.date(today.year, today.month - 1, 1)
+    createPDF(firstDayOfPastMonth)
 
 '''
 Method: save_all_timely_records
@@ -72,12 +192,3 @@ def save_all_daily_records(date, end_date = 0):
         if end_date and current_date == endDate:
             break
 
-
-'''
-Test code for shell:
-
-from statisticsManagement.controllers import save_all_daily_records, save_all_timely_records
-save_all_daily_records
-save_all_timely_records
-
-'''
