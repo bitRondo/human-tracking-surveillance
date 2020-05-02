@@ -29,10 +29,15 @@
         <h2 style="color: red;">Your activation code has expired!</h2>
         {% endif %}
         {% if resend %}
-        {% url 'resend_code' "new" as resend_url %}
-        <a href="{{ resend_url }}">
-            <span class="btn btn-primary">Send New Activation Code</span>
-        </a>
+            {% if connectivity %}
+                {% url 'resend_code' "new" as resend_url %}
+                <a href="{{ resend_url }}">
+                    <span class="btn btn-primary">Send New Activation Code</span>
+                </a>
+            {% else %}
+                <h5 style="color: red;">Cannot send New Activation code!</h5>
+                <p>Please connect your device to the internet, and then refresh the browser.</p>
+            {% endif %}
         {% endif %}
     </form>
 </div>

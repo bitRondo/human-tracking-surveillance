@@ -5,7 +5,9 @@ import datetime
 from django.utils import timezone
 
 from statisticsManagement.models import TimelyRecord, DailyRecord
+from statisticsManagement.controllers import sendMonthlyReport
 from securityManagement.controllers import send_security_alert
+from systemManagement.controllers import checkEmailConnectivity
 
 counter = 0
 timelyCounts = {}
@@ -23,6 +25,7 @@ autoSwitchingScheduler = schedule.Scheduler()
 reportingScheduler = schedule.Scheduler()
 reportingJob = None
 
+notifications = []
 
 def setMode(n = 1):
     global mode, counter
@@ -136,6 +139,7 @@ def schedule_recording():
     reportingJob = reportingScheduler.every(30).minutes.do(record)
 
     reportingScheduler.every().day.at("00:00").do(record_at_end_of_day)
+    reportingScheduler.every().day.at("00:30").do(send_monthly_report)
     end_timers()
 
 def start_timer():
@@ -210,6 +214,29 @@ def record_at_end_of_day():
     # )
     # rec.save()
     print(date, totalCount, peakStart, peakEnd)
+
+def send_monthly_report():
+    today = datetime.datetime.today()
+    if today.day != 1:
+        return
+    else:
+        if checkEmailConnectivity():
+            sendMonthlyReport()
+        else:
+            prevMonth = datetime.date(today.year, today.month - 1, 1)
+            message = "Could not send Monthly Report of %s"%(prevMonth.strftime("%B, %Y"))
+            addNotification(message)
+
+def addNotification(n):
+    global notifications
+    notifications.append(n)    
+
+def getNotifications():
+    return notifications
+
+def removeNotifications():
+    global notifications
+    notifications = []
 
 def runMain():
     setMode(1)

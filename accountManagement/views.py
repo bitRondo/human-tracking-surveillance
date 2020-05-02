@@ -9,6 +9,7 @@ from datetime import timedelta
 from .forms import CustomizedUserCreationForm
 
 from .controllers import send_activation_key, checkIsAdmin
+from systemManagement.controllers import checkEmailConnectivity
 
 import random
 
@@ -21,25 +22,27 @@ def index(request):
 
 @user_passes_test(checkIsAdmin)
 def register(request):
+    if checkEmailConnectivity():
+        if request.method == 'POST':
+            form = CustomizedUserCreationForm(request.POST)
 
-    if request.method == 'POST':
-        form = CustomizedUserCreationForm(request.POST)
+            if form.is_valid():
+                username = form.cleaned_data['username']
+                password = form.cleaned_data['password1']
+                form.save()
 
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            form.save()
+                user = authenticate(username = username, password = password)
 
-            user = authenticate(username = username, password = password)
+                send_activation_key(user)
+                login(request, user)
+                return redirect('activate')
 
-            send_activation_key(user)
-            login(request, user)
-            return redirect('activate')
+        else:
+            form = CustomizedUserCreationForm()
 
+        context = {'form' : form, 'connectivity' : True}
     else:
-        form = CustomizedUserCreationForm()
-
-    context = {'form' : form}
+        context = {'connectivity' : False}
 
     return render(request, 'registration/register.html', context)
 
@@ -57,11 +60,15 @@ def activateAccount(request, resend_requested = ''):
             'resend' : False,
             'resend_requested' : resend_requested,
             'empty' : False,
+            'connectivity' : True,
         }
 
         if (resend_requested == 'new'):
             print ("new")
-            send_activation_key(user, True)
+            if checkEmailConnectivity():
+                send_activation_key(user, True)
+            else:
+                context['connectivity'] = False
 
         if request.method == 'POST':
             key_given = request.POST['key_given']

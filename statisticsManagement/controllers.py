@@ -1,4 +1,5 @@
 from .models import DailyRecord, TimelyRecord
+from accountManagement.models import User
 
 import os.path
 from reportlab.platypus import SimpleDocTemplate, Spacer, Paragraph, PageBreak, Table, TableStyle
@@ -119,12 +120,25 @@ def createPDF(firstDay):
     contents.append(table)
 
     pdf.build(contents)
+    return filename
 
 def sendMonthlyReport():
     today = datetime.datetime.today()
     firstDayOfPastMonth = datetime.date(today.year, today.month - 1, 1)
-    createPDF(firstDayOfPastMonth)
+    pdf = [createPDF(firstDayOfPastMonth)]
 
+    recpients = User.objects.filter(receive_reports = True)
+    month = firstDayOfPastMonth.strftime("%B, %Y")
+    subject = "Monthly Report - %s"%(month)
+    message = ("Please find the attached PDF document containing Counting statistics of %s"%(month))
+
+    sentStatus = True
+    for r in recpients:
+        sent = r.email_user_with_attachments(subject, message, pdf)
+        if not sent: 
+            sentStatus = False
+
+    return sentStatus
 '''
 Method: save_all_timely_records
 Description: Saves timely records in 30-min intervals on a given day
