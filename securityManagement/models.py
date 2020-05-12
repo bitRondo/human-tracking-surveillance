@@ -1,6 +1,7 @@
 from django.db import models
 
 class Recipient(models.Model):
+   
     register_num = models.IntegerField(unique = True)
 
     name = models.CharField(max_length=200)

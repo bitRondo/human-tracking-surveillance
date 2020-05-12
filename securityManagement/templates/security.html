@@ -18,7 +18,7 @@
             <td>{{i.register_num}}</td>
             <td>{{i.name}}</td>
             <td>{{i.email}}</td>
-            <!-- <td><a href="{% url 'RecipientEdit' i.id %}">Edit</a></td> -->
+            <td ><a href="{% url 'RecipientEdit' i.id %}" >Edit</a></td>
             <td><a href="{% url 'RecipientRemove' i.id %}">Delete</a></td>
         </tr>
         {% endfor %}
