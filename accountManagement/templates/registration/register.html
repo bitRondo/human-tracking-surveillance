@@ -10,67 +10,75 @@
         padding-left: 0;
     }
 </style>
-<div class="col-md-6">
-    <h1 class="display-3" style="margin-bottom: 2vw;">Registration</h1>
-
-    <form action="{% url 'register' %}" method="POST">
-        {% csrf_token %}
-
-        <div class="form-group">
-            <div id="names" class="row">
-                <div class="col-md-5 was-validated">
-                    {{ form.first_name }}
-                    <label for="id_first_name">First Name</label>
-                </div>
-                <div class="col-md-7">
-                    {{ form.last_name }}
-                    <label for="id_last_name">Last Name</label>
-                </div>
+<div class="container">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-dark">
+                <h1 class="display-3 text-center text-white">Registration</h1>
             </div>
-            <span class="row col">{{ form.first_name.errors }}</span>
-            <div id="contact" class="row">
-                <div class="col-md-7 was-validated">
-                    {{ form.email }}
-                    <label for="id_email">Email</label>
-                </div>
-                <div class="col-md-5">
-                    {{ form.phone }}
-                    <label for="id_phone">Phone</label>
-                </div>
-            </div>
-            <span class="row col">{{ form.email.errors }}</span>
-            <div id="credentials">
-                <div class="row was-validated">
-                    <div class="col-md-6">
-                        {{ form.username }}
-                        <label for="id_username">Username</label>
+            <div class="card-body">
+                <form action="{% url 'register' %}" method="POST">
+                    {% csrf_token %}
+    
+                    <div class="form-group">
+                        <div id="names" class="row">
+                            <div class="col-md-5 was-validated">
+                                {{ form.first_name }}
+                                <label for="id_first_name">First Name</label>
+                            </div>
+                            <div class="col-md-7">
+                                {{ form.last_name }}
+                                <label for="id_last_name">Last Name</label>
+                            </div>
+                        </div>
+                        <span class="row col">{{ form.first_name.errors }}</span>
+                        <div id="contact" class="row">
+                            <div class="col-md-7 was-validated">
+                                {{ form.email }}
+                                <label for="id_email">Email</label>
+                            </div>
+                            <div class="col-md-5">
+                                {{ form.phone }}
+                                <label for="id_phone">Phone</label>
+                            </div>
+                        </div>
+                        <span class="row col">{{ form.email.errors }}</span>
+                        <div id="credentials">
+                            <div class="row was-validated">
+                                <div class="col-md-6">
+                                    {{ form.username }}
+                                    <label for="id_username">Username</label>
+                                </div>
+                            </div>
+                            <span class="row col">{{ form.username.errors }}</span>
+                            <div class="row was-validated">
+                                <div class="col-md-6">
+                                    {{ form.password1 }}
+                                    <label for="id_password1">Password</label>
+                                    <span class="row col">{{ form.password1.errors }}</span>
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.password2 }}
+                                    <label for="id_password2">Password Confirmation</label>
+                                    <span class="row col">{{ form.password2.errors }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="reception" class="row">
+                            <div class="col">
+                                <label for="id_receive_reports">Enable Reception of Monthly Reports</label>
+                                <div>{{ form.receive_reports }}</div>
+                            </div>
+                        </div>
+    
                     </div>
-                </div>
-                <span class="row col">{{ form.username.errors }}</span>
-                <div class="row was-validated">
-                    <div class="col-md-6">
-                        {{ form.password1 }}
-                        <label for="id_password1">Password</label>
-                        <span class="row col">{{ form.password1.errors }}</span>
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.password2 }}
-                        <label for="id_password2">Password Confirmation</label>
-                        <span class="row col">{{ form.password2.errors }}</span>
-                    </div>
-                </div>
-            </div>
-            <div id="reception" class="row">
-                <div class="col">
-                    <label for="id_receive_reports">Enable Reception of Monthly Reports</label>
-                    <div>{{ form.receive_reports }}</div>
-                </div>
-            </div>
+    
+                    <input type="submit" value="Register" class="btn btn-primary">
+                </form>
 
+            </div>
+            
         </div>
-
-        <input type="submit" value="Register" class="btn btn-primary">
-    </form>
+    </div>
 </div>
-
 {% endblock %}

@@ -5,8 +5,8 @@
 {% block content %}
 
 <div class="col-md-6">
-    <h1 class="display-4">Remove Recipient</h1>
-    <h3>Are you sure you want to delete "{{item.name}}"?</h3>
+    <!-- <h1 class="display-4">Remove Recipient</h1> -->
+    <h3 class="text-bold">Are you sure you want to delete "{{item.name}}"?</h3>
 
     <form action="{% url 'RecipientRemove' item.id %}" method=POST>
 

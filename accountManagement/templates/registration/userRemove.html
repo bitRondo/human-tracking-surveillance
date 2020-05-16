@@ -5,8 +5,8 @@
 {% block content %}
 
 <div class="col-md-6">
-    <h1 class="display-4">Remove Users</h1>
-    <h3>Are you sure you want to delete </h3>
+    <!-- <h1 class="display-4">Remove Users</h1> -->
+    <h3>Are you sure you want to delete "{{item.first_name}}"?</h3>
 
     <form action="{% url 'UserRemove' item.id %}" method=POST>
 
