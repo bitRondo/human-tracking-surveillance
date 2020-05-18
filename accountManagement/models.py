@@ -1,3 +1,8 @@
+'''
+Copyright: CSE Group 28 - 2020
+(Module Project - Surveillance System to Detect and Track humans)
+Written by: Disura Warusawithana
+'''
 from django.db import models
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -5,10 +10,17 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
-from django.core.mail import send_mail
+from django.conf import settings
+
+from django.core.mail import send_mail, EmailMessage
 
 from .managers import UserManager
 
+'''
+Model: User
+Extends: AbstractBaseUser, PermissionsMixin
+This is customized User model which is made to contain system-specific attrbibutes of a user.
+'''
 class User (AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(
         _('first name'),
@@ -95,5 +107,25 @@ class User (AbstractBaseUser, PermissionsMixin):
     def is_account_activated(self):
         return True if self.activation_key == '' else False
 
-    def email_user(self, subject, message, from_email = None, **kwargs):
-        send_mail(subject, message, from_email, [self.email,], **kwargs)
+    def email_user(self, subject, message, **kwargs):
+        try:
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [self.email,], **kwargs)
+            return True
+        except:
+            return False
+
+    def email_user_with_attachments(self, subject, message, attachments = []):
+        emailObject = EmailMessage(
+            subject=subject,
+            body=message,
+            from_email=settings.EMAIL_HOST_USER,
+            to=[self.email],
+        )
+        for a in attachments:
+            emailObject.attach_file(a)
+
+        try:
+            emailObject.send()
+            return True
+        except:
+            return False

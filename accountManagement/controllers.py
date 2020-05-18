@@ -29,29 +29,15 @@ def send_activation_key(user, resend = False):
         "<h2>%s</h2>"%keyString +
         "<p>We hope you enjoy using HumanTrackingSurveillance!</p>" +
         "<small>Please note that the above activation code will be valid only within 24 hours after being sent.</small>")
-    
-    from_email = "HTS@hts.com"
 
-
-    user.activation_key = key
-    user.key_expiry = timezone.now() + timedelta(hours = 24)
-    user.save()
-
-    print (keyString)
-    # send_mail(subject, "", from_email, ["disurawaru.17@cse.mrt.ac.lk",], html_message = message)
-
-    user.email_user(subject, "", from_email = from_email, html_message = message)
+    sent = user.email_user(subject, "", html_message = message)
+    if sent:
+        user.activation_key = key
+        user.key_expiry = timezone.now() + timedelta(hours = 24)
+        user.save()
+        return True
+    else:
+        return False
 
 def checkIsAdmin(user):
     return user.is_staff    
-
-# from accountManagement.controllers import a
-def test_mail():
-    subject = "Account Activation"
-    message = "Please use this email to activate your account"
-    from_email = "HTS@hts.com"
-    to_email = ["disurawaru.17@cse.mrt.ac.lk",]
-    send_mail(subject, message, from_email, to_email)
-
-    from django.core.mail import send_mail
-    send_mail("Helo", "Test mail", "HTS@hts.com", ["disurawaru.17@cse.mrt.ac.lk",])

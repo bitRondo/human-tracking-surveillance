@@ -4,11 +4,13 @@ import datetime
 
 from django.utils import timezone
 
-from statisticsManagement.models import TimelyRecord
+from statisticsManagement.models import TimelyRecord, DailyRecord
+from statisticsManagement.controllers import sendMonthlyReport
 from securityManagement.controllers import send_security_alert
+from systemManagement.controllers import checkEmailConnectivity
 
 counter = 0
-
+timelyCounts = {}
 modes = {0 : 'Idle', 1 : 'Business', 2 : 'Security', 3 : 'Terminated'}
 mode = 0
 
@@ -21,7 +23,9 @@ activeTimers = []
 
 autoSwitchingScheduler = schedule.Scheduler()
 reportingScheduler = schedule.Scheduler()
+reportingJob = None
 
+notifications = []
 
 def setMode(n = 1):
     global mode, counter
@@ -32,10 +36,12 @@ def setMode(n = 1):
             mode = n
         else: 
             print("Invalid mode!")
-            mode = 4
+            mode = 3
         if mode == 1: start_timer()
-        else : end_timers()
-        print("Mode set to %s at %s"%(modes.get(mode), timezone.localtime().strftime("%Y-%m-%d %H:%M")))
+        else : 
+            end_timers()
+            reportingJob = None # to make sure reportingJob cannot be referenced while in other modes
+        print("Mode set to %s at %s"%(modes.get(mode), timezone.localtime().strftime("%Y-%m-%d %H:%M:%S")))
 
 def getMode():
     return modes.get(mode)
@@ -105,35 +111,51 @@ class Reporter(threading.Thread):
         print("Exitting Reporter")
 
 def record():
-    now = timezone.now()
-    # # Uncomment following lines 52-57 to actually save data into database
-    # rec = TimelyRecord(
-    #     record_date = now.date(), 
-    #     record_time = now.time().replace(microsecond = 0), 
-    #     record_count = counter,
-    # )
-    # rec.save()
-    print("Counter = %d"%counter, now.strftime("%H:%M:%S"))
+    global counter, timelyCounts
+    now = timezone.localtime()
+    nowString = now.strftime("%H:%M:%S")
+
+    '''
+    the following check is essential because this method is called by 2 instances:
+    the reportingScheduler and the scheduled job - get_results_of_the_day
+    '''
+    if nowString not in timelyCounts:
+        # # Uncomment following 6 lines to actually save data into database
+        # rec = TimelyRecord(
+        #     record_date = now.date(), 
+        #     record_time = now.time().replace(microsecond = 0), 
+        #     record_count = counter,
+        # )
+        # rec.save()
+        print("Counter = %d"%counter, nowString)
+        timelyCounts[nowString] = counter
+        counter = 0
 
 def schedule_recording():
     record()
-    print("Scheduled at: " + timezone.now().strftime("%H:%M:%S"))
-    reportingScheduler.every(30).seconds.do(record)
+    print("Scheduled at: " + timezone.localtime().strftime("%H:%M:%S"))
+
+    global reportingJob
+    reportingJob = reportingScheduler.every(30).minutes.do(record)
+
+    reportingScheduler.every().day.at("00:00").do(record_at_end_of_day)
+    reportingScheduler.every().day.at("00:30").do(send_monthly_report)
+    end_timers()
 
 def start_timer():
     end_timers()
     # Calculating the delay in which Scheduling should start at a 'ROUND' time
-    now = timezone.now()
+    now = timezone.localtime()
     if now.minute < 30:     # e.g. if now is 11:16, scheduling should start at 11:30
         hour, minute = now.hour, 30
     else:                   # e.g. if now is 11:34, scheduling should start at 12:00
         hour, minute = now.hour + 1, 0
 
     exec_time = datetime.datetime(now.year, now.month, now.day, hour = hour, minute = minute, 
-    tzinfo = timezone.get_current_timezone())
+    tzinfo = now.tzinfo)
 
     # Delaying the Scheduling until the next 'ROUND' time
-    nownow = timezone.now() # the exact moment after the above calculations
+    nownow = timezone.localtime() # the exact moment after the above calculations
     timer = threading.Timer((exec_time - nownow).total_seconds(), schedule_recording)
     timer.start()
     print("Scheduling will start at: " + exec_time.strftime("%H:%M:%S"))
@@ -158,61 +180,85 @@ def schedule_auto_switch_mode():
             autoSwitchingScheduler.every().day.at(autoSwitchingTimes['s_end']).do(setMode, 0)
             print("Scheduled to go Idle at %s" % autoSwitchingTimes['s_end'])
 
+def get_results_of_day():
+    if reportingJob: reportingJob.run() # to make sure first it records the last timely record of the day
+
+    maxCount = 0
+    timeStamps = list(timelyCounts.keys())
+    totalCount = timelyCounts[timeStamps[0]]
+
+    for t in range(len(timeStamps) - 1):
+        hourlyCount = timelyCounts[timeStamps[t]] + timelyCounts[timeStamps[t + 1]]
+        if hourlyCount >= maxCount: 
+            maxCount = hourlyCount
+            peakHourStart = datetime.time.fromisoformat(timeStamps[t])
+        totalCount += timelyCounts[timeStamps[t + 1]]
+
+    # a dummy date is required because timedelta operations can be done only with datetime objects
+    dummyDate = datetime.datetime(100, 1, 1, peakHourStart.hour, peakHourStart.minute)
+
+    # adjustments to properly represent the peak hour
+    peakHourStart = (dummyDate - datetime.timedelta(minutes=30)).time()
+    peakHourEnd = (dummyDate + datetime.timedelta(minutes=30)).time()
+
+    return totalCount, peakHourStart, peakHourEnd
+
+def record_at_end_of_day():
+    totalCount, peakStart, peakEnd = get_results_of_day()
+    # decreasing date by 1 day because this is executed past 00:00
+    date = (timezone.localtime() - datetime.timedelta(days=1)).date()
+    # # Uncomment following 2 lines to actually save data into database
+    # rec = DailyRecord(
+    #     record_date = date, total_count = totalCount, 
+    #     peak_hour_start = peakStart, peak_hour_end = peakEnd
+    # )
+    # rec.save()
+    print(date, totalCount, peakStart, peakEnd)
+
+def send_monthly_report():
+    today = datetime.datetime.today()
+    if today.day != 2:
+        return
+    else:
+        if checkEmailConnectivity():
+            sendMonthlyReport()
+        else:
+            prevMonth = datetime.date(today.year, today.month - 1, 1)
+            message = "Could not send Monthly Report of %s"%(prevMonth.strftime("%B, %Y"))
+            addNotification(message)
+
+def addNotification(n):
+    global notifications
+    notifications.append(n)    
+
+def getNotifications():
+    return notifications
+
+def removeNotifications():
+    global notifications
+    notifications = []
+
 def runMain():
     setMode(1)
     Reporter().start()
     Analyzer().start()
 
-
-# The following 2 classes and runThreads method are not used.
 '''
-class Business(threading.Thread):
-    def __init__(self, threadID, name):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
+Do the following in testing process:
 
-    def run(self):
-        print("Starting " + self.name)
+function record:
+1) Comment out the defined lines
 
-        global counter, mode
-        while (mode != 4):
-            if (mode == 1):
-                schedule.run_pending()
-            time.sleep(1)
-        print("Exiting " + self.name)
+function schedule_recording:
+2) change every(30).minutes to every(30).seconds
+*3) change every().day.at("00:00") to a time close to now
 
-class Security(threading.Thread):
-    def __init__(self, threadID, name):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
+function start_timer:
+*4) add a line after exec_time having an (hour, minute) tuple with values close to now
 
-    def run(self):
-        print("Starting " + self.name)
-        global counter, mode
-        while(mode != 4):
-            if (mode == 2):
-                if counter:
-                    print("Alert!")
-            time.sleep(1)
-        print("Exiting " + self.name)    
+function get_results_of_day:
+5) change minutes=30 to seconds=30 in both peakHourStart and peakHourEnd
 
-def runThreads():
-    bthread = Business(1, "Business")
-    bthread.start()
-
-    sthread = Security(2, "Security")
-    sthread.start()
-    
-    pthread = Analyzer(0, "Video analyzer")
-    pthread.start()
-
-'''
-
-'''
-import videoAnalysis.videoAnalysis as v
-v.switch_mode()
-v.setAutoSwitch()
-v.runMain()
+function recordAtEndOfDay:
+6) Comment out the defined lines
 '''

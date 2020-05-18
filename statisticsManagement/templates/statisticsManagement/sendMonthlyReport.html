@@ -1,0 +1,25 @@
+{% extends 'mainbase.html'%}
+
+{% block title %}Send Monthly Report{% endblock %}
+
+{% block content %}
+
+<div class="col">
+    <h1 class="display-4">Send Monthly Report of {{ prevMonth }}</h1>
+{% if not success %}
+    {% if connectivity %}
+    <form action="{% url 'send_monthly_report' %}" method="POST">
+        <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+    {% else %}
+    <h1 class="display-3" style="color: red;">No Internet!</h1>
+    <h3>Internet connection is necessary to send monthly reports.</h3>
+    <h3>Please connect your device to the internet, and then refresh the browser.</h3>
+    {% endif %}
+{% else %}
+    <h3 style="color: green">Successfully Sent!</h3>
+{% endif %}
+
+</div>
+
+{% endblock %}

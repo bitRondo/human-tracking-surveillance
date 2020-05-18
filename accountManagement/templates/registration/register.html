@@ -10,12 +10,14 @@
         padding-left: 0;
     }
 </style>
+
 <div class="container">
     <div class="col-md-8">
         <div class="card">
             <div class="card-header bg-dark">
                 <h1 class="display-3 text-center text-white">Registration</h1>
             </div>
+{% if connectivity %}
             <div class="card-body">
                 <form action="{% url 'register' %}" method="POST">
                     {% csrf_token %}
@@ -70,15 +72,16 @@
                                 <div>{{ form.receive_reports }}</div>
                             </div>
                         </div>
-    
-                    </div>
-    
+                    </div>   
                     <input type="submit" value="Register" class="btn btn-primary">
                 </form>
-
-            </div>
-            
-        </div>
-    </div>
+          </div>
+      </div>
+  </div>
 </div>
+{% else %}
+    <h1 class="display-1" style="color: red;">No Internet!</h1>
+    <h3>Registration process cannot be continued without internet connection.</h3>
+    <h3>Please connect your device to the internet, and then refresh the browser.</h3>
+{% endif %}
 {% endblock %}
