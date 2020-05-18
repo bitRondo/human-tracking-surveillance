@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-    {% load staticfiles %}
+    {% load static %}
+    
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- semantic UI -->
+        <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+        <!--Chart js-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+        
+      
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script type="text/javascript">
@@ -25,7 +34,7 @@
             refresh();
         }
     </script>
-</head>
+
 
 <body onload="showCurrentTime()">
     {% if user.is_authenticated %}
@@ -34,7 +43,14 @@
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
             <ul class="navbar-nav">
                 <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
-                <li class="nav-item"><a href="{% url 'statistics' %}" class="nav-link">Statistics</a></li>
+              
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Statistics</a>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'DailyRecords' %}" class="dropdown-item">Records within a range of dates</a>
+                        <a href="{% url 'TimelyRecords' %}" class="dropdown-item">Records on a given date</a>    
+                    </div>
+                </li>
                 <li class="nav-item"><a href="{% url 'account' %}" class="nav-link">My Account</a></li>
                 {% if user.is_staff %}
                 <li class="nav-item"><a href="{% url 'system_settings' %}" class="nav-link">System</a></li>

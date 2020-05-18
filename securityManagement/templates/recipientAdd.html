@@ -3,31 +3,68 @@
 {% block title %}Add Recipient{% endblock %}
 
 {% block content %}
-<div class="col-md-6">
-    <h1 class="display-4">Add New Recipient</h1>
-    <form action="{% url 'RecipientAdd' %}" method="POST">
-        {% csrf_token %}
+<div class="container">
+    <div class="col-md-8">
+        <div class="card card-cascade narrower">
+            <div class="card-header bg-dark">
+                <h1 class="display-4 bg-dark text-white text-center">Registration</h1>
+            </div>
+            <!-- <div class="bg-dark">
+            <h1 class="display-4 bg-dark text-white text-center">Register</h1>
+            </div> -->
+            <div class="card-body">
+            <form action="" method=POST>
+                {% csrf_token %}
 
-        <div class="form-group">
-            <div class="col-md-6">
-                {{ form.register_num }}
-                <label for="id_register_num">Registration Number</label>
-            </div>
-            {% if form.register_num.errors %}
-                <p class="col" style="color: red;">Registration number is not unique.</p>
-            {% endif %}
-            <div class="col-md-6">
-                {{ form.name }}
-                <label for="id_name">Name</label>
-                {{ form.email }}
-                <label for="id_email">Email</label>
-            </div>
-            {% if form.email.errors %}
-            <p class="col" style="color: red;">Email is already being used by a recipient.</p>
-            {% endif %}
+                <div class="form-group row">
+                    <div class="col-md-4 text-center">
+                        <label for="id_register_num">Registration Number</label>
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.register_num }}
+                        
+                    </div>
+                    {% if form.register_num.errors %}
+                        <p class="col" style="color: red;">Registration number is not unique.</p>
+                    {% endif %}
+                </div>
+                    <div class="form-group row">
+                        <div class="col-md-4 text-center">
+                            <label for="id_name">Name</label>
+                        </div>
+                        <div class="col-md-8">
+                            {{ form.name }}
+                        </div>
+                        
+                    </div>
+                
+                    <div class=" form-group row">
+                        <div class="col-md-4 text-center">
+                            <label for="id_email">Email</label>
+                        </div>
+                        <div class="col-md-8">
+                            {{ form.email }}
+                        </div>
+                        
+                    </div>
+
+                    <!-- <div class="col-md-6">
+                        {{ form.name }}
+                        <label for="id_name">Name</label>
+                        {{ form.email }}
+                        <label for="id_email">Email</label>
+                    </div> -->
+                    {% if form.email.errors %}
+                    <p class="col" style="color: red;">Email is already being used by a recipient.</p>
+                    {% endif %}
+                
+
+                <input type="submit" value="Register" class="btn btn-primary">
+            </form>
         </div>
-
-        <input type="submit" value="Register" class="btn btn-primary">
-    </form>
+    </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
+

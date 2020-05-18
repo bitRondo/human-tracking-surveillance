@@ -24,6 +24,8 @@ def RecipientAdd(request):
        
     return render (request, 'recipientAdd.html',{'form':form})
 
+
+
 @user_passes_test(checkIsAdmin)
 def RecipientRemove(request,pk):
     recipient = Recipient.objects.get(id = pk)
@@ -33,10 +35,25 @@ def RecipientRemove(request,pk):
     context = {'item' : recipient}
     return render(request, 'recipientRemove.html', context)
 
-@user_passes_test(checkIsAdmin)
+
+
+@user_passes_test(checkIsAdmin) 
 def RecipientEdit(request,pk):
-    form =RecipientAddForm()
+    recipient = Recipient.objects.get(id=pk)
+    form = RecipientAddForm(instance=recipient)
+
+    if request.method == 'POST':
+        form = RecipientAddForm(request.POST , instance=recipient)
+        if form.is_valid():
+            form.save()
+            return redirect('/securityManagement')
+       
+    
     return render (request, 'recipientAdd.html',{'form':form})
+
+
+
+
 
 def alert(request):
     return render(request, 'alert.html')
