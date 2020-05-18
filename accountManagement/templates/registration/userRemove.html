@@ -8,10 +8,10 @@
     <!-- <h1 class="display-4">Remove Users</h1> -->
     <h3>Are you sure you want to delete "{{item.first_name}}"?</h3>
 
-    <form action="{% url 'UserRemove' item.id %}" method=POST>
+    <form action="{% url 'user_remove' item.id %}" method=POST>
 
         {% csrf_token %}
-        <a href="{% url 'user' %}"><span class="btn btn-secondary">Cancel</span></a>
+        <a href="{% url 'all_users' %}"><span class="btn btn-secondary">Cancel</span></a>
 
         <input type="submit" name="Confirm" value="Remove" class="btn btn-danger">
 

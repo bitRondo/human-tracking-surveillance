@@ -11,7 +11,10 @@
                     <h1 class="text-dark font-weight-bold display-3">Users</h1>
                 </div>
                 <div class="col-md-4">
-                    <button class="btn btn-primary  btn-rounded"><a href="{% url 'register' %}" class="text-white"><h1>Register New User</h1></a></button>
+                    <button class="btn btn-primary  btn-rounded">
+                    <a href="{% url 'register' %}" class="text-white" style="text-decoration: none;">
+                    <h1>Register New User</h1></a>
+                    </button>
                 </div>
             
             
@@ -30,21 +33,25 @@
                     <th></th>
                     <th></th>
                 </tr>
-                {%for i in user%}
+                {%for u in all_users%}
                 <tr>
-                    <td>{{i.first_name}}</td>
-                    <td>{{i.last_name}}</td>
-                    <td>{{i.email}}</td>
-                    <td>{{i.phone}}</td>
-                    <td><button class="btn-danger btn"><a href="{% url 'UserRemove' i.id %}" class="text-white">Remove</a></button></td>
+                    <td>{{u.first_name}}</td>
+                    <td>{{u.last_name}}</td>
+                    <td>{{u.email}}</td>
+                    <td>{{u.phone}}</td>
+                    <td>
+                    {% if u.is_staff %}
+                    <p>ADMIN</p>
+                    {% else %}
+                    <button class="btn-danger btn"><a href="{% url 'user_remove' u.id %}" class="text-white">Remove</a></button>
+                    {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
             </div>
         </div>
     </div>
-</div>
-
 </div>
 
 {% endblock %}

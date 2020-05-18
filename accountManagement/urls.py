@@ -10,9 +10,9 @@ urlpatterns = [
     path('register/', views.register, name = 'register'),
     path('activate/', views.activateAccount, name = 'activate'),
     path('activate/<resend_requested>', views.activateAccount, name = 'resend_code'),
-    path('user/',views.user,name='user'),
+    path('allusers/', views.allUsers, name='all_users'),
     path('account/', views.account, name = 'account'),
-    path('userremove/<str:pk>/',views.UserRemove, name='UserRemove'),
+    path('userremove/<str:pk>/', views.userRemove, name='user_remove'),
 
 
     path('password_change/', 

@@ -28,9 +28,9 @@ def index(request):
     return redirect('login')
 
 @login_required
-def user(request):
+def allUsers(request):
     all_users=User.objects.all()
-    return render(request,'registration/user.html',{'user':all_users})
+    return render(request,'registration/allUsers.html',{'all_users':all_users})
 
 @user_passes_test(checkIsAdmin)
 def register(request):
@@ -128,10 +128,10 @@ def account(request):
     return render(request, 'registration/account.html', context)
 
 @login_required
-def UserRemove(request,pk):
-    user = User.objects.get(id = pk)
+def userRemove(request,pk):
+    u = User.objects.get(id = pk)
     if request.method=="POST":
-        user.delete()
-        return redirect('/user')
-    context = {'item' : user}
+        u.delete()
+        return redirect('/allusers')
+    context = {'item' : u}
     return render(request, 'registration/userRemove.html', context)
