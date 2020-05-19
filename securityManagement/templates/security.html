@@ -11,14 +11,9 @@
                     <div class="col-md-8">
                         <h1 class="text-dark font-weight-bold display-3">Recipients of Security Alerts</h1>
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary  btn-rounded"><a href="{% url 'RecipientAdd' %}" class="text-white"><h1>Add New Recipient</h1></a></button>
-                    </div>
-                
-                
                 </div>
                 
-                <br>
+                <div style="margin-bottom: 3vw;"></div>
                 <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10">
@@ -35,8 +30,8 @@
                         <td>{{i.register_num}}</td>
                         <td>{{i.name}}</td>
                         <td>{{i.email}}</td>
-                        <td ><button class="btn btn-success"><a href="{% url 'RecipientEdit' i.id %}"  class="text-white">Edit</a></button></td>
-                        <td><button class="btn-danger btn"><a href="{% url 'RecipientRemove' i.id %}" class="text-white">Delete</a></button></td>
+                        <td ><button class="btn btn-success"><a href="{% url 'RecipientEdit' i.id %}"  class="text-white" style="text-decoration: none">Edit</a></button></td>
+                        <td><button class="btn-danger btn"><a href="{% url 'RecipientRemove' i.id %}" class="text-white" style="text-decoration: none">Delete</a></button></td>
                     </tr>
                     {% endfor %}
                 </table>

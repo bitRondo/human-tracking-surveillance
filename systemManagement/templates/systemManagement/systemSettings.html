@@ -1,5 +1,5 @@
 {% extends "mainbase.html "%}
-{% block title %}System{% endblock %}
+{% block title %}SystemSetting{% endblock %}
 
 {% block content %}
 <style>
@@ -18,14 +18,8 @@
         border-radius: 1vw;
     }
 </style>
+
 <div class="col-md-6 float-left">
-    <div id="user">
-        <h1 class="display-4">User Settings</h1>
-        <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-left"> Users</a>
-        <div style="margin-bottom: 1vw;"></div>
-        <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-left">Recipients of Security Alerts</a>
-    </div>
-    <hr style="color: black;">
     <div id="system">
         <h1 class="display-4">System Settings</h1>
 

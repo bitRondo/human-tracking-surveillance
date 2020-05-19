@@ -16,7 +16,7 @@ modeDict = {'Business' : 1, 'Security' : 2}
 
 # urlname = system_settings
 @user_passes_test(checkIsAdmin)
-def system(request):
+def systemSetting(request):
     mode = program.getMode()
     is_auto_switching = program.isAutoSwitching()
     auto_switch = 'on' if is_auto_switching else 'off'
@@ -64,3 +64,8 @@ def system(request):
         'verification_failed' : verification_failed,
     }
     return render(request, 'systemManagement/systemSettings.html', context)
+
+@user_passes_test(checkIsAdmin)
+def userSetting(request):
+    return render(request,'systemManagement/userSetting.html')
+

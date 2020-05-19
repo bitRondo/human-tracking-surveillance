@@ -1,0 +1,27 @@
+{% extends "mainbase.html "%}
+{% block title %}UserSetting{% endblock %}
+
+{% block content %}
+
+<div id="user">
+    <div class="col-md-6">
+        <h1 class="display-4">User Settings</h1>
+    <div style="margin-bottom: 3vw;"></div>
+   
+    
+   
+    <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-center"> View users</a>
+    <div style="margin-bottom: 3vw;"></div>
+    <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-center"> Add users</a>
+    <div style="margin-bottom: 3vw;"></div>        
+            
+       
+      
+    <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-center">View Recipients of Security Alerts</a>
+    <div style="margin-bottom: 3vw;"></div>
+    <a href="{% url 'RecipientAdd' %}" class="col-md-6 btn btn-secondary text-center">Add Recipients of Security Alerts</a>
+
+    </div>
+</div>
+
+{% endblock %}
