@@ -15,7 +15,7 @@ import videoAnalysis.videoAnalysis as program
 modeDict = {'Business' : 1, 'Security' : 2}
 
 # urlname = system_settings
-@user_passes_test(checkIsAdmin)
+@user_passes_test(checkIsAdmin, login_url='index')
 def systemSetting(request):
     mode = program.getMode()
     is_auto_switching = program.isAutoSwitching()
@@ -65,7 +65,7 @@ def systemSetting(request):
     }
     return render(request, 'systemManagement/systemSettings.html', context)
 
-@user_passes_test(checkIsAdmin)
+@user_passes_test(checkIsAdmin, login_url='index')
 def userSetting(request):
     return render(request,'systemManagement/userSetting.html')
 

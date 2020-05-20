@@ -130,7 +130,7 @@ def calculate_viewable_date_range(start_date, end_date):
     maxLeft = (end_date - datetime.timedelta(days = (14))).date()
     return (maxLeft, maxRight)
 
-@user_passes_test(checkIsAdmin)
+@user_passes_test(checkIsAdmin, login_url='index')
 def sendMonthlyReport(request):
     today = datetime.datetime.today()
     prevMonth = datetime.date(today.year, today.month - 1, 1)

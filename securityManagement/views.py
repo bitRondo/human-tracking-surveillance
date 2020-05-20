@@ -7,12 +7,12 @@ from accountManagement.controllers import checkIsAdmin
 from .models import Recipient
 from .forms import RecipientAddForm
 
-@user_passes_test(checkIsAdmin)
+@user_passes_test(checkIsAdmin, login_url='index')
 def Security(request):
     recipients = Recipient.objects.all()
     return render(request,'security.html', {'Recipient':recipients} )
 
-@user_passes_test(checkIsAdmin)
+@user_passes_test(checkIsAdmin, login_url='index')
 def RecipientAdd(request):
     form = RecipientAddForm()
     
@@ -26,7 +26,7 @@ def RecipientAdd(request):
 
 
 
-@user_passes_test(checkIsAdmin)
+@user_passes_test(checkIsAdmin, login_url='index')
 def RecipientRemove(request,pk):
     recipient = Recipient.objects.get(id = pk)
     if request.method=="POST":
@@ -37,7 +37,7 @@ def RecipientRemove(request,pk):
 
 
 
-@user_passes_test(checkIsAdmin) 
+@user_passes_test(checkIsAdmin, login_url='index') 
 def RecipientEdit(request,pk):
     recipient = Recipient.objects.get(id=pk)
     form = RecipientAddForm(instance=recipient)
@@ -50,10 +50,6 @@ def RecipientEdit(request,pk):
        
     
     return render (request, 'recipientAdd.html',{'form':form})
-
-
-
-
 
 def alert(request):
     return render(request, 'alert.html')
