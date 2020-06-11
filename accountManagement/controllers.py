@@ -41,3 +41,6 @@ def send_activation_key(user, resend = False):
 
 def checkIsAdmin(user):
     return user.is_staff    
+
+def checkIsActivated(user):
+    return user.activation_key == ''

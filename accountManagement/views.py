@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -8,7 +9,7 @@ from datetime import timedelta
 
 from .forms import CustomizedUserCreationForm
 
-from .controllers import send_activation_key, checkIsAdmin
+from .controllers import send_activation_key, checkIsAdmin, checkIsActivated
 
 from systemManagement.controllers import checkEmailConnectivity
 import videoAnalysis.videoAnalysis as va
@@ -109,6 +110,7 @@ def activateAccount(request, resend_requested = ''):
         return render(request, 'activation/activationForm.html', context)
 
 @login_required
+@user_passes_test(checkIsActivated, login_url='index')
 def account(request):
 
     context = {
@@ -127,9 +129,11 @@ def account(request):
 
     return render(request, 'registration/account.html', context)
 
-@login_required
+@user_passes_test(checkIsAdmin)
 def userRemove(request,pk):
     u = User.objects.get(id = pk)
+    if u.is_staff:
+        raise Http404
     if request.method=="POST":
         u.delete()
         return redirect('/allusers')

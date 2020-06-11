@@ -12,10 +12,11 @@ from .models import DailyRecord, TimelyRecord
 
 from .controllers import sendMonthlyReport
 
-from accountManagement.controllers import checkIsAdmin
+from accountManagement.controllers import checkIsAdmin, checkIsActivated
 from systemManagement.controllers import checkEmailConnectivity
 
 @login_required
+@user_passes_test(checkIsActivated, login_url='index')
 def DailyRecords(request):
     print("Daily Records")
     timezone.activate('Asia/Colombo')
@@ -61,6 +62,7 @@ def DailyRecords(request):
     return render(request, 'statisticsManagement/DailyRecordChart.html', content)
 
 @login_required
+@user_passes_test(checkIsActivated, login_url='index')
 def TimelyRecords(request):
     timezone.activate('Asia/Colombo')
 
