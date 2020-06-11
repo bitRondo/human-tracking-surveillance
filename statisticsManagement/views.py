@@ -98,15 +98,33 @@ def TimelyRecords(request):
         else:
             midVal = datetime.time(single_date_daily_result.peak_hour_start.hour, 30)
         single_date_peak_times = (
-            single_date_daily_result.peak_hour_start,
-            midVal,                
-            single_date_daily_result.peak_hour_end
+            "%s to %s"%(single_date_daily_result.peak_hour_start.strftime("%H:%M"),
+            midVal.strftime("%H:%M")), 
+            "%s to %s"%(midVal.strftime("%H:%M"),
+            single_date_daily_result.peak_hour_end.strftime("%H:%M"))
         )
    
+    timely_results_list = []
+    if single_date_timely_results:
+        for t in range(len(single_date_timely_results)-1):
+            result = {
+                'record_time':'%s to %s'%(single_date_timely_results[t].record_time.strftime("%H:%M"), 
+                single_date_timely_results[t+1].record_time.strftime("%H:%M")),
+                'record_count':single_date_timely_results[t+1].record_count
+                }
+            timely_results_list.append(result)
+        last_index = len(single_date_timely_results) - 1
+        last_result = {
+            'record_time':'%s to %s'%(single_date_timely_results[last_index].record_time.strftime("%H:%M"), 
+                single_date_timely_results[0].record_time.strftime("%H:%M")),
+                'record_count':single_date_timely_results[last_index].record_count
+        }
+        timely_results_list.append(last_result)
+
     content = {
         'form' : form,
         'single_date' : single_date,
-        'single_date_timely_results' : single_date_timely_results,
+        'single_date_timely_results' : timely_results_list,
         'single_date_daily_result' : single_date_daily_result,
         'single_date_peak_times' : single_date_peak_times,
         

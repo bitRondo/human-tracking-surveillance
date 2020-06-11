@@ -152,70 +152,115 @@ def sendMonthlyReport():
 
         return sentStatus
     else: return -1
+
 '''
-Method: save_all_timely_records
-Description: Saves timely records in 30-min intervals on a given day
-Params: date{required}: recording date as a 3-tuple (YYYY, MM, DD), initial_count: int, 
-        start_time: recording start time as a 2-tuple (HH, MM), end_time = recording stop time as a 2-tuple (HH, MM)
+params: date = 3-tuple (YYYY, MM, DD)
 '''
-def save_all_timely_records(date, initial_count = 0, start_time = (0, 0), end_time = (23, 30)):
-    startTime = datetime.datetime(date[0], date[1], date[2], start_time[0], start_time[1], 0)
-    endTime = datetime.datetime(date[0], date[1], date[2], end_time[0], end_time[1], 0)
+def save_all_timely_records(date):
+    timelyCounts = {}
+    startTime = datetime.datetime(date[0], date[1], date[2], 0, 0)
     for t in range(48):
         time = startTime + datetime.timedelta(minutes = 30*t)
         h = time.hour
-
-        print("Date: " + time.date().strftime("%Y-%m-%d") 
-        + "\tTime: " + time.time().strftime("%H:%M") 
-        + "\tCount: " + str(initial_count))
-
-        # # Uncomment the following 2 lines to save in the database
-        # record = TimelyRecord(record_date = time.date(), record_time = time.time(), record_count = initial_count)
-        # record.save()
-
+        count = 0
         if h >= 8 and h < 12:
-            initial_count += random.randint(1, 5)
+            count = random.randint(1, 5)
         elif h >= 12 and h < 17:
-            initial_count += random.randint(1, 10)
+            count = random.randint(1, 10)
         elif h >= 17 and h < 20:
-            initial_count += random.randint(1, 5)
+            count = random.randint(1, 5)
+        timelyCounts[time.strftime("%H:%M:%S")] = count
+    
+    maxCount = 0
+    timeStamps = list(timelyCounts.keys())
+    totalCount = timelyCounts[timeStamps[0]]
+
+    for t in range(len(timeStamps) - 1):
+        hourlyCount = timelyCounts[timeStamps[t]] + timelyCounts[timeStamps[t + 1]]
+        if hourlyCount >= maxCount: 
+            maxCount = hourlyCount
+            peakHourStart = datetime.time.fromisoformat(timeStamps[t])
+        totalCount += timelyCounts[timeStamps[t + 1]]
+
+    # a dummy date is required because timedelta operations can be done only with datetime objects
+    dummyDate = datetime.datetime(100, 1, 1, peakHourStart.hour, peakHourStart.minute)
+
+    # adjustments to properly represent the peak hour
+    peakHourStart = (dummyDate - datetime.timedelta(minutes=30)).time()
+    peakHourEnd = (dummyDate + datetime.timedelta(minutes=30)).time()
+
+    record_string = ""
+    for k in list(timelyCounts.keys()):
+        record_string += "%s,%s,%d"%(startTime.strftime("%Y-%m-%d"), k, timelyCounts[k]) + "\n"
+
+    return str(totalCount), peakHourStart.strftime("%H:%M:%S"), peakHourEnd.strftime("%H:%M:%S"), record_string
+
+def save_all_records(startDate, endDate):
+    start_date = datetime.datetime(startDate[0], startDate[1], startDate[2], 0, 0)
+    end_date = datetime.datetime(endDate[0], endDate[1], endDate[2], 0, 0)
+
+    timely_string = ""
+    daily_string = ""
+
+    date = start_date
+    while date <= end_date:
+        record = save_all_timely_records((date.year, date.month, date.day))
+        timely_string += record[3]
+        daily_record = "%s,%s,%s,%s"%(date.strftime("%Y-%m-%d"), record[0], record[1], record[2])
+        daily_string += daily_record + "\n"
         
-        if time == endTime:
-            break
+        date = date + datetime.timedelta(days=1)
+
+    folder = os.path.join("statisticsManagement", "dummy_data")
+    timely_filename = os.path.join(folder, "%s to %s timely.txt"%
+    (start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")))
+    daily_filename = os.path.join(folder, "%s to %s daily.txt"%
+    (start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")))
+
+    t = open(timely_filename, "w")
+    t.write(timely_string.strip())
+    t.close()
+
+    d = open(daily_filename, "w")
+    d.write(daily_string.strip())
+    d.close()
+
+def saveAllToDatabase(timely_filename = None, daily_filename = None):
+    folder = os.path.join("statisticsManagement", "dummy_data")
+    if timely_filename:
+        timely_filename = os.path.join(folder, timely_filename)
+        t = open(timely_filename, "r")
+        t_lines = t.readlines()
+        t.close()
+        for line in t_lines:
+            if line != '':
+                content = line.strip().split(',')
+                rec_date = datetime.date.fromisoformat(content[0])
+                rec_time = datetime.time.fromisoformat(content[1])
+                rec_count = int(content[2])
+                record = TimelyRecord(record_date = rec_date, 
+                record_time = rec_time, record_count = rec_count)
+                record.save()
+                print(record)
+    if daily_filename:
+        daily_filename = os.path.join(folder, daily_filename)
+        d = open(daily_filename, "r")
+        d_lines = d.readlines()
+        d.close()
+        for line in d_lines:
+            if line != '':
+                content = line.strip().split(',')
+                rec_date = datetime.date.fromisoformat(content[0])
+                rec_count = int(content[1])
+                peak_start = datetime.time.fromisoformat(content[2])
+                peak_end = datetime.time.fromisoformat(content[3])
+                record = DailyRecord(record_date = rec_date, total_count = rec_count, 
+                peak_hour_start = peak_start, peak_hour_end = peak_end)
+                record.save()
+                print(record.total_count)
 
 '''
-Method: save_all_daily_records
-Description: Saves daily records on a given month
-Params: date{required}: recording start date as a 3-tuple (YYYY, MM, DD), 
-        end_date = recording stop date as a 3-tuple (YYYY, MM, DD)
+from statisticsManagement.controllers import save_all_records, saveAllToDatabase
+save_all_records((2020,4,1), (2020,4,30))
+saveAllToDatabase(timely_filename = "")
 '''
-def save_all_daily_records(date, end_date = 0):
-    startDate = datetime.datetime(date[0], date[1], date[2])
-
-    if end_date: endDate = datetime.datetime(date[0], date[1], end_date)
-
-    choices = [0, 30]
-
-    for d in range(31):
-        current_date = startDate + datetime.timedelta(hours = 24*d)
-        if current_date.month > date[1]:
-            break
-        elif current_date.day > 12 and current_date.day < 25:
-            count = random.randint(50, 150)
-        else:
-            count = random.randint(25, 50)
-
-        peak_start = datetime.time(random.randint(10, 14), random.choice(choices))
-        peak_end = datetime.time(peak_start.hour + 1, peak_start.minute)
-        print("Date: " + current_date.strftime("%Y-%m-%d") +
-                "\tCount: " + str(count) +
-                "\tPeak time: " + peak_start.strftime("%H:%M") + " to " + peak_end.strftime("%H:%M"))
-
-        # # Uncomment the following 3 lines to save in the database
-        # record = DailyRecord(record_date = current_date, total_count = count, 
-        # peak_hour_start = peak_start, peak_hour_end = peak_end)
-        # record.save()
-
-        if end_date and current_date == endDate:
-            break
-

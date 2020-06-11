@@ -1,6 +1,6 @@
 {% extends 'mainbase.html' %}
 
-{% block title %}Statistics1{% endblock %}
+{% block title %}Statistics - Date{% endblock %}
 {% block content %}
 <h3 class="display-4 text-center">Records on a given date</h3>
 <br>
@@ -23,7 +23,7 @@
                     {% for each in single_date_timely_results %}
                     <tr {% if each.record_time in single_date_peak_times %} style="background-color:palevioletred;"
                         {% endif %}>
-                        <td style="padding-left: 5px;">{{ each.record_time|date:"H:i" }}</td>
+                        <td style="padding-left: 5px;">{{ each.record_time }}</td>
                         <td>{{ each.record_count }}</td>
                     </tr>
                     {% endfor %}
@@ -80,16 +80,11 @@
                     }
                 });
                 </script>
+                {% else %}
+                <p>Sorry, No Results!</p>
                 {% endif %}
 
-                
-              
-            </div>
-
-            <!-- Search panel -->
-
-
-            
+            </div>  
         </div>
     </form>
 </div>

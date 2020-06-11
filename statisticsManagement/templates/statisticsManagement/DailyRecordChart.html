@@ -1,6 +1,6 @@
 {% extends 'mainbase.html' %}
 
-{% block title %}Statistics{% endblock %}
+{% block title %}Statistics - Date Range{% endblock %}
 {% block content %}
 
 <div class="col">
@@ -91,23 +91,8 @@
             <!-- </form> -->
             </div>
 
-            
-
-            <!-- Search panel -->
-
-
             <div id="search_panel" class="col-md-3">
                 <h3 class="display-4 text-center">Search here</h3>
-                <div class="row">
-                    <div class="col">
-                        <label for="id_auto_adjust">Auto Adjust</label>
-                        {{ form.auto_adjust }}
-                        <br>
-                        <small>Automatically adjust date range to contain the selected date. <br>Disable this
-                            to view date ranges independently.
-                        </small>
-                    </div>
-                </div>
                 <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;">
             </div>
         </div>
