@@ -136,13 +136,14 @@ def calculate_viewable_date_range(start_date, end_date):
 def sendMonthlyReport(request):
     today = datetime.datetime.today()
     prevMonth = datetime.date(today.year, today.month - 1, 1)
-    context = {"prevMonth" : prevMonth.strftime("%B, %Y"), "success" : False}
+    context = {"prevMonth" : prevMonth.strftime("%B, %Y"), "success" : False, "nodata" : False}
     if checkEmailConnectivity():
         context["connectivity"] = True
         if request.method == "POST":
             sent = sendMonthlyReport()
             if sent:
                 context['success'] = True
+                if sent < 0 : context['nodata'] = True
     else:
         context["connectivity"] = False
     return render(request, 'statisticsManagement/sendMonthlyReport.html', context)

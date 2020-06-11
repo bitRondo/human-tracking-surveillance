@@ -17,7 +17,11 @@
     <h3>Please connect your device to the internet, and then refresh the browser.</h3>
     {% endif %}
 {% else %}
-    <h3 style="color: green">Successfully Sent!</h3>
+    {% if nodata %}
+        <h3 style="color: green">There is no data available for {{ prevMonth }}</h3>
+    {% else %}
+        <h3 style="color: green">Successfully Sent!</h3>
+    {% endif %}
 {% endif %}
 
 </div>

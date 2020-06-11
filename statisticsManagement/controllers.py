@@ -66,79 +66,92 @@ def createTable(records):
 
     return table
 
+"""
+returns a PDF containing a graph and a list of statistics for the given month of firstDay
+returns None if no data is available for that month
+"""
 def createPDF(firstDay):
-    folder = os.path.join("statisticsManagement", "monthly_reports")
-    filename = os.path.join(folder, "HTS_Monthly_Report_%s.pdf"%(firstDay.strftime("%B_%Y")))
-    pdf = SimpleDocTemplate(
-        filename=filename,
-        pagesize=letter,
-        rightmargin=72, leftmargin=72, topmargin=72, bottommargin=72
-    )
-
-    contents = []
-    styles = getSampleStyleSheet()
-
-    title1 = Paragraph("Monthly Report - %s"%(firstDay.strftime("%B, %Y")), styles['Heading1'])
-    title2 = Paragraph("Counting Statistics", styles['Heading2'])
-
-    contents.append(title1)
-    contents.append(title2)
-    noteString = Paragraph("This is a system-generated document.", styles['Normal'])
-    contents.append(noteString)
-    contents.append(Spacer(1, inch))
-
     lastDay = firstDay.replace(day=calendar.monthrange(firstDay.year, firstDay.month)[1])
     records = DailyRecord.fetchWithinRange(firstDay, lastDay)
-    peakDays = DailyRecord.findPeakWithinRange(firstDay, lastDay)
-    peakValue = peakDays[0].total_count
 
-    chart = createChart(records, peakValue)
+    if records:
+        folder = os.path.join("statisticsManagement", "monthly_reports")
+        filename = os.path.join(folder, "HTS_Monthly_Report_%s.pdf"%(firstDay.strftime("%B_%Y")))
+        pdf = SimpleDocTemplate(
+            filename=filename,
+            pagesize=letter,
+            rightmargin=72, leftmargin=72, topmargin=72, bottommargin=72
+        )
 
-    contents.append(chart)
+        contents = []
+        styles = getSampleStyleSheet()
 
-    contents.append(Spacer(1, inch))
+        title1 = Paragraph("Monthly Report - %s"%(firstDay.strftime("%B, %Y")), styles['Heading1'])
+        title2 = Paragraph("Counting Statistics", styles['Heading2'])
 
-    peakTitleString = "Peak Day" if len(peakDays) == 1 else "Peak Days"
-    peakTitleString += "\t(Total Count = %d) :"%(peakValue)
-    peakTitle = Paragraph(peakTitleString, styles['Heading3'])
+        contents.append(title1)
+        contents.append(title2)
+        noteString = Paragraph("This is a system-generated document.", styles['Normal'])
+        contents.append(noteString)
+        contents.append(Spacer(1, inch))
 
-    contents.append(peakTitle)
+        peakDays = DailyRecord.findPeakWithinRange(firstDay, lastDay)
+        peakValue = peakDays[0].total_count
 
-    for day in peakDays:
-        dayString = day.record_date.strftime("%Y-%m-%d")
-        peakDay = Paragraph(dayString, styles['Normal'])
-        contents.append(peakDay)
+        chart = createChart(records, peakValue)
 
-    contents.append(PageBreak())
+        contents.append(chart)
 
-    styles['Heading4'].alignment = 1
-    listViewTitle = Paragraph("Daily records in detail", styles['Heading4'])
-    contents.append(listViewTitle)
-    contents.append(Spacer(1, 0.25*inch))
+        contents.append(Spacer(1, inch))
 
-    table = createTable(records)
-    contents.append(table)
+        peakTitleString = "Peak Day" if len(peakDays) == 1 else "Peak Days"
+        peakTitleString += "\t(Total Count = %d) :"%(peakValue)
+        peakTitle = Paragraph(peakTitleString, styles['Heading3'])
 
-    pdf.build(contents)
-    return filename
+        contents.append(peakTitle)
 
+        for day in peakDays:
+            dayString = day.record_date.strftime("%Y-%m-%d")
+            peakDay = Paragraph(dayString, styles['Normal'])
+            contents.append(peakDay)
+
+        contents.append(PageBreak())
+
+        styles['Heading4'].alignment = 1
+        listViewTitle = Paragraph("Daily records in detail", styles['Heading4'])
+        contents.append(listViewTitle)
+        contents.append(Spacer(1, 0.25*inch))
+
+        table = createTable(records)
+        contents.append(table)
+
+        pdf.build(contents)
+        return filename
+    else: return None
+
+"""
+Returns 1 if sent to all recipients, 0 if sending failed, -1 if no data available
+That way, we can be sure that no empty reports are sent.
+"""
 def sendMonthlyReport():
     today = datetime.datetime.today()
     firstDayOfPastMonth = datetime.date(today.year, today.month - 1, 1)
     pdf = [createPDF(firstDayOfPastMonth)]
 
-    recpients = User.objects.filter(receive_reports = True)
-    month = firstDayOfPastMonth.strftime("%B, %Y")
-    subject = "Monthly Report - %s"%(month)
-    message = ("Please find the attached PDF document containing Counting statistics of %s"%(month))
+    if pdf:
+        recpients = User.objects.filter(receive_reports = True)
+        month = firstDayOfPastMonth.strftime("%B, %Y")
+        subject = "Monthly Report - %s"%(month)
+        message = ("Please find the attached PDF document containing Counting statistics of %s"%(month))
 
-    sentStatus = True
-    for r in recpients:
-        sent = r.email_user_with_attachments(subject, message, pdf)
-        if not sent: 
-            sentStatus = False
+        sentStatus = 1
+        for r in recpients:
+            sent = r.email_user_with_attachments(subject, message, pdf)
+            if not sent: 
+                sentStatus = 0
 
-    return sentStatus
+        return sentStatus
+    else: return -1
 '''
 Method: save_all_timely_records
 Description: Saves timely records in 30-min intervals on a given day

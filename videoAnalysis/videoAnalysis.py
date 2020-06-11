@@ -24,8 +24,14 @@ activeTimers = []
 autoSwitchingScheduler = schedule.Scheduler()
 reportingScheduler = schedule.Scheduler()
 reportingJob = None
+monthlyScheduler = schedule.Scheduler()
 
 notifications = []
+
+"""
+NOTICE: NOW THIS SYSTEM IS SET FOR DEMONSTRATION PURPOSE
+changes tagged as [definite] are made
+"""
 
 def setMode(n = 1):
     global mode, counter
@@ -49,16 +55,18 @@ def getMode():
 def getNextValidMode():
     if mode == 1: return 'Security'
     elif mode == 2: return 'Business'
-    else: return None
+    else: return 'Business'
 
 def toggleAutoSwitch(condition, times = None):
-    global autoSwitch, autoSwitchingTimes
+    global autoSwitch, autoSwitchingTimes, mode
     autoSwitch = condition
     if autoSwitch:
         if times != autoSwitchingTimes:
             set_auto_switching_times(times)
             schedule_auto_switch_mode()
             print("Auto-Switching ON")
+    else:
+        if mode == 0: setMode() # set default to Business if current mode is Idle
 
 def isAutoSwitching():
     return autoSwitch
@@ -97,6 +105,7 @@ class Reporter(threading.Thread):
         global counter, mode, autoSwitch, shouldAlert
         print("Starting Reporter")
         while (mode != 3):
+            monthlyScheduler.run_pending()
             if autoSwitch:
                 autoSwitchingScheduler.run_pending()
             if (mode == 1):
@@ -136,10 +145,8 @@ def schedule_recording():
     print("Scheduled at: " + timezone.localtime().strftime("%H:%M:%S"))
 
     global reportingJob
-    reportingJob = reportingScheduler.every(30).minutes.do(record)
-
-    reportingScheduler.every().day.at("00:00").do(record_at_end_of_day)
-    reportingScheduler.every().day.at("00:30").do(send_monthly_report)
+    reportingJob = reportingScheduler.every(30).seconds.do(record) # change
+    reportingScheduler.every().day.at("00:00").do(record_at_end_of_day) # change
     end_timers()
 
 def start_timer():
@@ -149,7 +156,7 @@ def start_timer():
     if now.minute < 30:     # e.g. if now is 11:16, scheduling should start at 11:30
         hour, minute = now.hour, 30
     else:                   # e.g. if now is 11:34, scheduling should start at 12:00
-        hour, minute = now.hour + 1, 0
+        hour, minute = (now.hour + 1)%24, 0
 
     exec_time = datetime.datetime(now.year, now.month, now.day, hour = hour, minute = minute, 
     tzinfo = now.tzinfo)
@@ -198,8 +205,8 @@ def get_results_of_day():
     dummyDate = datetime.datetime(100, 1, 1, peakHourStart.hour, peakHourStart.minute)
 
     # adjustments to properly represent the peak hour
-    peakHourStart = (dummyDate - datetime.timedelta(minutes=30)).time()
-    peakHourEnd = (dummyDate + datetime.timedelta(minutes=30)).time()
+    peakHourStart = (dummyDate - datetime.timedelta(seconds=30)).time() # change
+    peakHourEnd = (dummyDate + datetime.timedelta(seconds=30)).time() # change
 
     return totalCount, peakHourStart, peakHourEnd
 
@@ -227,6 +234,8 @@ def send_monthly_report():
             message = "Could not send Monthly Report of %s"%(prevMonth.strftime("%B, %Y"))
             addNotification(message)
 
+monthlyScheduler.every().day.at("00:30").do(send_monthly_report) # change
+
 def addNotification(n):
     global notifications
     notifications.append(n)    
@@ -244,21 +253,24 @@ def runMain():
     Analyzer().start()
 
 '''
-Do the following in testing process:
+Do the following changes in testing/demonstration process:
 
 function record:
 1) Comment out the defined lines
 
 function schedule_recording:
-2) change every(30).minutes to every(30).seconds
-*3) change every().day.at("00:00") to a time close to now
+[definite]2) change every(30).minutes to every(30).seconds in reportingJob
+3) change "00:00" to a time close to now
+
+monthlyScheduler:
+4) change every().day.at("00:30") to a time close to now
 
 function start_timer:
-*4) add a line after exec_time having an (hour, minute) tuple with values close to now
+5) add a line just before exec_time having an (hour, minute) tuple with values close to now
 
 function get_results_of_day:
-5) change minutes=30 to seconds=30 in both peakHourStart and peakHourEnd
+[definite]6) change minutes=30 to seconds=30 in both peakHourStart and peakHourEnd
 
 function recordAtEndOfDay:
-6) Comment out the defined lines
+7) Comment out the defined lines
 '''

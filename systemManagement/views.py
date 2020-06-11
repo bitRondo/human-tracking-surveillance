@@ -52,8 +52,10 @@ def systemSetting(request):
                             's_end' : request.POST['security_end']
                         } 
                         program.toggleAutoSwitch(True, times)
+                        mode = program.getMode()
                 else:
                     program.toggleAutoSwitch(False)
+                    mode = program.getMode()
         else:
             verification_failed = 'Admin verification Failed!'
     context = {
