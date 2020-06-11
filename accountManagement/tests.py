@@ -1,11 +1,6 @@
 from django.test import TestCase, RequestFactory, Client
-
 from django.urls import reverse
-
-from django.contrib.auth.models import AnonymousUser
 from .models import User
-
-from .views import index
 
 class AccountManagementTests(TestCase):
 
