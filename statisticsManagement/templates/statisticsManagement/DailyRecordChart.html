@@ -10,7 +10,7 @@
 </style>
 
 <div class="col">
-    <h3 class="display-4 text-center"style="margin-top:8vw;"></h3>
+    <h4 class="display-4 text-center"style="margin-top:8vw; margin-bottom:2vw;">Records within a date of range</h4>
     <form action="{% url 'DailyRecords' %}" method="POST">
         {% csrf_token %}
         
@@ -29,8 +29,8 @@
     </form>
     {% if all_results %} 
     <div class="row">
-        <div id="date_range_chart" style="margin-left: 15vw;margin-top: 2vw;">
-            <canvas id="myChart" width="1000" height="450"></canvas>
+        <div id="date_range_chart" style="margin-left: 10%;margin-top: 2vw;">
+            <canvas id="myChart" width="1200" height="450"></canvas>
             <script> 
         
                 const label = [{%for i in all_results%}'{{i.record_date}}',{% endfor%}];
@@ -85,7 +85,7 @@
         </div>
     </div>
             
-    <div class="row" style="margin-left: 25vw;margin-top:2vw;">
+    <div class="row" style="margin-left: 10%;margin-top:2vw;">
         <div class="col-md-2">
             <h4 style="color: red; margin-top: 1vw;">Peak day{{ peak_results|pluralize }}: </h4>
         </div>
@@ -100,7 +100,7 @@
                 
     <div class="row">
         
-        <table class="table table-borderless table-hover " style="margin-left: 15vw; margin-top: 5vw;">
+        <table class="table table-borderless table-hover " style="margin-left: 20%; margin-top: 5vw;">
             <th>Date</th>
             <th>Total Count</th>
             <th>Peak hour</th>
@@ -119,7 +119,9 @@
     {% elif invalid_date_range %}
         <p style="color: red;">Invalid Date Range!</p>
     {% else %}
-        <p>Sorry, No Results </p>
+    <div class="text-center" style="margin-top: 10%;">
+        <h4>Sorry, No Results!</h4>
+    </div>
     {% endif %}           
                 
                 
