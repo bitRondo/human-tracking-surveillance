@@ -84,9 +84,9 @@
         </div>
         <div class="col">
             <h5 style="color: red;">Peak hour =
-                {{ single_date_peak_times|first|date:"H:i"}}
+                {{ single_date_daily_result.peak_hour_start|date:"H:i"}}
                 to
-                {{ single_date_peak_times|last|date:"H:i"}}</h5>   
+                {{ single_date_daily_result.peak_hour_end|date:"H:i"}}</h5>   
         </div>
         {% endif %}
     </div>
