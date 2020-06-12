@@ -52,14 +52,14 @@
                     {% endfor %}
                 </div>
                 <h3 style="margin-top: 2vw;">Business Mode</h3><span id="business_error" style="color: red;"></span>
-                <div class="form-inline">
+                <div class="form-inline" style="font-size: large;">
                     {{ form.business_start.label }}{{ form.business_start }}
                     {{ form.business_end.label }}{{ form.business_end }}
                 </div>
 
 
                 <h3 style="margin-top: 1vw;">Security Mode</h3><span id="security_error" style="color: red;"></span>
-                <div class="form-inline">
+                <div class="form-inline" style="font-size: large;">
                     {{ form.security_start.label }}{{ form.security_start }}
                     {{ form.security_end.label }}{{ form.security_end }}
                 </div>
@@ -76,10 +76,12 @@
             <hr>
             <div class="form-group">
                 <h3>Manual Switching</h3>
+                <div style="font-size: large;">
                 <label for="id_change_mode">Change Mode to </label>
                 <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}
                     class="btn btn-success">
                     {{ validMode }}</button>
+                </div>
             </div>
         </form>
     </div>
