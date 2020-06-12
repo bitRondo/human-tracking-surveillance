@@ -4,25 +4,42 @@
 {% block content %}
 
 <style>
+    html,body{
+        background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+    }
     .errorlist {
         list-style-type: none;
         color: red;
         padding-left: 0;
     }
+    /* .card-header{
+        background-color:;
+    } */
+    .card{
+        height: 570px;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 600px;
+        background-color:rgba(0,0,0,0.5) !important;
+        }
 </style>
 
 <div class="container">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-dark">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="margin-top:10vw;">
+            <div class="card-header">
                 <h1 class="display-3 text-center text-white">Registration</h1>
             </div>
-{% if connectivity %}
+            {% if connectivity %}
             <div class="card-body">
                 <form action="{% url 'register' %}" method="POST">
                     {% csrf_token %}
     
-                    <div class="form-group">
+                    <div class="form-group text-white">
                         <div id="names" class="row">
                             <div class="col-md-5 was-validated">
                                 {{ form.first_name }}
@@ -66,6 +83,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div style="margin-bottom: 2vw;"></div>
                         <div id="reception" class="row">
                             <div class="col">
                                 <label for="id_receive_reports">Enable Reception of Monthly Reports</label>
@@ -78,6 +96,9 @@
           </div>
       </div>
   </div>
+    </div>
+    
+        
 </div>
 {% else %}
     <h1 class="display-1" style="color: red;">No Internet!</h1>

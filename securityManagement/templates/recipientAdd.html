@@ -3,20 +3,33 @@
 {% block title %}Add Recipient{% endblock %}
 
 {% block content %}
+<style>
+     html,body{
+        background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+    }
+    .card{
+        height: 370px;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 500px;
+        background-color: rgba(0,0,0,0.5) !important;
+        }
+</style>
 <div class="container">
-    <div class="col-md-8">
-        <div class="card card-cascade narrower">
-            <div class="card-header bg-dark">
-                <h1 class="display-4 bg-dark text-white text-center">Registration</h1>
+    <div class="d-flex justify-content-center h-400">
+        <div class="card card-cascade narrower" style="margin-top:12vw;">
+            <div class="card-header">
+                <h1 class="display-4  text-white text-center">Registration</h1>
             </div>
-            <!-- <div class="bg-dark">
-            <h1 class="display-4 bg-dark text-white text-center">Register</h1>
-            </div> -->
-            <div class="card-body">
+            <div class="card-body text-white">
             <form action="" method=POST>
                 {% csrf_token %}
 
-                <div class="form-group row">
+                <div class="form-group row ">
                     <div class="col-md-4 text-center">
                         <label for="id_register_num">Registration Number</label>
                     </div>
@@ -30,7 +43,7 @@
                 </div>
                     <div class="form-group row">
                         <div class="col-md-4 text-center">
-                            <label for="id_name">Name</label>
+                            <label for="id_name" >Name</label>
                         </div>
                         <div class="col-md-8">
                             {{ form.name }}

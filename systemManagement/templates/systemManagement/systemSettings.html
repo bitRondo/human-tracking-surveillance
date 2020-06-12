@@ -3,6 +3,13 @@
 
 {% block content %}
 <style>
+     html,body{
+        background-image: url('https://embridgeconsulting.com/wp-content/uploads/2014/10/homepage-background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+}  
     .mode-label {
         font-size: x-large;
         text-transform: uppercase;
@@ -21,7 +28,7 @@
 
 <div class="col-md-6 float-left">
     <div id="system">
-        <h1 class="display-4">System Settings</h1>
+        <h1 class="display-4" style="margin-top:8vw;">System Settings</h1>
 
         <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
             {% csrf_token %}

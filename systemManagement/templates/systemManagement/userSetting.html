@@ -2,26 +2,43 @@
 {% block title %}UserSetting{% endblock %}
 
 {% block content %}
-
+<style>
+  html,body{
+        background-image: url('https://embridgeconsulting.com/wp-content/uploads/2014/10/homepage-background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+}   
+.btn{
+    background-color: #2e1c16;
+} 
+</style>
 <div id="user">
-    <div class="col-md-6">
-        <h1 class="display-4">User Settings</h1>
-    <div style="margin-bottom: 3vw;"></div>
-   
-    
-   
-    <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-center"> View users</a>
-    <div style="margin-bottom: 3vw;"></div>
-    <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-center"> Add users</a>
-    <div style="margin-bottom: 3vw;"></div>        
+    <div class="container">
+        <div class="d-flex justify-content-left ">
+            <div class="col-md-8">
+                <h1 class="display-3" style="margin-top:10vw;">User Settings</h1>
+            <div style="margin-bottom: 3vw;"></div>
+           
             
-       
-      
-    <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-center">View Recipients of Security Alerts</a>
-    <div style="margin-bottom: 3vw;"></div>
-    <a href="{% url 'RecipientAdd' %}" class="col-md-6 btn btn-secondary text-center">Add Recipients of Security Alerts</a>
-
+           
+            <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-center"> View users</a>
+            <div style="margin-bottom: 3vw;"></div>
+            <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-center"> Add users</a>
+            <div style="margin-bottom: 3vw;"></div>        
+                    
+               
+              
+            <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-center">View Recipients of Security Alerts</a>
+            <div style="margin-bottom: 3vw;"></div>
+            <a href="{% url 'RecipientAdd' %}" class="col-md-6 btn btn-secondary text-center">Add Recipients of Security Alerts</a>
+        
+            </div>
+        </div>
+        
     </div>
+    
 </div>
 
 {% endblock %}

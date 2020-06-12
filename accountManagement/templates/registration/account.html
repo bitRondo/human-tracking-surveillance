@@ -3,53 +3,72 @@
 {% block title %}Account{% endblock %}
 
 {% block content %}
+<style>
+    html,body{
+        background-image: url('https://www.peoplesearchlive.com/wp-content/uploads/2018/07/full-service-min-1030x579.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+}
 
-<!-- <h2 class="display-4">{{ user.first_name }} {{ user.last_name }}</h2> -->
-<h2 class="display-4">Nuwanthika Waihenage</h2>
-<div style="margin-bottom: 2vw;"></div>
-<div class="row">
-        <div class="col">
-            <div class="row">
-                <div class="col-md-2">
-                    <h2>Username: </h3>
+.card{
+        height: 270px;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 400px;
+        background-color:white !important;
+        }
+</style>
+<div class="contai"
+<div class="card" style="margin-top:10vw;">
+    <h2 class="display-4" >{{ user.first_name }} {{ user.last_name }}</h2>
+    <div style="margin-bottom: 2vw;"></div>
+    <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col-md-2">
+                        <h2>Username: </h3>
+                    </div>
+                    <div class="col-md-5">
+                        <h5>{{ user.username }}</h5>
+                    </div>
                 </div>
-                <div class="col-md-5">
-                    <h5>{{ user.username }}</h5>
+                <div style="margin-bottom: 2vw;"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <h2>Email: </h3>
+                    </div>
+                    <div class="col-md-5">
+                        <h5>{{ user.email }}</h5>
+                    </div>
                 </div>
+                <div style="margin-bottom: 2vw;"></div>
+                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary">Change Password</h1></a>
+            
             </div>
-            <div style="margin-bottom: 2vw;"></div>
-            <div class="row">
-                <div class="col-md-2">
-                    <h2>Email: </h3>
-                </div>
-                <div class="col-md-5">
-                    <h5>{{ user.email }}</h5>
-                </div>
+            
+            <div class="col">
+                <h2>Reception of Monthly Reports</h3>
+        
+                    <form action="{% url 'account' %}" method="POST">
+                        {% csrf_token %}
+                        {% if user.receive_reports %}
+                            <h5 style="color: green;">Enabled</h5>
+                            <button type="submit" name="receive_reports" value="off" class="btn btn-outline-danger">
+                                Disable above facility
+                            </button>
+                        {% else %}
+                            <h5 style="color: red;">Disabled</h5>
+                            <button type="submit" name="receive_reports" value="on" class="btn btn-outline-success">
+                                Enable above facility    
+                            </button>
+                        {% endif %}
+                    </form>
             </div>
-            <div style="margin-bottom: 2vw;"></div>
-            <a href="{% url 'password_change' %}"><h1 class="btn btn-primary">Change Password</h1></a>
-        
-        </div>
-        
-        <div class="col">
-            <h2>Reception of Monthly Reports</h3>
-    
-                <form action="{% url 'account' %}" method="POST">
-                    {% csrf_token %}
-                    {% if user.receive_reports %}
-                        <h5 style="color: green;">Enabled</h5>
-                        <button type="submit" name="receive_reports" value="off" class="btn btn-outline-danger">
-                            Disable above facility
-                        </button>
-                    {% else %}
-                        <h5 style="color: red;">Disabled</h5>
-                        <button type="submit" name="receive_reports" value="on" class="btn btn-outline-success">
-                            Enable above facility    
-                        </button>
-                    {% endif %}
-                </form>
-        </div>
-</div>    
+    </div> 
+</div>
+   
         
  
 
