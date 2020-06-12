@@ -2,92 +2,129 @@
 
 {% block title %}Statistics - Date{% endblock %}
 {% block content %}
-<h3 class="display-4 text-center">Records on a given date</h3>
+
+<style>
+    html,body{
+        background-color:#f8f4ef;
+    }
+
+</style>
+<div class="col">
+    <h3 class="display-4 text-center" style="margin-top:8vw;"></h3>
+    <form action="{% url 'TimelyRecords' %}" method="POST">
+        {% csrf_token %}
+        <div class="row" style="margin-left: 25vw;">
+                <div class="col-md-3"><label for="id_single_date">Date: </label> {{ form.single_date }}</div>
+                <div class="col-md-3">
+                    <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;">
+                </div>
+        </div>
+        
+    </form>
+    {% if single_date_timely_results %}
+    <div class="row">
+        <div id="single_date_chart"style="margin-left: 10vw;margin-top: 2vw;">
+            <canvas id="Chart" width="1200" height="450"></canvas>
+            <script> 
+        
+                const label = [{%for i in single_date_timely_results%}'{{i.record_time}}',{% endfor%}];
+                const data =  [{%for i in single_date_timely_results%}'{{i.record_count}}',{% endfor%}]
+                
+            
+            
+            
+            var ctx = document.getElementById('Chart').getContext('2d');
+            var Chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels:label,
+                    datasets: [{
+                        label: 'count',
+                        data:data,
+            
+                        backgroundColor: [
+                            'brown',
+            
+                        ],
+                        borderColor: [
+            
+                            'brown'
+                        ],
+                        borderWidth: 4,
+                        fill:false,
+                        lineTension:0
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "black",
+                                fontSize: 10,
+                                beginAtZero: true
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                fontColor: "black",
+                                fontSize: 10,
+                                beginAtZero: true
+                }
+            }]
+                    }
+                }
+            });
+            </script>
+        </div>    
+    </div>
+    <div class="row" style="margin-left: 25vw;margin-top:2vw;">
+        {% if single_date_daily_result %}
+        <div class="col">
+            <h5 style="color: red;"style="margin-top: 1vw;">Total Count = {{ single_date_daily_result.total_count }}</h5>
+        </div>
+        <div class="col">
+            <h5 style="color: red;">Peak hour =
+                {{ single_date_peak_times|first|date:"H:i"}}
+                to
+                {{ single_date_peak_times|last|date:"H:i"}}</h5>   
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <table class="table table-borderless table-hover " style="margin-left: 15vw; margin-top: 5vw;">
+            <th>Time</th>
+            <th>Count</th>
+
+            {% for each in single_date_timely_results %}
+            <tr {% if each.record_time in single_date_peak_times %} style="background-color:palevioletred;"
+                {% endif %}>
+                <td style="padding-left: 5px;">{{ each.record_time }}</td>
+                <td>{{ each.record_count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+        <p>Sorry, No Results!</p>
+    {% endif %}
+</div>
+<!-- 
 <br>
 <br>
 <div class="col">
-    <form action="{% url 'TimelyRecords' %}" method="POST">
-        {% csrf_token %}
-        <div class="row">
-            <div id="single_date_view" class="col-md-5">
+    
+               
                 
-                <div class="row">
-                    <div class="col-md-6"><label for="id_single_date">Date: </label> {{ form.single_date }}</div>
-                    <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;">
-                </div>
-                {% if single_date_timely_results %}
-                <table style="width: 70%; margin-top: 1vw;">
-                    <th>Time</th>
-                    <th>Count</th>
-
-                    {% for each in single_date_timely_results %}
-                    <tr {% if each.record_time in single_date_peak_times %} style="background-color:palevioletred;"
-                        {% endif %}>
-                        <td style="padding-left: 5px;">{{ each.record_time }}</td>
-                        <td>{{ each.record_count }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                {% if single_date_daily_result %}
-                <h5 style="margin-top: 1vw;">Total Count = {{ single_date_daily_result.total_count }}</h5>
-                <h5>Peak hour =
-                    {{ single_date_peak_times|first|date:"H:i"}}
-                    to
-                    {{ single_date_peak_times|last|date:"H:i"}}</h5>
-
-                {% endif %}
+                
             </div>
-            <div id="single_date_chart" class="col-md-7">
-                <canvas id="Chart" width="400" height="250"></canvas>
-                <script> 
             
-                    const label = [{%for i in single_date_timely_results%}'{{i.record_time}}',{% endfor%}];
-                    const data =  [{%for i in single_date_timely_results%}'{{i.record_count}}',{% endfor%}]
-                    
                 
-                
-                
-                var ctx = document.getElementById('Chart').getContext('2d');
-                var Chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels:label,
-                        datasets: [{
-                            label: 'count',
-                            data:data,
-                
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                
-                            ],
-                            borderColor: [
-                
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 4,
-                            fill:false,
-                            lineTension:0
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-                </script>
-                {% else %}
-                <p>Sorry, No Results!</p>
-                {% endif %}
 
             </div>  
         </div>
     </form>
-</div>
+</div> -->
 
 
 
