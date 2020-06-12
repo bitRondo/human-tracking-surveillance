@@ -28,7 +28,7 @@
 
 <div class="col-md-6 float-left text-black">
     <div id="system">
-        <h1 class="display-4" style="margin-top:8vw;">System Settings</h1>
+        <h1 class="display-4" style="margin-top:7vw;">System Settings</h1>
 
         <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
             {% csrf_token %}
@@ -40,6 +40,7 @@
             </div>
             <p class="invalid-feedback">{{ verification_failed }}</p>
             <h3>Current mode: <span class="current-mode">{{ mode }}</span></h3>
+            <hr>
             <div class="form-group">
                 <h3>Automatic Switching</h3>
                 <div class="form-check-inline">
@@ -50,14 +51,14 @@
                     </div>
                     {% endfor %}
                 </div>
-                <h4>Business Mode</h4><span id="business_error" style="color: red;"></span>
+                <h3 style="margin-top: 2vw;">Business Mode</h3><span id="business_error" style="color: red;"></span>
                 <div class="form-inline">
                     {{ form.business_start.label }}{{ form.business_start }}
                     {{ form.business_end.label }}{{ form.business_end }}
                 </div>
 
 
-                <h4>Security Mode</h4><span id="security_error" style="color: red;"></span>
+                <h3 style="margin-top: 1vw;">Security Mode</h3><span id="security_error" style="color: red;"></span>
                 <div class="form-inline">
                     {{ form.security_start.label }}{{ form.security_start }}
                     {{ form.security_end.label }}{{ form.security_end }}
