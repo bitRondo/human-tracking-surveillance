@@ -7,7 +7,7 @@ import threading
 from .videoAnalysis import Analyzer
 from .Person import MyPerson
 
-    
+from django.http import StreamingHttpResponse 
 
 class HumanTrackingSystem(threading.Thread):
     lock = threading.Lock()
@@ -120,11 +120,11 @@ class HumanTrackingSystem(threading.Thread):
             with self.lock:
                 # check if the output frame is available, otherwise skip
                 # the iteration of the loop
-                if outputFrame is None:
+                if self.outputFrame is None:
                     continue
 
                 # encode the frame in JPEG format
-                (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+                (flag, encodedImage) = cv2.imencode(".jpg", self.outputFrame)
 
                 # ensure the frame was successfully encoded
                 if not flag:
@@ -134,11 +134,11 @@ class HumanTrackingSystem(threading.Thread):
             yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
                 bytearray(encodedImage) + b'\r\n')
 
-    def video_feed():
+    def video_feed(self):
 	# return the response generated along with the specific media
 	# type (mime type)
-	    return Response(generate(),
-		    mimetype = "multipart/x-mixed-replace; boundary=frame")
+	    return StreamingHttpResponse(self.generate())
     # k = cv.waitKey(30) & 0xff
     # if k == 27:
     #     break
+    #,streaming_content = "multipart/x-mixed-replace; boundary=frame"

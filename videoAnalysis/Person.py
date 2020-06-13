@@ -17,7 +17,6 @@ class MyPerson:
         return self.y
     def updateCoords(self, xn, yn):
         self.age = 0
-        self.tracks.append([self.x,self.y])
         self.x = xn
         self.y = yn
     def setDone(self):
