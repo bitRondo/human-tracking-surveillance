@@ -4,15 +4,16 @@ import Person
 import time
 import threading
 
-from.videoAnalysis import Analyzer
+from .videoAnalysis import Analyzer
 
     
 
 class HumanTrackingSystem(threading.Thread):
+    lock = threading.Lock()
+    outputFrame = None
     def __init__(self):
         threading.Thread.__init__(self,  name = "HumanTracker", daemon=True)
-        outputFrame = None
-        lock = threading.Lock()
+        
 
     def run(self):  
 
@@ -43,7 +44,7 @@ class HumanTrackingSystem(threading.Thread):
         pid = 1
 
         while(True):
-            if !(cap.isOpened()):
+            if (not cap.isOpened()):
                 cap = cv.VideoCapture('Test Files/TestVideo.avi')
 
             ret, frame = cap.read()
@@ -69,7 +70,7 @@ class HumanTrackingSystem(threading.Thread):
             except:
                 break
 
-            # RETR_EXTERNAL returns only extreme outer flags. All child contours are left behind.
+            #RETR_EXTERNAL returns only extreme outer flags. All child contours are left behind.
             contours, hierarchy = cv.findContours(mask2,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
             for cnt in contours:
                 area = cv.contourArea(cnt)
@@ -102,19 +103,20 @@ class HumanTrackingSystem(threading.Thread):
                     persons.pop(index)
                     del i  
 
-		    with lock:
-			    outputFrame = frame.copy()
+            with self.lock:
+                outputFrame = frame.copy()
+
         cap.release()
         cv.destroyAllWindows()
         
-    def generate():
+    def generate(self):
         # grab global references to the output frame and lock variables
         global outputFrame, lock
 
         # loop over frames from the output stream
         while True:
             # wait until the lock is acquired
-            with lock:
+            with self.lock:
                 # check if the output frame is available, otherwise skip
                 # the iteration of the loop
                 if outputFrame is None:
