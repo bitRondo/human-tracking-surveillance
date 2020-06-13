@@ -5,6 +5,7 @@ import time
 import threading
 
 from .videoAnalysis import Analyzer
+from .Person import MyPerson
 
     
 
