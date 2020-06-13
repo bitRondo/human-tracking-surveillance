@@ -90,6 +90,7 @@ class Analyzer(threading.Thread):
         global counter, mode
         key = 's'
         while(True):
+            print (counter)
             counter += getNew()
             time.sleep(1)
         mode = 3

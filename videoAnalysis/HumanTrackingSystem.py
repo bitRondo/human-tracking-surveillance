@@ -2,12 +2,10 @@ import numpy as np
 import cv2 as cv
 import time
 import threading
-import sys
-sys.path.append(".")
 from .Person import MyPerson
 
 from django.http import StreamingHttpResponse 
-
+from  django.views.decorators import gzip
 lock = threading.Lock()
 outputFrame = None
 newPersons=0
@@ -20,8 +18,8 @@ class HumanTrackingSystem(threading.Thread):
 
     def run(self):  
         
-        cap = cv.VideoCapture('videoAnalysis/Test Files/testvideo.mp4')
-
+        cap = cv.VideoCapture('videoAnalysis/Test Files/TestVideo.mp4')
+        print (cap)
         h = 480
         w = 640
         frameArea = h*w
@@ -45,12 +43,15 @@ class HumanTrackingSystem(threading.Thread):
         persons = []
         max_p_age = 40
         pid = 1
-
+        frame_counter = 0
         while(True):
-            if (not cap.isOpened()):
-                cap = cv.VideoCapture('videoAnalysis/Test Files/TestVideo.mp4')
+            frame_counter+=1
+            if frame_counter == cap.get(cv.CAP_PROP_FRAME_COUNT):
+                frame_counter = 0
+                cap.set(cv.CAP_PROP_POS_FRAMES, 0)
             ret, frame = cap.read()
-            cv.imshow('Frame',frame)
+
+            
             for i in persons:
                 i.age_one() #age every person one frame
 
@@ -108,9 +109,12 @@ class HumanTrackingSystem(threading.Thread):
                     del i  
             
             with lock:
-                self.outputFrame = frame.copy()
+                global outputFrame
+                outputFrame = frame.copy()
             cv.imshow('Frame',frame)
-            
+            k = cv.waitKey(30) & 0xff
+            if k == 27:
+                break
         cap.release()
         cv.destroyAllWindows()
         
@@ -119,24 +123,11 @@ def generate():
     # loop over frames from the output stream
     while True:
         # wait until the lock is acquired
-        with lock:
-            # check if the output frame is available, otherwise skip
-            # the iteration of the loop
-            if outputFrame is None:
-                continue
+        yield(b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-            # encode the frame in JPEG format
-            (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
-
-            # ensure the frame was successfully encoded
-            if not flag:
-                continue
-
-        # yield the output frame in the byte format
-        yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
-            bytearray(encodedImage) + b'\r\n')
-
-def video_feed():
+@gzip.gzip_page
+def video_feed(request):
+    print ("video")
 # return the response generated along with the specific media
 # type (mime type)
     return StreamingHttpResponse(generate(),content_type="multipart/x-mixed-replace;boundary=frame")
