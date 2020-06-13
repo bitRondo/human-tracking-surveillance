@@ -1,10 +1,10 @@
 import numpy as np
 import cv2 as cv
-import Person
 import time
 import threading
-
-from .videoAnalysis import Analyzer
+import sys
+sys.path.append(".")
+from .videoAnalysis import increment
 from .Person import MyPerson
 
 from django.http import StreamingHttpResponse 
@@ -12,6 +12,7 @@ from django.http import StreamingHttpResponse
 class HumanTrackingSystem(threading.Thread):
     lock = threading.Lock()
     outputFrame = None
+
     def __init__(self):
         threading.Thread.__init__(self,  name = "HumanTracker", daemon=True)
         
@@ -90,8 +91,8 @@ class HumanTrackingSystem(threading.Thread):
                             i.updateCoords(cx,cy)
 
                     if new == True:
-                        Analyzer.increment()
-                        p = Person.MyPerson(pid,cx,cy, max_p_age)
+                        increment()
+                        p = MyPerson(pid,cx,cy, max_p_age)
                         persons.append(p)
                         pid += 1
 
@@ -105,14 +106,12 @@ class HumanTrackingSystem(threading.Thread):
                     del i  
 
             with self.lock:
-                outputFrame = frame.copy()
+                self.outputFrame = frame.copy()
 
         cap.release()
         cv.destroyAllWindows()
         
     def generate(self):
-        # grab global references to the output frame and lock variables
-        global outputFrame, lock
 
         # loop over frames from the output stream
         while True:
@@ -137,7 +136,7 @@ class HumanTrackingSystem(threading.Thread):
     def video_feed(self):
 	# return the response generated along with the specific media
 	# type (mime type)
-	    return StreamingHttpResponse(self.generate())
+	    return StreamingHttpResponse(self.generate(),content_type="multipart/x-mixed-replace;boundary=frame")
     # k = cv.waitKey(30) & 0xff
     # if k == 27:
     #     break

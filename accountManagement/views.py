@@ -19,7 +19,7 @@ import random
 
 def index(request):
     if request.user.is_authenticated:
-        context = {'notif' : []}
+        context = {'notif' : [],'video' :HumanTrackingSystem.video_feed()}
         if request.user.activation_key != '':
             return render(request, 'activation/notActivated.html')
         if request.user.is_staff:
@@ -28,10 +28,7 @@ def index(request):
         return render(request, 'accountManagement/index.html', context)
     return redirect('login')
 
-@app.route("/video_feed")
-def video_feed():
-    return HumanTrackingSystem.video_feed()
-    
+
 @login_required
 def allUsers(request):
     all_users=User.objects.all()

@@ -13,7 +13,7 @@ counter = 0
 timelyCounts = {}
 modes = {0 : 'Idle', 1 : 'Business', 2 : 'Security', 3 : 'Terminated'}
 mode = 0
-
+count=0
 autoSwitch = False
 autoSwitchingTimes = {'b_start' : None, 's_start' : None, 'b_end' : None, 's_end' : None}
 
@@ -78,12 +78,15 @@ def set_auto_switching_times(times):
     global autoSwitchingTimes
     autoSwitchingTimes.update(times)
 
+def increment():
+    global count
+    count+=1
 class Analyzer(threading.Thread):
+    
     count=0
     def __init__(self):
         threading.Thread.__init__(self,  name = "Analyzer")
-    def increment(self):
-        self.count+=1
+
     def run(self):
         print("Starting Analyzer")
         global counter, mode
