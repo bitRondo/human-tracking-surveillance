@@ -14,7 +14,7 @@ class HumanTrackingSystem(threading.Thread):
         outputFrame = None
         lock = threading.Lock()
 
-    run(self):  
+    def run(self):  
 
         cap = cv.VideoCapture('Test Files/testvideo.mp4')
 
