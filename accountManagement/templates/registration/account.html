@@ -44,7 +44,7 @@
             </div>
             <div style="margin-bottom: 2vw;"></div>
             <div class="row" style="margin-left: 5vw;">
-                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary">Change Password</h1></a>
+                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary" id="change_password">Change Password</h1></a>
             </div>
                    
             <div style="margin-bottom: 2vw;"></div>
@@ -58,12 +58,12 @@
                         {% csrf_token %}
                         {% if user.receive_reports %}
                             <h5 style="color:white;margin-top: 0.3vw;">Enabled</h5>
-                            <button type="submit" name="receive_reports" value="off" class="btn btn-danger">
+                            <button type="submit" name="receive_reports" value="off" class="btn btn-danger" id="disable">
                                 Disable above facility
                             </button>
                         {% else %}
                             <h5 style="color:white; margin-top: 0.3vw;">Disabled</h5>
-                            <button type="submit" name="receive_reports" value="on" class="btn btn-success">
+                            <button type="submit" name="receive_reports" value="on" class="btn btn-success" id="enable">
                                 Enable above facility    
                             </button>
                         {% endif %}

@@ -23,16 +23,16 @@
            
             
            
-            <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-center"> View users</a>
+            <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-center" name="view_user"> View users</a>
             <div style="margin-bottom: 3vw;"></div>
-            <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-center"> Add users</a>
+            <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-center"name="add_user"> Add users</a>
             <div style="margin-bottom: 3vw;"></div>        
                     
                
               
-            <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-center">View Recipients of Security Alerts</a>
+            <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-center" name="view_recipient">View Recipients of Security Alerts</a>
             <div style="margin-bottom: 3vw;"></div>
-            <a href="{% url 'RecipientAdd' %}" class="col-md-6 btn btn-secondary text-center">Add Recipients of Security Alerts</a>
+            <a href="{% url 'RecipientAdd' %}" class="col-md-6 btn btn-secondary text-center" name="add_recipient">Add Recipients of Security Alerts</a>
         
             </div>
         </div>

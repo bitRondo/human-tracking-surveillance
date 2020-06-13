@@ -4,16 +4,16 @@
 
 {% block content %}
 
-<div class="col-md-6">
+<div class="col-md-6" style="margin-top:8vw; margin-left: 10vw;">
     <!-- <h1 class="display-4">Remove Users</h1> -->
     <h3>Are you sure you want to delete "{{item.first_name}}"?</h3>
 
     <form action="{% url 'user_remove' item.id %}" method=POST>
 
         {% csrf_token %}
-        <a href="{% url 'all_users' %}"><span class="btn btn-secondary">Cancel</span></a>
+        <a href="{% url 'all_users' %}"><span class="btn btn-secondary" id="cancel">Cancel</span></a>
 
-        <input type="submit" name="Confirm" value="Remove" class="btn btn-danger">
+        <input type="submit" name="Confirm" value="Remove" class="btn btn-danger" id="remove">
 
     </form>
 </div>

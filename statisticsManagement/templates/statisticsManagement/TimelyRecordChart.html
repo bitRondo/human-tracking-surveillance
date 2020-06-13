@@ -17,13 +17,13 @@
             <div class="col-md-3" style="margin-left: 8%;"><label for="id_single_date">Date: </label>
                 {{ form.single_date }}</div>
             <div class="col-md-3">
-                <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;">
+                <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;" id="search">
             </div>
         </div>
 
     </form>
     {% if single_date_timely_results %}
-    <div style="margin-left: 5%; margin-right: 5%;">
+    <div style="margin-left: 10%; margin-right: 5%;">
         <div class="row">
             <div id="single_date_chart" style="margin-top: 2vw;">
                 <canvas id="Chart" width="1200" height="450"></canvas>

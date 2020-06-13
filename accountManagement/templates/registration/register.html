@@ -41,22 +41,22 @@
     
                     <div class="form-group text-white">
                         <div id="names" class="row">
-                            <div class="col-md-5 was-validated">
+                            <div name="firstname" class="col-md-5 was-validated">
                                 {{ form.first_name }}
                                 <label for="id_first_name">First Name</label>
                             </div>
-                            <div class="col-md-7">
+                            <div name="lastname" class="col-md-7">
                                 {{ form.last_name }}
                                 <label for="id_last_name">Last Name</label>
                             </div>
                         </div>
                         <span class="row col">{{ form.first_name.errors }}</span>
                         <div id="contact" class="row">
-                            <div class="col-md-7 was-validated">
+                            <div name="email" class="col-md-7 was-validated">
                                 {{ form.email }}
                                 <label for="id_email">Email</label>
                             </div>
-                            <div class="col-md-5">
+                            <div name="phonenum" class="col-md-5">
                                 {{ form.phone }}
                                 <label for="id_phone">Phone</label>
                             </div>
@@ -64,19 +64,19 @@
                         <span class="row col">{{ form.email.errors }}</span>
                         <div id="credentials">
                             <div class="row was-validated">
-                                <div class="col-md-6">
+                                <div name="username" class="col-md-6">
                                     {{ form.username }}
                                     <label for="id_username">Username</label>
                                 </div>
                             </div>
                             <span class="row col">{{ form.username.errors }}</span>
                             <div class="row was-validated">
-                                <div class="col-md-6">
+                                <div name="password1" class="col-md-6">
                                     {{ form.password1 }}
                                     <label for="id_password1">Password</label>
                                     <span class="row col">{{ form.password1.errors }}</span>
                                 </div>
-                                <div class="col-md-6">
+                                <div name="password2" class="col-md-6">
                                     {{ form.password2 }}
                                     <label for="id_password2">Password Confirmation</label>
                                     <span class="row col">{{ form.password2.errors }}</span>
@@ -91,7 +91,7 @@
                             </div>
                         </div>
                     </div>   
-                    <input type="submit" value="Register" class="btn btn-primary">
+                    <input type="submit" name="register" value="Register" class="btn btn-primary">
                 </form>
           </div>
       </div>

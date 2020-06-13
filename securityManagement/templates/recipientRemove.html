@@ -11,9 +11,9 @@
     <form action="{% url 'RecipientRemove' item.id %}" method=POST>
 
         {% csrf_token %}
-        <a href="{% url 'Security' %}"><span class="btn btn-secondary">Cancel</span></a>
+        <a href="{% url 'Security' %}"><span class="btn btn-secondary" id="cancel">Cancel</span></a>
 
-        <input type="submit" name="Confirm" value="Remove" class="btn btn-danger">
+        <input type="submit" name="Confirm" value="Remove" class="btn btn-danger" id="remove">
 
     </form>
 </div>

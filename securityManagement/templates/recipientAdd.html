@@ -61,18 +61,15 @@
                         
                     </div>
 
-                    <!-- <div class="col-md-6">
-                        {{ form.name }}
-                        <label for="id_name">Name</label>
-                        {{ form.email }}
-                        <label for="id_email">Email</label>
-                    </div> -->
+                  
                     {% if form.email.errors %}
                     <p class="col" style="color: red;">Email is already being used by a recipient.</p>
                     {% endif %}
                 
-
-                <input type="submit" value="Register" class="btn btn-primary">
+                <div style="margin-left: 5%;">
+                    <input type="submit" name="register" value="Register" class="btn btn-primary ">
+                </div>
+                
             </form>
         </div>
     </div>
