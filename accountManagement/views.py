@@ -33,7 +33,7 @@ def allUsers(request):
     all_users=User.objects.all()
     return render(request,'registration/allUsers.html',{'all_users':all_users})
 
-@user_passes_test(checkIsAdmin, login_url='index')
+# @user_passes_test(checkIsAdmin, login_url='index')
 def register(request):
     if checkEmailConnectivity():
         if request.method == 'POST':
