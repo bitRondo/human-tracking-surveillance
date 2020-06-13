@@ -40,7 +40,7 @@
                     {% if u.is_staff %}
                     <p>ADMIN</p>
                     {% else %}
-                    <button class="btn-danger btn"><a href="{% url 'user_remove' u.id %}" class="text-white">Remove</a></button>
+                    <button class="btn-danger btn"><a href="{% url 'user_remove' u.id %}" class="text-white" style="text-decoration: none">Remove</a></button>
                     {% endif %}
                     </td>
                 </tr>
