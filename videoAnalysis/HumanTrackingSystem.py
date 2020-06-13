@@ -10,9 +10,10 @@ from .videoAnalysis import Analyzer
 
 class HumanTrackingSystem(threading.Thread):
     lock = threading.Lock()
+    outputFrame = None
     def __init__(self):
         threading.Thread.__init__(self,  name = "HumanTracker", daemon=True)
-        outputFrame = None
+        
 
     def run(self):  
 
@@ -69,7 +70,7 @@ class HumanTrackingSystem(threading.Thread):
             except:
                 break
 
-            # RETR_EXTERNAL returns only extreme outer flags. All child contours are left behind.
+            #RETR_EXTERNAL returns only extreme outer flags. All child contours are left behind.
             contours, hierarchy = cv.findContours(mask2,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
             for cnt in contours:
                 area = cv.contourArea(cnt)
