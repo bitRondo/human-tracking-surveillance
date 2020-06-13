@@ -9,9 +9,11 @@ from .Person import MyPerson
 
 from django.http import StreamingHttpResponse 
 
+lock = threading.Lock()
+outputFrame = None
+
 class HumanTrackingSystem(threading.Thread):
-    lock = threading.Lock()
-    outputFrame = None
+
 
     def __init__(self):
         threading.Thread.__init__(self,  name = "HumanTracker", daemon=True)
@@ -104,19 +106,19 @@ class HumanTrackingSystem(threading.Thread):
                     index = persons.index(i)
                     persons.pop(index)
                     del i  
-
-            with self.lock:
+            global lock
+            with lock:
                 self.outputFrame = frame.copy()
 
         cap.release()
         cv.destroyAllWindows()
         
     def generate(self):
-
+        global outputFrame,lock
         # loop over frames from the output stream
         while True:
             # wait until the lock is acquired
-            with self.lock:
+            with lock:
                 # check if the output frame is available, otherwise skip
                 # the iteration of the loop
                 if self.outputFrame is None:
