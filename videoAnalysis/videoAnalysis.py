@@ -79,17 +79,17 @@ def set_auto_switching_times(times):
     autoSwitchingTimes.update(times)
 
 class Analyzer(threading.Thread):
+    count=0
     def __init__(self):
         threading.Thread.__init__(self,  name = "Analyzer")
-        count=0
     def increment(self):
-        count+=1
+        self.count+=1
     def run(self):
         print("Starting Analyzer")
         global counter, mode
         key = 's'
         while(True):
-            counter += count
+            counter += self.count
             count=0
             time.sleep(1)
         mode = 3
