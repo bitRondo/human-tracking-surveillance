@@ -23,7 +23,7 @@
     <div class="d-flex justify-content-center h-400">
         <div class="card card-cascade narrower" style="margin-top:12vw;">
             <div class="card-header">
-                <h1 class="display-4  text-white text-center">Add Recipient</h1>
+                <h1 class="display-4  text-white text-center">Registration</h1>
             </div>
             <div class="card-body text-white">
             <form action="" method=POST>
@@ -61,7 +61,12 @@
                         
                     </div>
 
-                  
+                    <!-- <div class="col-md-6">
+                        {{ form.name }}
+                        <label for="id_name">Name</label>
+                        {{ form.email }}
+                        <label for="id_email">Email</label>
+                    </div> -->
                     {% if form.email.errors %}
                     <p class="col" style="color: red;">Email is already being used by a recipient.</p>
                     {% endif %}

@@ -13,7 +13,11 @@
 }
 
 .card{
+<<<<<<< HEAD
         height: 400px;
+=======
+        height: 470px;
+>>>>>>> da59a82c99f3f8bacb2fcb992753ed28e959ed7f
         margin-top: auto;
         margin-bottom: auto;
         width: 700px;
@@ -22,41 +26,68 @@
 </style>
 <div class="container">
     <div class="d-flex justify-content-center h-400"></div>
+<<<<<<< HEAD
     <div class="card text-white" style="margin-top:10vw; margin-left: 15%;">
+=======
+    <div class="card text-white" style="margin-top:10vw; margin-left: 10vw;">
+>>>>>>> da59a82c99f3f8bacb2fcb992753ed28e959ed7f
         <h2 class="display-4 text-center">{{ user.first_name }} {{ user.last_name }}</h2>
         <div style="margin-bottom: 2vw;"></div>
             <div class="row">
                 <div class="col-md-4" style="margin-left:5vw;">
+<<<<<<< HEAD
                     <h4>Username  : </h4>
                 </div>
                 <div class="col-md-5" style="margin-top: 0.2vw;">
+=======
+                    <h2>Username: </h3>
+                </div>
+                <div class="col-md-5" style="margin-top: 0.5vw;">
+>>>>>>> da59a82c99f3f8bacb2fcb992753ed28e959ed7f
                     <h5>{{ user.username }}</h5>
                 </div>
             </div>
             <div style="margin-bottom: 2vw;"></div>
             <div class="row">
                 <div class="col-md-4"style="margin-left:5vw;">
+<<<<<<< HEAD
                     <h4>Email  : </h4>
                 </div>
                 <div class="col-md-5" style="margin-top: 0.2vw;">
+=======
+                    <h2>Email: </h3>
+                </div>
+                <div class="col-md-5" style="margin-top: 0.5vw;">
+>>>>>>> da59a82c99f3f8bacb2fcb992753ed28e959ed7f
                     <h5>{{ user.email }}</h5>
                 </div>
             </div>
             <div style="margin-bottom: 2vw;"></div>
+<<<<<<< HEAD
             <div class="row" style="margin-left: 5vw;">
                 <a href="{% url 'password_change' %}"><h1 class="btn btn-primary" id="change_password">Change Password</h1></a>
+=======
+            <div class="row" style="margin-left: 15vw;">
+                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary">Change Password</h1></a>
+>>>>>>> da59a82c99f3f8bacb2fcb992753ed28e959ed7f
             </div>
                    
             <div style="margin-bottom: 2vw;"></div>
             <div class="row">
+<<<<<<< HEAD
                 <div class="col-md-6 " style="margin-left:5vw;">
                     <h4>Reception of Monthly Reports  : </h4>
+=======
+                <div class="col-md-6" style="margin-left:5vw;">
+                    <h2>Reception of Monthly Reports</h3>
+>>>>>>> da59a82c99f3f8bacb2fcb992753ed28e959ed7f
                 </div>
                 
                 <div class="col-md-4">
                     <form action="{% url 'account' %}" method="POST">
                         {% csrf_token %}
                         {% if user.receive_reports %}
+<<<<<<< HEAD
                             <h5 style="color:white;margin-top: 0.3vw;">Enabled</h5>
                             <button type="submit" name="receive_reports" value="off" class="btn btn-danger" id="disable">
                                 Disable above facility
@@ -64,6 +95,15 @@
                         {% else %}
                             <h5 style="color:white; margin-top: 0.3vw;">Disabled</h5>
                             <button type="submit" name="receive_reports" value="on" class="btn btn-success" id="enable">
+=======
+                            <h5 style="color: green;">Enabled</h5>
+                            <button type="submit" name="receive_reports" value="off" class="btn btn-outline-danger">
+                                Disable above facility
+                            </button>
+                        {% else %}
+                            <h5 style="color: red;">Disabled</h5>
+                            <button type="submit" name="receive_reports" value="on" class="btn btn-outline-success">
+>>>>>>> da59a82c99f3f8bacb2fcb992753ed28e959ed7f
                                 Enable above facility    
                             </button>
                         {% endif %}
