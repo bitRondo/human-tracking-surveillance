@@ -68,7 +68,7 @@
                 <li class="nav-item"><a href="{% url 'account' %}" class="nav-link text-white">My Account</a></li>
                 {% if user.is_staff %}
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle text-white" data-toggle="dropdown">System</a>
+                    <a href="#" class="nav-link dropdown-toggle text-white" data-toggle="dropdown">Settings</a>
                     <div class="dropdown-menu">
                         <a href="{% url 'user_settings' %}" class="dropdown-item">User Setting</a>
                         <a href="{% url 'system_settings' %}" class="dropdown-item">System Setting</a>    
