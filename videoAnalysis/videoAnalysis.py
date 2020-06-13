@@ -8,7 +8,8 @@ from statisticsManagement.models import TimelyRecord, DailyRecord
 from statisticsManagement.controllers import sendMonthlyReport
 from securityManagement.controllers import send_security_alert
 from systemManagement.controllers import checkEmailConnectivity
-
+from .HumanTrackingSystem import HumanTrackingSystem
+from .HumanTrackingSystem import getNew
 counter = 0
 timelyCounts = {}
 modes = {0 : 'Idle', 1 : 'Business', 2 : 'Security', 3 : 'Terminated'}
@@ -78,12 +79,9 @@ def set_auto_switching_times(times):
     global autoSwitchingTimes
     autoSwitchingTimes.update(times)
 
-def increment():
-    global count
-    count+=1
+
 class Analyzer(threading.Thread):
     
-    count=0
     def __init__(self):
         threading.Thread.__init__(self,  name = "Analyzer")
 
@@ -92,8 +90,7 @@ class Analyzer(threading.Thread):
         global counter, mode
         key = 's'
         while(True):
-            counter += self.count
-            count=0
+            counter += getNew()
             time.sleep(1)
         mode = 3
         end_timers()
@@ -251,6 +248,8 @@ def removeNotifications():
 
 def runMain():
     setMode(1)
+    humanDetectionSystem=HumanTrackingSystem()
+    humanDetectionSystem.start()
     Reporter().start()
     Analyzer().start()
 

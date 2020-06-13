@@ -4,14 +4,13 @@ import time
 import threading
 import sys
 sys.path.append(".")
-from .videoAnalysis import increment
 from .Person import MyPerson
 
 from django.http import StreamingHttpResponse 
 
 lock = threading.Lock()
 outputFrame = None
-
+newPersons=0
 class HumanTrackingSystem(threading.Thread):
 
 
@@ -20,8 +19,8 @@ class HumanTrackingSystem(threading.Thread):
         
 
     def run(self):  
-
-        cap = cv.VideoCapture('Test Files/testvideo.mp4')
+        
+        cap = cv.VideoCapture('videoAnalysis/Test Files/testvideo.mp4')
 
         h = 480
         w = 640
@@ -49,10 +48,9 @@ class HumanTrackingSystem(threading.Thread):
 
         while(True):
             if (not cap.isOpened()):
-                cap = cv.VideoCapture('Test Files/TestVideo.avi')
-
+                cap = cv.VideoCapture('videoAnalysis/Test Files/TestVideo.mp4')
             ret, frame = cap.read()
-
+            cv.imshow('Frame',frame)
             for i in persons:
                 i.age_one() #age every person one frame
 
@@ -60,7 +58,7 @@ class HumanTrackingSystem(threading.Thread):
             #Apply background subtraction
             fgmask = fgbg.apply(frame)
             fgmask2 = fgbg.apply(frame)
-
+            
             #Binariazcion to remove shadows (gray color)
             try:
                 ret,imBin= cv.threshold(fgmask,200,255,cv.THRESH_BINARY)
@@ -73,7 +71,7 @@ class HumanTrackingSystem(threading.Thread):
                 mask2 = cv.morphologyEx(mask2, cv.MORPH_CLOSE, kernelCl)
             except:
                 break
-
+            
             #RETR_EXTERNAL returns only extreme outer flags. All child contours are left behind.
             contours, hierarchy = cv.findContours(mask2,cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
             for cnt in contours:
@@ -93,7 +91,9 @@ class HumanTrackingSystem(threading.Thread):
                             i.updateCoords(cx,cy)
 
                     if new == True:
-                        increment()
+                        global lock,newPersons
+                        with lock:
+                            newPersons+=1
                         p = MyPerson(pid,cx,cy, max_p_age)
                         persons.append(p)
                         pid += 1
@@ -106,40 +106,47 @@ class HumanTrackingSystem(threading.Thread):
                     index = persons.index(i)
                     persons.pop(index)
                     del i  
-            global lock
+            
             with lock:
                 self.outputFrame = frame.copy()
-
+            cv.imshow('Frame',frame)
+            
         cap.release()
         cv.destroyAllWindows()
         
-    def generate(self):
-        global outputFrame,lock
-        # loop over frames from the output stream
-        while True:
-            # wait until the lock is acquired
-            with lock:
-                # check if the output frame is available, otherwise skip
-                # the iteration of the loop
-                if self.outputFrame is None:
-                    continue
+def generate():
+    global outputFrame,lock
+    # loop over frames from the output stream
+    while True:
+        # wait until the lock is acquired
+        with lock:
+            # check if the output frame is available, otherwise skip
+            # the iteration of the loop
+            if outputFrame is None:
+                continue
 
-                # encode the frame in JPEG format
-                (flag, encodedImage) = cv2.imencode(".jpg", self.outputFrame)
+            # encode the frame in JPEG format
+            (flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
 
-                # ensure the frame was successfully encoded
-                if not flag:
-                    continue
+            # ensure the frame was successfully encoded
+            if not flag:
+                continue
 
-            # yield the output frame in the byte format
-            yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
-                bytearray(encodedImage) + b'\r\n')
+        # yield the output frame in the byte format
+        yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
+            bytearray(encodedImage) + b'\r\n')
 
-    def video_feed(self):
-	# return the response generated along with the specific media
-	# type (mime type)
-	    return StreamingHttpResponse(self.generate(),content_type="multipart/x-mixed-replace;boundary=frame")
+def video_feed():
+# return the response generated along with the specific media
+# type (mime type)
+    return StreamingHttpResponse(generate(),content_type="multipart/x-mixed-replace;boundary=frame")
     # k = cv.waitKey(30) & 0xff
     # if k == 27:
     #     break
     #,streaming_content = "multipart/x-mixed-replace; boundary=frame"
+
+def getNew():
+    global newPersons
+    temp=newPersons
+    newPersons=0
+    return temp
