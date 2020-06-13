@@ -13,7 +13,7 @@ from .controllers import send_activation_key, checkIsAdmin, checkIsActivated
 
 from systemManagement.controllers import checkEmailConnectivity
 import videoAnalysis.videoAnalysis as va
-
+from videoAnalysis.HumanTrackingSystem import HumanTrackingSystem
 from .models import User
 import random
 
@@ -28,6 +28,10 @@ def index(request):
         return render(request, 'accountManagement/index.html', context)
     return redirect('login')
 
+@app.route("/video_feed")
+def video_feed():
+    return HumanTrackingSystem.video_feed()
+    
 @login_required
 def allUsers(request):
     all_users=User.objects.all()

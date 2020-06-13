@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomizedUserCreationForm, CustomizedUserChangeForm
 from .models import User
 
+
 class CustomizedUserAdmin (UserAdmin):
     add_form = CustomizedUserCreationForm
     form = CustomizedUserChangeForm

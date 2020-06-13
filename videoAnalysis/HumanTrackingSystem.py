@@ -4,6 +4,7 @@ import Person
 import time
 import threading
 
+from.videoAnalysis import Analyzer
 
     
 
@@ -15,7 +16,7 @@ class HumanTrackingSystem(threading.Thread):
 
     run(self):  
 
-        cap = cv.VideoCapture('Test Files/testvideo.avi')
+        cap = cv.VideoCapture('Test Files/testvideo.mp4')
 
         h = 480
         w = 640
@@ -42,8 +43,8 @@ class HumanTrackingSystem(threading.Thread):
         pid = 1
 
         while(True):
-            if !cap.isOpened():
-                cap = cv.VideoCapture('Test Files/testvideo.avi')
+            if !(cap.isOpened()):
+                cap = cv.VideoCapture('Test Files/TestVideo.avi')
 
             ret, frame = cap.read()
 
@@ -87,7 +88,7 @@ class HumanTrackingSystem(threading.Thread):
                             i.updateCoords(cx,cy)
 
                     if new == True:
-                        print (pid)
+                        Analyzer.increment()
                         p = Person.MyPerson(pid,cx,cy, max_p_age)
                         persons.append(p)
                         pid += 1
@@ -130,7 +131,6 @@ class HumanTrackingSystem(threading.Thread):
             yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
                 bytearray(encodedImage) + b'\r\n')
 
-    @app.route("/")
     def video_feed():
 	# return the response generated along with the specific media
 	# type (mime type)
