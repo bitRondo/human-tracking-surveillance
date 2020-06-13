@@ -28,12 +28,12 @@ def index(request):
         return render(request, 'accountManagement/index.html', context)
     return redirect('login')
 
-# @login_required
+@login_required
 def allUsers(request):
     all_users=User.objects.all()
     return render(request,'registration/allUsers.html',{'all_users':all_users})
 
-@user_passes_test(checkIsAdmin, login_url='index')
+# @user_passes_test(checkIsAdmin, login_url='index')
 def register(request):
     if checkEmailConnectivity():
         if request.method == 'POST':
@@ -129,7 +129,7 @@ def account(request):
 
     return render(request, 'registration/account.html', context)
 
-# @user_passes_test(checkIsAdmin)
+@user_passes_test(checkIsAdmin)
 def userRemove(request,pk):
     u = User.objects.get(id = pk)
     if u.is_staff:

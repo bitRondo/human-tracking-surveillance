@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'statisticsManagement.apps.StatisticsmanagementConfig',
     'systemManagement.apps.SystemmanagementConfig',
     'securityManagement.apps.SecuritymanagementConfig',
+    'prediction.apps.PredictionConfig'
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'HumanTrackingSystem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['HumanTrackingSystem/templates',],
+        'DIRS': ['HumanTrackingSystem/templates','prediction/templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
