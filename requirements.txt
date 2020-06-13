@@ -1,6 +1,10 @@
 asgiref==3.2.5
 Django==2.2.11
+django-libs==2.0.3
 numpy==1.18.2
 opencv-python==4.2.0.32
+Pillow==7.1.2
 pytz==2019.3
+reportlab==3.5.42
+schedule==0.6.0
 sqlparse==0.3.1

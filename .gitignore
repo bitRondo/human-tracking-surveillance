@@ -353,3 +353,4 @@ MigrationBackup/
 .vscode/
 db*
 venv/
+monthly_reports

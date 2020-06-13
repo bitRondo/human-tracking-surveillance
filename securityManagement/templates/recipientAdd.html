@@ -1,0 +1,83 @@
+{% extends 'mainbase.html' %}
+
+{% block title %}Add Recipient{% endblock %}
+
+{% block content %}
+<style>
+     html,body{
+        background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+    }
+    .card{
+        height: 300px;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 500px;
+        background-color: rgba(0,0,0,0.5) !important;
+        }
+</style>
+<div class="container">
+    <div class="d-flex justify-content-center h-400">
+        <div class="card card-cascade narrower" style="margin-top:12vw;">
+            <div class="card-header">
+                <h1 class="display-4  text-white text-center">Registration</h1>
+            </div>
+            <div class="card-body text-white">
+            <form action="" method=POST>
+                {% csrf_token %}
+
+                <div class="form-group row ">
+                    <div class="col-md-4 text-center">
+                        <label for="id_register_num">Registration Number</label>
+                    </div>
+                    <div class="col-md-8">
+                        {{ form.register_num }}
+                        
+                    </div>
+                    {% if form.register_num.errors %}
+                        <p class="col" style="color: red;">Registration number is not unique.</p>
+                    {% endif %}
+                </div>
+                    <div class="form-group row">
+                        <div class="col-md-4 text-center">
+                            <label for="id_name" >Name</label>
+                        </div>
+                        <div class="col-md-8">
+                            {{ form.name }}
+                        </div>
+                        
+                    </div>
+                
+                    <div class=" form-group row">
+                        <div class="col-md-4 text-center">
+                            <label for="id_email">Email</label>
+                        </div>
+                        <div class="col-md-8">
+                            {{ form.email }}
+                        </div>
+                        
+                    </div>
+
+                    <!-- <div class="col-md-6">
+                        {{ form.name }}
+                        <label for="id_name">Name</label>
+                        {{ form.email }}
+                        <label for="id_email">Email</label>
+                    </div> -->
+                    {% if form.email.errors %}
+                    <p class="col" style="color: red;">Email is already being used by a recipient.</p>
+                    {% endif %}
+                
+
+                <input type="submit" value="Register" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

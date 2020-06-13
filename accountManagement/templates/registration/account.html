@@ -1,0 +1,92 @@
+{% extends 'mainbase.html' %}
+
+{% block title %}Account{% endblock %}
+
+{% block content %}
+<style>
+    html,body{
+        background-image: url('https://icdn2.digitaltrends.com/image/digitaltrends/pexels-photo-392018-2.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+}
+
+.card{
+        height: 470px;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 700px;
+        background-color:rgba(0,0,0,0.5) !important;
+        }
+</style>
+<div class="container">
+    <div class="d-flex justify-content-center h-400"></div>
+    <div class="card text-white" style="margin-top:10vw; margin-left: 10vw;">
+        <h2 class="display-4 text-center">{{ user.first_name }} {{ user.last_name }}</h2>
+        <div style="margin-bottom: 2vw;"></div>
+            <div class="row">
+                <div class="col-md-4" style="margin-left:5vw;">
+                    <h2>Username: </h3>
+                </div>
+                <div class="col-md-5" style="margin-top: 0.5vw;">
+                    <h5>{{ user.username }}</h5>
+                </div>
+            </div>
+            <div style="margin-bottom: 2vw;"></div>
+            <div class="row">
+                <div class="col-md-4"style="margin-left:5vw;">
+                    <h2>Email: </h3>
+                </div>
+                <div class="col-md-5" style="margin-top: 0.5vw;">
+                    <h5>{{ user.email }}</h5>
+                </div>
+            </div>
+            <div style="margin-bottom: 2vw;"></div>
+            <div class="row" style="margin-left: 15vw;">
+                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary">Change Password</h1></a>
+            </div>
+                   
+            <div style="margin-bottom: 2vw;"></div>
+            <div class="row">
+                <div class="col-md-6" style="margin-left:5vw;">
+                    <h2>Reception of Monthly Reports</h3>
+                </div>
+                
+                <div class="col-md-4">
+                    <form action="{% url 'account' %}" method="POST">
+                        {% csrf_token %}
+                        {% if user.receive_reports %}
+                            <h5 style="color: green;">Enabled</h5>
+                            <button type="submit" name="receive_reports" value="off" class="btn btn-outline-danger">
+                                Disable above facility
+                            </button>
+                        {% else %}
+                            <h5 style="color: red;">Disabled</h5>
+                            <button type="submit" name="receive_reports" value="on" class="btn btn-outline-success">
+                                Enable above facility    
+                            </button>
+                        {% endif %}
+                    </form>
+                </div>
+                    
+            </div>
+
+                    
+                
+                </div>
+                
+                <div class="col">
+                    
+            
+                        
+                </div>
+        </div> 
+    </div>
+       
+</div>
+
+        
+ 
+
+{% endblock %}
