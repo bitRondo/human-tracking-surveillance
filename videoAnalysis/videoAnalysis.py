@@ -79,7 +79,6 @@ def set_auto_switching_times(times):
     global autoSwitchingTimes
     autoSwitchingTimes.update(times)
 
-
 class Analyzer(threading.Thread):
     
     def __init__(self):
@@ -158,6 +157,8 @@ def start_timer():
     else:                   # e.g. if now is 11:34, scheduling should start at 12:00
         hour, minute = (now.hour + 1)%24, 0
 
+    hour, minute = 9, 15 # VERY IMPORTANT CHANGE FOR TESTING/DEMONSTRATION PURPOSES
+
     exec_time = datetime.datetime(now.year, now.month, now.day, hour = hour, minute = minute, 
     tzinfo = now.tzinfo)
 
@@ -205,8 +206,8 @@ def get_results_of_day():
     dummyDate = datetime.datetime(100, 1, 1, peakHourStart.hour, peakHourStart.minute)
 
     # adjustments to properly represent the peak hour
-    peakHourStart = (dummyDate - datetime.timedelta(seconds=30)).time() # change
-    peakHourEnd = (dummyDate + datetime.timedelta(seconds=30)).time() # change
+    peakHourStart = (dummyDate - datetime.timedelta(minutes=30)).time()
+    peakHourEnd = (dummyDate + datetime.timedelta(minutes=30)).time()
 
     return totalCount, peakHourStart, peakHourEnd
 
@@ -268,10 +269,10 @@ monthlyScheduler:
 4) change every().day.at("00:30") to a time close to now
 
 function start_timer:
-5) add a line just before exec_time having an (hour, minute) tuple with values close to now
+[definite]5) add a line just before exec_time having an (hour, minute) tuple with values close to now
 
 function get_results_of_day:
-[definite]6) change minutes=30 to seconds=30 in both peakHourStart and peakHourEnd
+6) change minutes=30 to seconds=30 in both peakHourStart and peakHourEnd
 
 function recordAtEndOfDay:
 7) Comment out the defined lines
