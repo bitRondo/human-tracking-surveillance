@@ -13,13 +13,12 @@ from .controllers import send_activation_key, checkIsAdmin, checkIsActivated
 
 from systemManagement.controllers import checkEmailConnectivity
 import videoAnalysis.videoAnalysis as va
-from videoAnalysis.HumanTrackingSystem import video_feed
 from .models import User
 import random
 
 def index(request):
     if request.user.is_authenticated:
-        context = {'notif' : [],'video' :video_feed()}
+        context = {'notif' : []}
         if request.user.activation_key != '':
             return render(request, 'activation/notActivated.html')
         if request.user.is_staff:

@@ -1,13 +1,13 @@
 from random import randint
 import time
 
-class MyPerson:
-    def __init__(self, id, xi, yi, max_age):
+class Person:
+    def __init__(self, id, xi, yi, maxAge):
         self.id = id
         self.x = xi
         self.y = yi
         self.age = 0
-        self.max_age = max_age
+        self.maxAge = maxAge
 
     def getId(self):
         return self.id
@@ -15,25 +15,12 @@ class MyPerson:
         return self.x
     def getY(self):
         return self.y
+    def getMaxAge(self):
+        return self.maxAge
     def updateCoords(self, xn, yn):
         self.age = 0
         self.x = xn
         self.y = yn
-    def setDone(self):
-        self.done = True
-    def age_one(self):
+    def ageOneFrame(self):
         self.age += 1
-        if self.age > self.max_age:
-            self.done = True
-        return True
-class MultiPerson:
-    def __init__(self, persons, xi, yi):
-        self.persons = persons
-        self.x = xi
-        self.y = yi
-        self.tracks = []
-        self.R = randint(0,255)
-        self.G = randint(0,255)
-        self.B = randint(0,255)
-        self.done = False
         
