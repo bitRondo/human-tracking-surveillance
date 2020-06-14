@@ -51,5 +51,5 @@ def RecipientEdit(request,pk):
     
     return render (request, 'recipientAdd.html',{'form':form})
 
-def alert(request):
-    return render(request, 'alert.html')
+# def alert(request):
+#     return render(request, 'alert.html')
