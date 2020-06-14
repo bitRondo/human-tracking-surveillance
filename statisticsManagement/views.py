@@ -119,7 +119,8 @@ def TimelyRecords(request):
                 single_date_timely_results[0].record_time.strftime("%H:%M")),
                 'record_count':single_date_timely_results[last_index].record_count
         }
-        timely_results_list.append(last_result)
+        if single_date_timely_results[last_index].record_time == datetime.time(23,30):
+            timely_results_list.append(last_result)
 
     content = {
         'form' : form,
