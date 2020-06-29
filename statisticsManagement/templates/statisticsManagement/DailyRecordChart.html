@@ -39,21 +39,22 @@
 
                     var ctx = document.getElementById('myChart').getContext('2d');
                     var myChart = new Chart(ctx, {
-                        type: 'line',
+                        type: 'bar',
                         data: {
                             labels: label,
                             datasets: [{
                                 label: 'count',
                                 data: data,
 
-                                backgroundColor: [
+                                backgroundColor: 
                                     'brown',
 
-                                ],
-                                borderColor: [
+                                
+                                // borderColor: [
 
-                                    'brown'
-                                ],
+                                //     'brown'
+                                // ],
+                                // backgroundColor: "rgba(4,60,100,1)",
                                 borderWidth: 4,
                                 fill: false,
                                 lineTension: 0
@@ -66,7 +67,13 @@
                                         fontColor: "black",
                                         fontSize: 10,
                                         beginAtZero: true
-                                    }
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Count',
+                                        fontColor: "black",
+                                        fontSize: 15,
+                                    },
                                 }],
                                 xAxes: [{
                                     ticks: {
@@ -74,7 +81,13 @@
                                         fontSize: 10,
 
                                         beginAtZero: true
-                                    }
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Date',
+                                        fontColor: "black",
+                                        fontSize: 15,
+                                    },
                                 }]
                             }
                         }

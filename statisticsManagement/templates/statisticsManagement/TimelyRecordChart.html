@@ -17,7 +17,7 @@
             <div class="col-md-3" style="margin-left: 8%;"><label for="id_single_date">Date: </label>
                 {{ form.single_date }}</div>
             <div class="col-md-3">
-                <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;" id="search">
+                <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 1.5vw;" id="search">
             </div>
         </div>
 
@@ -26,7 +26,7 @@
     <div style="margin-left: 10%; margin-right: 5%;">
         <div class="row">
             <div id="single_date_chart" style="margin-top: 2vw;">
-                <canvas id="Chart" width="1200" height="450"></canvas>
+                <canvas id="Chart" width="1500" height="480"></canvas>
                 <script>
 
                     const label = [{%for i in single_date_timely_results %}'{{i.record_time}}', {% endfor %}];
@@ -37,21 +37,13 @@
 
                     var ctx = document.getElementById('Chart').getContext('2d');
                     var Chart = new Chart(ctx, {
-                        type: 'line',
+                        type: 'bar',
                         data: {
                             labels: label,
                             datasets: [{
                                 label: 'count',
                                 data: data,
-
-                                backgroundColor: [
-                                    'brown',
-
-                                ],
-                                borderColor: [
-
-                                    'brown'
-                                ],
+                                backgroundColor:'brown',
                                 borderWidth: 4,
                                 fill: false,
                                 lineTension: 0
@@ -64,14 +56,27 @@
                                         fontColor: "black",
                                         fontSize: 10,
                                         beginAtZero: true
-                                    }
+                                        
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Count',
+                                        fontColor: "black",
+                                        fontSize: 15,
+                                    },
                                 }],
                                 xAxes: [{
                                     ticks: {
                                         fontColor: "black",
                                         fontSize: 10,
                                         beginAtZero: true
-                                    }
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Time',
+                                        fontColor: "black",
+                                        fontSize: 15,
+                                    },
                                 }]
                             }
                         }
