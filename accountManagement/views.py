@@ -131,7 +131,10 @@ def account(request):
 
 @user_passes_test(checkIsAdmin)
 def userRemove(request,pk):
-    u = User.objects.get(id = pk)
+    u = User.objects.filter(id = pk)
+    if not u:
+        return redirect('all_users')
+    else: u = u[0]
     if u.is_staff:
         raise Http404
     if request.method=="POST":
