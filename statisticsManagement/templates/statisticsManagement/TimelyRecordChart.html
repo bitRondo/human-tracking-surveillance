@@ -1,0 +1,119 @@
+{% extends 'mainbase.html' %}
+
+{% block title %}Statistics - Date{% endblock %}
+{% block content %}
+
+<style>
+    html,
+    body {
+        background-color: #f8f4ef;
+    }
+</style>
+<div class="col">
+    <h4 class="display-4 text-center" style="margin-top:8vw;margin-bottom: 2vw;">Records on a given date</h4>
+    <form action="{% url 'TimelyRecords' %}" method="POST">
+        {% csrf_token %}
+        <div class="row" style="margin-left: 25vw;">
+            <div class="col-md-3" style="margin-left: 8%;"><label for="id_single_date">Date: </label>
+                {{ form.single_date }}</div>
+            <div class="col-md-3">
+                <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 1.5vw;" id="search">
+            </div>
+        </div>
+
+    </form>
+    {% if single_date_timely_results %}
+    <div style="margin-left: 10%; margin-right: 5%;">
+        <div class="row">
+            <div id="single_date_chart" style="margin-top: 2vw;">
+                <canvas id="Chart" width="1500" height="480"></canvas>
+                <script>
+
+                    const label = [{%for i in single_date_timely_results %}'{{i.record_time}}', {% endfor %}];
+                    const data = [{%for i in single_date_timely_results %}'{{i.record_count}}', {% endfor %}]
+
+
+
+
+                    var ctx = document.getElementById('Chart').getContext('2d');
+                    var Chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: label,
+                            datasets: [{
+                                label: 'count',
+                                data: data,
+                                backgroundColor:'brown',
+                                borderWidth: 4,
+                                fill: false,
+                                lineTension: 0
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        fontColor: "black",
+                                        fontSize: 10,
+                                        beginAtZero: true
+                                        
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Count',
+                                        fontColor: "black",
+                                        fontSize: 15,
+                                    },
+                                }],
+                                xAxes: [{
+                                    ticks: {
+                                        fontColor: "black",
+                                        fontSize: 10,
+                                        beginAtZero: true
+                                    },
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Time',
+                                        fontColor: "black",
+                                        fontSize: 15,
+                                    },
+                                }]
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+        <div class="row text-center" style="font-size: x-large; margin-top:2vw;">
+            {% if single_date_daily_result %}
+            <div class="col-md-6"><span style="color: red;">Total Count = </span>{{ single_date_daily_result.total_count }}</div>
+            <div class="col-md-6"><span style="color: red;">Peak hour = </span>
+                {{ single_date_daily_result.peak_hour_start|date:"H:i"}}
+                to
+                {{ single_date_daily_result.peak_hour_end|date:"H:i"}}</div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <table class="table table-borderless table-hover" style="margin-top: 5vw; text-align: center; table-layout: fixed;">
+                <th>Time</th>
+                <th>Count</th>
+
+                {% for each in single_date_timely_results %}
+                <tr {% if each.record_time in single_date_peak_times %} style="background-color:palevioletred;"
+                    {% endif %}>
+                    <td>{{ each.record_time }}</td>
+                    <td>{{ each.record_count }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center" style="margin-top: 10%;">
+        <h4>Sorry, No Results!</h4>
+    </div>
+
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'mainbase.html'%}
+{% block title %}Not Activated{% endblock %}
+
+{% block content %}
+<div class="col" style="margin-top: 10%;">
+    <h1 class="display-2 text-danger">Your account is not activated!</h1>
+    <a href="{% url 'activate' %}" style="text-decoration: none;"><h3>Click here to activate</h3></a>
+</div>
+{% endblock %}

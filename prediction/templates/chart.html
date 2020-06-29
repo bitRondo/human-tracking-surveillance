@@ -1,0 +1,59 @@
+<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+<script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+  <script type="text/javascript">
+  var data = (("{{data |safe}}").replace(/&(l|g|quo)t;/g, function(a,b){
+        return {
+            l   : '<',
+            g   : '>',
+            quo : '"'
+        }[b];
+    }));
+  data = data.replace(/u'/g, '\'')
+  data = data.replace(/'/g, '\"')
+  data = JSON.parse( data );
+  var category = (("{{category |safe}}").replace(/&(l|g|quo)t;/g, function(a,b){
+              return {
+                  l   : '<',
+                  g   : '>',
+                  quo : '"'
+              }[b];
+          }));
+  category = category.replace(/u'/g, '\'')
+  category = category.replace(/'/g, '\"')
+  category = JSON.parse( category );
+  FusionCharts.ready(function(){
+    var chartObj = new FusionCharts({
+  type: 'scrollColumn2d',
+  renderAt: 'chart-container',
+  width: '650',
+  height: '390',
+  dataFormat: 'json',
+  dataSource: {
+      "chart": {
+          "theme": "fusion",
+          "caption": "Count vs Date",
+          "subcaption": "{{caption}}",
+          "xaxisname": "Date",
+          "yaxisname": "Count",
+          "showvalues": "1",
+          "numberprefix": "",
+          "numVisiblePlot": "12",
+          "scrollheight": "10",
+          "flatScrollBars": "1",
+          "scrollShowButtons": "0",
+          "scrollColor": "#cccccc",
+          "showHoverEffect": "1",
+          
+      },
+      "categories": [{
+          "category": category
+      }],
+      "dataset": [{
+          "data": data
+      }]
+  }
+});
+    chartObj.render();
+  });
+</script>
+<div id="chart-container">FusionCharts XT will load here!</div>

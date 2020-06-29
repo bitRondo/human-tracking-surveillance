@@ -1,0 +1,108 @@
+{% extends 'mainbase.html'%}
+{% block title %}Registration{% endblock %}
+
+{% block content %}
+
+<style>
+    html,body{
+        background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+    }
+    .errorlist {
+        list-style-type: none;
+        color: red;
+        padding-left: 0;
+    }
+    /* .card-header{
+        background-color:;
+    } */
+    .card{
+        height: 570px;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 600px;
+        background-color:rgba(0,0,0,0.5) !important;
+        }
+</style>
+
+<div class="container">
+    <div class="d-flex justify-content-center h-100">
+        <div class="card" style="margin-top:10vw;">
+            <div class="card-header">
+                <h1 class="display-3 text-center text-white">Registration</h1>
+            </div>
+            {% if connectivity %}
+            <div class="card-body">
+                <form action="{% url 'register' %}" method="POST">
+                    {% csrf_token %}
+    
+                    <div class="form-group text-white">
+                        <div id="names" class="row">
+                            <div name="firstname" class="col-md-5 was-validated">
+                                {{ form.first_name }}
+                                <label for="id_first_name">First Name</label>
+                            </div>
+                            <div name="lastname" class="col-md-7">
+                                {{ form.last_name }}
+                                <label for="id_last_name">Last Name</label>
+                            </div>
+                        </div>
+                        <span class="row col">{{ form.first_name.errors }}</span>
+                        <div id="contact" class="row">
+                            <div name="email" class="col-md-7 was-validated">
+                                {{ form.email }}
+                                <label for="id_email">Email</label>
+                            </div>
+                            <div name="phonenum" class="col-md-5">
+                                {{ form.phone }}
+                                <label for="id_phone">Phone</label>
+                            </div>
+                        </div>
+                        <span class="row col">{{ form.email.errors }}</span>
+                        <div id="credentials">
+                            <div class="row was-validated">
+                                <div name="username" class="col-md-6">
+                                    {{ form.username }}
+                                    <label for="id_username">Username</label>
+                                </div>
+                            </div>
+                            <span class="row col">{{ form.username.errors }}</span>
+                            <div class="row was-validated">
+                                <div name="password1" class="col-md-6">
+                                    {{ form.password1 }}
+                                    <label for="id_password1">Password</label>
+                                    <span class="row col">{{ form.password1.errors }}</span>
+                                </div>
+                                <div name="password2" class="col-md-6">
+                                    {{ form.password2 }}
+                                    <label for="id_password2">Password Confirmation</label>
+                                    <span class="row col">{{ form.password2.errors }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 2vw;"></div>
+                        <div id="reception" class="row">
+                            <div class="col">
+                                <label for="id_receive_reports">Enable Reception of Monthly Reports</label>
+                                <div>{{ form.receive_reports }}</div>
+                            </div>
+                        </div>
+                    </div>   
+                    <input type="submit" name="register" value="Register" class="btn btn-primary">
+                </form>
+          </div>
+      </div>
+  </div>
+    </div>
+    
+        
+</div>
+{% else %}
+    <h1 class="display-1" style="color: red;">No Internet!</h1>
+    <h3>Registration process cannot be continued without internet connection.</h3>
+    <h3>Please connect your device to the internet, and then refresh the browser.</h3>
+{% endif %}
+{% endblock %}
