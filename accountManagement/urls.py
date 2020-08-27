@@ -13,7 +13,7 @@ urlpatterns = [
     path('allusers/', views.allUsers, name='all_users'),
     path('account/', views.account, name = 'account'),
     path('userremove/<str:pk>/', views.userRemove, name='user_remove'),
-
+    path('video_feed/', views.video_feed, name='video_feed'),
 
     path('password_change/', 
     auth_views.PasswordChangeView.as_view(template_name = 'password/password_change.html'), 

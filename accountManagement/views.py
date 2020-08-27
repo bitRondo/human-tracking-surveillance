@@ -8,9 +8,9 @@ from django.utils import timezone
 from datetime import timedelta
 
 from .forms import CustomizedUserCreationForm
-
+from django.http.response import StreamingHttpResponse
 from .controllers import send_activation_key, checkIsAdmin, checkIsActivated
-
+import videoAnalysis.HumanTrackingSystem as hts
 from systemManagement.controllers import checkEmailConnectivity
 import videoAnalysis.videoAnalysis as va
 from .models import User
@@ -26,6 +26,17 @@ def index(request):
             va.removeNotifications()
         return render(request, 'accountManagement/index.html', context)
     return redirect('login')
+
+def gen():
+	while True:
+		frame = hts.getFrame()
+		yield (b'--frame\r\n'
+				b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+def video_feed(request):
+	return StreamingHttpResponse(gen(),
+					content_type='multipart/x-mixed-replace; boundary=frame')
 
 #d nd
 @login_required
