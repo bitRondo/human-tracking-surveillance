@@ -1,0 +1,14 @@
+version: "3"
+services:
+    django:
+        container_name: 24surveril_server
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: 24surveil_system
+        stdin_open: true
+        tty: true
+        volumes:
+            - .:/application
+        ports:
+            - "8000:8000"
