@@ -11,6 +11,8 @@ WORKDIR /application
 COPY requirements.txt /application/
 RUN pip install -r requirements.txt
 
+COPY . /application/
+
 EXPOSE 8000
 STOPSIGNAL SIGINT
 ENTRYPOINT ["python", "manage.py"]
