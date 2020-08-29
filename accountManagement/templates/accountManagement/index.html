@@ -1,4 +1,6 @@
+
 {% extends "mainbase.html "%}
+{% load static %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
@@ -19,11 +21,13 @@
     }
 </style>
 {% for n in notif %}
+
 <div class="row" id="notification-bar">{{ n }}
     <a href="{% url 'send_monthly_report' %}" style="margin-left: 1vw;">Review</a>
 </div>
 {% endfor %}
 <h1 class="display-1 text-center" style="margin-top:15vw;">Human Tracking System</h1>
+<img src="{% url 'video_feed' %}" style = "display: block; margin-left: auto; margin-right: auto;">
 <!-- <div class="d-flex justify-content-center">
     <div id="live-footage">
         <p class="display-2 text-center">For all your surveillance statistics and prediction needs</p>

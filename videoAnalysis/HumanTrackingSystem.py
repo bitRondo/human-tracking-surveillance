@@ -7,8 +7,8 @@ from .Person import Person
 from django.http import StreamingHttpResponse 
 from  django.views.decorators import gzip
 
-# lock = threading.Lock()
-# outputFrame = None
+lock = threading.Lock()
+outputFrame = None
 
 newPersons=0
 class HumanTrackingSystem(threading.Thread):
@@ -84,7 +84,7 @@ class HumanTrackingSystem(threading.Thread):
 
                     newTracker = True
                     for i in persons:
-                        if abs(x-i.getX()) <= w and abs(y-i.getY()) <= h:       # the object is close to one that was detected before
+                        if abs(cx-i.getX()) <= w and abs(cy-i.getY()) <= h:       # the object is close to one that was detected before
                             
                             newTracker = False
                             i.updateCoords(cx,cy)
@@ -110,22 +110,31 @@ class HumanTrackingSystem(threading.Thread):
                 else:
                     index+=1  
             
-            # with lock:
-            #     global outputFrame
-            #     outputFrame = frame.copy()
+            with lock:
+                 global outputFrame
+                 outputFrame = frame.copy()
 
-            cv.imshow('Frame',frame)
+            #cv.imshow('Frame',frame)
             k = cv.waitKey(30) & 0xff
             if k == 27:
                 break
         cap.release()
         cv.destroyAllWindows()
+
+
+
     
 def getNew():
     global newPersons
     temp=newPersons
     newPersons=0
-    return temp  
+    return temp
+
+def getFrame():
+    ret, jpeg = cv.imencode('.jpg', outputFrame)
+    return jpeg.tobytes()
+
+
 
 
 
