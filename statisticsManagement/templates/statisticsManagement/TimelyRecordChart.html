@@ -14,7 +14,7 @@
     <form action="{% url 'TimelyRecords' %}" method="POST">
         {% csrf_token %}
         <div class="row" style="margin-left: 25vw;">
-            <div class="col-md-3" style="margin-left: 8%;"><label for="id_single_date">Date: </label>
+            <div class="col-md-3" style="margin-left: 8%;" title="Date to show the time-based counts. Latest date should be today"><label for="id_single_date">Date: </label>
                 {{ form.single_date }}</div>
             <div class="col-md-3">
                 <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 1.5vw;" id="search">
