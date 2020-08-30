@@ -57,12 +57,12 @@
                     <form action="{% url 'account' %}" method="POST">
                         {% csrf_token %}
                         {% if user.receive_reports %}
-                            <h5 style="color:white;margin-top: 0.3vw;">Enabled</h5>
+                            <h5 style="color:white;margin-top: 0.3vw;" title="Current ability to receive monthly reports">Enabled</h5>
                             <button type="submit" name="receive_reports" value="off" class="btn btn-danger" id="disable">
                                 Disable above facility
                             </button>
                         {% else %}
-                            <h5 style="color:white; margin-top: 0.3vw;">Disabled</h5>
+                            <h5 style="color:white; margin-top: 0.3vw;" title="Current ability to receive monthly reports">Disabled</h5>
                             <button type="submit" name="receive_reports" value="on" class="btn btn-success" id="enable">
                                 Enable above facility    
                             </button>
