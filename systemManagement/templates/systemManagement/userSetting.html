@@ -3,42 +3,58 @@
 
 {% block content %}
 <style>
-  html,body{
-        background-image: url('https://embridgeconsulting.com/wp-content/uploads/2014/10/homepage-background.jpg');
+body,html{
+        /* background-image: url('https://embridgeconsulting.com/wp-content/uploads/2014/10/homepage-background.jpg'); */
+        background: linear-gradient(to right, #22c1c3, #fdbb2d);
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
         font-family: 'Numans', sans-serif;
 }   
-.btn{
-    background-color: #2e1c16;
+.btn3D{
+     /* background-color: #2e1c16;  */
+    box-shadow: -10px 10px green, -9px 9px green, -8px 8px green, -7px 7px green, -6px 6px green, -5px 5px green, -4px 4px green, -3px 3px green, -2px 2px green, -1px 1px green;
+    /* border: 1px solid orange; */
+
 } 
+.btn:hover{
+    margin: 0px; 
+    padding: 0px;
+    border-radius: 25%;
+}
 </style>
 <div id="user">
     <div class="container">
-        <div class="d-flex justify-content-left ">
-            <div class="col-md-8">
-                <h1 class="display-3" style="margin-top:10vw;">User Settings</h1>
-            <div style="margin-bottom: 3vw;"></div>
-           
-            
-           
-            <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-center" name="view_user"> View users</a>
-            <div style="margin-bottom: 3vw;"></div>
-            <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-center"name="add_user"> Add users</a>
-            <div style="margin-bottom: 3vw;"></div>        
+            <h1 class="display-3 text-center" style="margin-top:10vw;">User Settings</h1><br><br>
+                <div class="row text-center">
+                    <div class="col col-md-3">
+                        <div style="margin-bottom: 3vw;"></div>
+                        <a href="{% url 'all_users' %}" class="btn3D btn btn-secondary text-center" name="view_user" title="view currently registered user accounts" data-toggle="tooltip" data-placement="bottom" > <button class="btn btn-success"><img src="/static/images/view-user.png" style="width: 70%;" alt="Null"> <br>View users </button></a> 
+                    </div>
                     
-               
-              
-            <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-center" name="view_recipient">View Recipients of Security Alerts</a>
-            <div style="margin-bottom: 3vw;"></div>
-            <a href="{% url 'RecipientAdd' %}" class="col-md-6 btn btn-secondary text-center" name="add_recipient">Add Recipients of Security Alerts</a>
-        
-            </div>
-        </div>
-        
+                    <div class="col col-md-3">
+                        <div style="margin-bottom: 3vw;"></div>
+                        <a href="{% url 'register' %}" class="btn3D btn btn-secondary text-center"name="add_user" title="Add new user account" data-toggle="tooltip"> <button class="btn btn-success"  ><img src="/static/images/add-user.png" style="width: 70%;" alt="Null"><br>Add users </button></a>
+                    </div>
+
+                    <div class="col col-md-3"> 
+                        <div style="margin-bottom: 3vw;"></div>        
+                        <a href="{% url 'Security' %}" class="btn3D btn btn-secondary text-center" name="view_recipient" title="View all security recipients" data-toggle="tooltip"> <button class="btn btn-success" ><img src="/static/images/view-recipients.png" style="width: 70%;" alt="Null"><br>View Recipients</button></a>
+                    </div>
+
+                    <div class="col col-md-3">
+                        <div style="margin-bottom: 3vw;"></div>
+                        <a href="{% url 'RecipientAdd' %}" class="btn3D btn btn-secondary text-center" name="add_recipient" title="Add new security recipient" data-toggle="tooltip"> <button class="btn btn-success" ><img src="/static/images/add-recipients.png" style="width: 70%;" alt="Null"><br>Add Recipients</button></a>
+                    </div>
+
+                </div>
     </div>
     
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
 
+    });
+</script>
 {% endblock %}
