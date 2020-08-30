@@ -15,8 +15,8 @@
         {% csrf_token %}
 
         <div class="row" style="margin-left: 20%; margin-right: 20%;">
-            <div class="col-md-5"><label for="id_start_date">Start Date: </label> {{ form.start_date }}</div>
-            <div class="col-md-5"><label for="id_start_date">End Date: </label> {{ form.end_date }}</div>
+            <div class="col-md-5" title="Starting date of the range. Latest date should be day before yesterday"><label for="id_start_date">Start Date: </label> {{ form.start_date }}</div>
+            <div class="col-md-5" title="Ending date of the range. Latest date should be yesterday"><label for="id_start_date">End Date: </label> {{ form.end_date }}</div>
             <div id="search_panel" class="col-md-2">
                 <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;" id="search">
             </div>
