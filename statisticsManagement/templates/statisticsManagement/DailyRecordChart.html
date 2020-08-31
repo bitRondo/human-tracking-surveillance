@@ -4,9 +4,7 @@
 {% block content %}
 <style>
     /* html,
-    body {
-        background-color: #f8f4ef;
-    } */
+   
     html,body{
         /* background-image: url('{%static "background/Brick wall background.png" %}'); */
         background-size: cover;
@@ -34,16 +32,22 @@
     {% if all_results %}
     <div style="margin-left: 10%; margin-right: 5%; ">
         <div class="row">
-            <div id="date_range_chart" style="margin-top: 2vw;">
-                <canvas id="myChart" width="1400" height="650"></canvas>
+        <div class="chartWrapper">
+    <div class="chartAreaWrapper">
+        <div class="chartAreaWrapper2">
+          <canvas id="myChart" height="500" width="1200"></canvas>
+        </div>
+     </div>
+    
+    </div>
+            
                 <script>
 
                     const label = [{%for i in all_results %}'{{i.record_date}}', {% endfor %}];
                     const data = [{%for i in all_results %}'{{i.total_count}}', {% endfor %}]
 
 
-
-
+                    var rectangleSet = true;
                     var ctx = document.getElementById('myChart').getContext('2d');
                     var myChart = new Chart(ctx, {
                         type: 'bar',
@@ -56,12 +60,6 @@
                                 backgroundColor: 
                                     'brown',
 
-                                
-                                // borderColor: [
-
-                                //     'brown'
-                                // ],
-                                // backgroundColor: "rgba(4,60,100,1)",
                                 borderWidth: 4,
                                 fill: false,
                                 lineTension: 0
@@ -79,7 +77,7 @@
                                         display: true,
                                         labelString: 'Count',
                                         fontColor: "black",
-                                        fontSize: 15,
+                                        fontSize: 20,
                                     },
                                 }],
                                 xAxes: [{
@@ -93,17 +91,20 @@
                                         display: true,
                                         labelString: 'Date',
                                         fontColor: "black",
-                                        fontSize: 15,
+                                        fontSize: 20,
                                     },
                                 }]
                             }
-                        }
+                        },
+                      
+                        
                     });
                 </script>
             </div>
         </div>
 
-        <div class="row" style="margin-top:2vw;">
+        <div class="row" style="margin-top:2vw ;margin-left: 20%; margin-right: 20%;">
+      
             <p style="font-size: x-large;">
                 <span style="color: red; margin-top: 1vw;">Peak day{{ peak_results|pluralize }}: </span>
                 {% for each in peak_results %}
@@ -113,12 +114,14 @@
         </div>
 
 
-        <div class="row">
-            <table class="table table-borderless table-hover" 
-            style="margin-top: 5vw; text-align: center;">
-                <th>Date</th>
+        <div class="row" style="margin-top:2vw ;margin-left: 10%; margin-right: 10%;">
+            <table class="table table-borderless table-hover " style="margin-top: 5vw; text-align: center; table-layout: fixed;">
+                <tr style="background-color:gray;">
+                    <th>Date</th>
                 <th>Total Count</th>
                 <th>Peak hour</th>
+                </tr>
+                
 
                 {% for each in all_results %}
                 <tr {% if each in peak_results %} style="background-color: palevioletred;" {% endif %}
