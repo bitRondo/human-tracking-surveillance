@@ -7,8 +7,8 @@ from .Person import Person
 from django.http import StreamingHttpResponse 
 from  django.views.decorators import gzip
 
-# lock = threading.Lock()
-# outputFrame = None
+lock = threading.Lock()
+outputFrame = None
 
 newPersons=0
 class HumanTrackingSystem(threading.Thread):
@@ -110,22 +110,31 @@ class HumanTrackingSystem(threading.Thread):
                 else:
                     index+=1  
             
-            # with lock:
-            #     global outputFrame
-            #     outputFrame = frame.copy()
+            with lock:
+                 global outputFrame
+                 outputFrame = frame.copy()
 
-            cv.imshow('Frame',frame)
+            #cv.imshow('Frame',frame)
             k = cv.waitKey(30) & 0xff
             if k == 27:
                 break
         cap.release()
         cv.destroyAllWindows()
+
+
+
     
 def getNew():
     global newPersons
     temp=newPersons
     newPersons=0
-    return temp  
+    return temp
+
+def getFrame():
+    ret, jpeg = cv.imencode('.jpg', outputFrame)
+    return jpeg.tobytes()
+
+
 
 
 
