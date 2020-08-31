@@ -33,7 +33,7 @@ class HumanTrackingSystem(threading.Thread):
         kernelOp = np.ones((3,3),np.uint8)
         kernelOp2 = np.ones((5,5),np.uint8)
         kernelCl = np.ones((11,11),np.uint8)
-
+ 
         #Variables
         persons = []
         maxAge = 40
@@ -84,7 +84,7 @@ class HumanTrackingSystem(threading.Thread):
 
                     newTracker = True
                     for i in persons:
-                        if abs(x-i.getX()) <= w and abs(y-i.getY()) <= h:       # the object is close to one that was detected before
+                        if abs(cx-i.getX()) <= w and abs(cy-i.getY()) <= h:       # the object is close to one that was detected before
                             
                             newTracker = False
                             i.updateCoords(cx,cy)

@@ -1,22 +1,29 @@
 {% extends 'mainbase.html' %}
-
+{% load static %}
 {% block title %}Statistics - Date Range{% endblock %}
 {% block content %}
 <style>
-    html,
+    /* html,
     body {
         background-color: #f8f4ef;
+    } */
+    html,body{
+        /* background-image: url('{%static "background/Brick wall background.png" %}'); */
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
     }
 </style>
 
 <div class="col">
-    <h4 class="display-4 text-center" style="margin-top:8vw; margin-bottom:2vw;">Records within a range of dates</h4>
+    <h1 class="display-4 text-center" style="margin-top:8vw; margin-bottom:2vw;">Records within a range of dates</h1>
     <form action="{% url 'DailyRecords' %}" method="POST">
         {% csrf_token %}
 
         <div class="row" style="margin-left: 20%; margin-right: 20%;">
-            <div class="col-md-5"><label for="id_start_date">Start Date: </label> {{ form.start_date }}</div>
-            <div class="col-md-5"><label for="id_start_date">End Date: </label> {{ form.end_date }}</div>
+            <div class="col-md-5"><label for="id_start_date"><h3>Start Date: </h3></label> {{ form.start_date }}</div>
+            <div class="col-md-5"><label for="id_start_date"><h3>End Date: </h3></label> {{ form.end_date }}</div>
             <div id="search_panel" class="col-md-2">
                 <input type="submit" value="Search" class="col btn btn-primary" style="margin-top: 2vw;" id="search">
             </div>
@@ -28,7 +35,7 @@
     <div style="margin-left: 10%; margin-right: 5%; ">
         <div class="row">
             <div id="date_range_chart" style="margin-top: 2vw;">
-                <canvas id="myChart" width="1200" height="450"></canvas>
+                <canvas id="myChart" width="1400" height="650"></canvas>
                 <script>
 
                     const label = [{%for i in all_results %}'{{i.record_date}}', {% endfor %}];
@@ -126,7 +133,7 @@
         </div>
     </div>
     {% elif invalid_date_range %}
-    <p style="color: red;">Invalid Date Range!</p>
+    <div style="color: red; margin-top: 5%;" class="text-center"><h4>Invalid Date Range!</h4></div>
     {% else %}
     <div class="text-center" style="margin-top: 5%;">
         <h4>Sorry, No Results!</h4>
