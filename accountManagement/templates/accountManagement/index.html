@@ -4,13 +4,10 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<style>
-     ;
+<style>    
     #live-footage {
-        margin-top: 1vw;
         width: 640px;
-        height: 360px;
-        border-style: solid;
+        height: 480px;
     }
     #notification-bar {
         background-color: rgba(255,0,0,0.3);
@@ -26,12 +23,7 @@
     <a href="{% url 'send_monthly_report' %}" style="margin-left: 1vw;">Review</a>
 </div>
 {% endfor %}
-<h1 class="display-1 text-center" style="margin-top:15vw;">Human Tracking System</h1>
-<img src="{% url 'video_feed' %}" style = "display: block; margin-left: auto; margin-right: auto;">
-<!-- <div class="d-flex justify-content-center">
-    <div id="live-footage">
-        <p class="display-2 text-center">For all your surveillance statistics and prediction needs</p>
-    </div>
-</div> -->
+
+<img id="live-footage" src="{% url 'video_feed' %}" style = "display: block; margin-left: auto; margin-right: auto;">        
 
 {% endblock %}

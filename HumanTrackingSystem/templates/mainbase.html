@@ -38,7 +38,7 @@
         }
     </script>
     <style>
-        .navbar-custom-light { 
+        .navbar-custom { 
             color: black;
         } 
         .footer {
@@ -50,10 +50,9 @@
             text-align: center;
         }
         html,body {
-        background-image: url('{%static "background/mainBackground2.jpg" %}');
+        background-image: url('{%static "background/mainBackground.jpg" %}');
         background-size: cover;
-        background-repeat: no-repeat;
-        height: 100%;
+        background-repeat: repeat;
         font-family: 'Numans', sans-serif;
         }          
     </style>
@@ -62,8 +61,7 @@
 <body onload="showCurrentTime()">
     {% if user.is_authenticated %}
     <div id="header" class="fixed-top">
-
-        <nav class="navbar navbar-expand-lg bg-dark navbar-custom">
+        <nav class="navbar navbar-expand-lg navbar-custom" style="background-color: rgba(0,64,112,0.9);">
             <a class="navbar-brand" href="{% url 'index' %}">
                 <img width="100px" height="50px"src='{% static "background/24SurveilLogo.png"%}'>
               </a>
@@ -94,7 +92,7 @@
                 <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link text-white">Logout</a></li>
             </ul>
         </nav>
-        <nav class="navbar navbar-expand-sm  bg-secondary navbar-custom-light">
+        <nav class="navbar navbar-expand-sm navbar-custom-light" style="background-color: rgba(88,120,165,0.5);">
             <ul class="navbar-nav ml-lg-auto ">
                 <li class="col"><span id="clock"></span></li>
                 
@@ -102,45 +100,16 @@
         </nav>
     </div>
     {% endif %}
-    
-    <!-- <div class="container-fluid" style="margin-top:8vw; margin-bottom: 3vw;"> -->
+    <div style="padding-top: 8.6%;">
         {% block content %}{% endblock %}
     </div>
-    <footer class="footer bg-dark font-small">
-
-        <!-- Copyright -->
+    <footer class="footer font-small" style="background-color: rgba(0,64,112,0.9);">
         <div class="col text-center py-3">
-            <!-- <div class="row text-center">
-                Contact Us
-            </div>
-            <div class="row text-center">
-                Adress: Molpe road, Katubadda
-            </div>
-            <div class="row text-center">
-                Adress: Molpe road, Katubadda
-            </div><div class="row text-center">
-                Adress: Molpe road, Katubadda
-            </div> -->
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-
-                <!-- Links -->
-                {% comment %} <h6 class="text-uppercase font-weight-bold">Contact Us</h6>
-                <hr class="teal accent-3 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                <p> {% endcomment %}
                   <i class="fas fa-home mr-3"></i> INFO: 24surveil@gmail.com</p>
-                <!-- <p>
-                  <i class="fas fa-envelope mr-3"></i> info@example.com</p>
-                <p>
-                  <i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
-                <p>
-                  <i class="fas fa-print mr-3"></i> + 01 234 567 89</p> -->
-        
               </div>
         </div>
-        <!-- Copyright -->
-      
       </footer>
-      <!-- Footer -->
 </body>
 
 </html>

@@ -5,43 +5,34 @@
 {% block content %}
 
 <style>
-    html,body{
-        /* background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb'); */
-        background-image: url('{%static "background/predictionBackground.jpg" %}');
-        background-size: cover;
-        background-repeat: no-repeat;
-        height: 100%;
-        font-family: 'Numans', sans-serif;
-    }
     .errorlist {
         list-style-type: none;
         color: red;
         padding-left: 0;
     }
+
     /* .card-header{
         background-color:;
     } */
-    .card{
-        height: 570px;
-        margin-top: auto;
-        margin-bottom: auto;
+    .card {
         width: 600px;
-        background-color:rgba(0,0,0,0.5) !important;
-        }
+        background-color: rgba(255, 255, 255, 0.7) !important;
+        padding-bottom: 0.5vw;
+    }
 </style>
 
 <div class="container">
-    <div class="d-flex justify-content-center h-100">
-        <div class="card" style="margin-top:10vw;">
+    <div class="d-flex justify-content-center">
+        <div class="card">
             <div class="card-header">
-                <h1 class="display-3 text-center text-white">Registration</h1>
+                <h1 class="display-3 text-center">Registration</h1>
             </div>
             {% if connectivity %}
             <div class="card-body">
                 <form action="{% url 'register' %}" method="POST">
                     {% csrf_token %}
-    
-                    <div class="form-group text-white">
+
+                    <div class="form-group">
                         <div id="names" class="row">
                             <div name="firstname" class="col-md-5 was-validated">
                                 {{ form.first_name }}
@@ -85,26 +76,29 @@
                                 </div>
                             </div>
                         </div>
-                        <div style="margin-bottom: 2vw;"></div>
+
                         <div id="reception" class="row">
                             <div class="col">
-                                <label for="id_receive_reports">Enable Reception of Monthly Reports</label>
-                                <div>{{ form.receive_reports }}</div>
+                                <label for="id_receive_reports" style="margin-right: 1vw;">
+                                    Enable Reception of Monthly Reports</label>
+                                {{ form.receive_reports }}
                             </div>
                         </div>
-                    </div>   
-                    <input type="submit" name="register" value="Register" class="btn btn-primary">
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" name="register" value="Register" class="btn btn-primary">
+                    </div>
                 </form>
-          </div>
-      </div>
-  </div>
+            </div>
+            {% else %}
+            <div class="text-center" style="color: white;">
+                <h1 class="display-1" style="color: red;">No Internet!</h1>
+                <h3>Registration process cannot be continued without internet connection.</h3>
+                <h3>Please connect your device to the internet, and then refresh the browser.</h3>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    
-        
 </div>
-{% else %}
-    <h1 class="display-1" style="color: red;">No Internet!</h1>
-    <h3>Registration process cannot be continued without internet connection.</h3>
-    <h3>Please connect your device to the internet, and then refresh the browser.</h3>
-{% endif %}
+
 {% endblock %}

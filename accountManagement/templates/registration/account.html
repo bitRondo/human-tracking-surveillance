@@ -3,91 +3,48 @@
 {% block title %}Account{% endblock %}
 
 {% block content %}
-<style>
-    html,body{
-        background-image: url('{%static "background/mainBackground.jpg" %}');
-        background-size: cover;
-        background-repeat: no-repeat;
-        height: 100%;
-        font-family: 'Numans', sans-serif;
-}
 
-.card{
-        height: 400px;
-        margin-top: auto;
-        margin-bottom: auto;
-        width: 700px;
-        background-color:rgba(0,0,0,0.5) !important;
-        }
-</style>
-<div class="container">
-    <div class="d-flex justify-content-center h-400"></div>
-    <div class=" text-black" style="margin-top:13vw; margin-left: 15%;">
-        <h1 class="display-4 text-center">{{ user.first_name }} {{ user.last_name }}</h1>
-        <div style="margin-bottom: 2vw;"></div>
-            <div class="row">
-                <div class="col-md-4" style="margin-left:5vw;">
-                    <h3>Username  : </h3>
-                </div>
-                <div class="col-md-5" style="margin-top: 0.2vw;">
-                    <h3>{{ user.username }}</h3>
-                </div>
+<div class="container" style="background-color: rgba(255,255,255,0.5);">
+    <div class="justify-content-center">
+        <div class="text-black">
+            <h1 class="display-4 text-center">{{ user.first_name }} {{ user.last_name }}</h1>
+            <div style="margin-bottom: 1vw;"></div>
+            <div class="text-center">
+                    <h4>Username</h4><h2>{{ user.username }}</h2>
+                    <hr>
+                    <h4>Email</h4><h2>{{ user.email }}</h2>
             </div>
-            <div style="margin-bottom: 2vw;"></div>
-            <div class="row">
-                <div class="col-md-4"style="margin-left:5vw;">
-                    <h3>Email  : </h3>
-                </div>
-                <div class="col-md-5" style="margin-top: 0.2vw;">
-                    <h3>{{ user.email }}</h3>
-                </div>
+            <hr>
+            <div class="text-center">
+                <a href="{% url 'password_change' %}">
+                    <h1 class="btn btn-secondary btn-lg btn-tooltip" data-toggle="tooltip" data-placement="top"
+                        title="Change Password" data-container="body" data-animation="true" id="change_password">Change
+                        Password</h1>
+                </a>
             </div>
-            <div style="margin-bottom: 2vw;"></div>
-            <div class="row" style="margin-left: 5vw;">
-                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary btn-lg btn-tooltip" data-toggle="tooltip" data-placement="top" title="Tooltip on top" data-container="body" data-animation="true" id="change_password">Change Password</h1></a>
-            </div>
-                   
-            <div style="margin-bottom: 2vw;"></div>
-            <div class="row">
-                <div class="col-md-5 " style="margin-left:5vw;">
-                    <h4>Reception of Monthly Reports  : </h4>
-                </div>
-                
-                <div class="col-md-4">
+            <hr>
+            <div class="text-center" style="padding-bottom: 2vw;">
+                    <h4>Reception of Monthly Reports</h4>
                     <form action="{% url 'account' %}" method="POST">
                         {% csrf_token %}
                         {% if user.receive_reports %}
-                            <h5 style="color:black;margin-top: 0.3vw;">Enabled</h5>
-                            <button type="submit" name="receive_reports" value="off" class="btn btn-lg btn-danger" id="disable">
-                                Disable above facility
-                            </button>
+                        <h2>Enabled</h2>
+                        <button type="submit" name="receive_reports" value="off" class="btn btn-lg btn-danger"
+                            id="disable">
+                            Disable above facility
+                        </button>
                         {% else %}
-                            <h5 style="color:black; margin-top: 0.3vw;">Disabled</h5>
-                            <button type="submit" name="receive_reports" value="on" class="btn btn-lg btn-success" id="enable">
-                                Enable above facility    
-                            </button>
+                        <h2>Disabled</h2>
+                        <button type="submit" name="receive_reports" value="on" class="btn btn-lg btn-success"
+                            id="enable">
+                            Enable above facility
+                        </button>
                         {% endif %}
-                        
+
                     </form>
-                </div>
-                    
             </div>
-
-                    
-                
-                </div>
-                
-                <div class="col">
-                    
-            
-                        
-                </div>
-        </div> 
+        </div>
     </div>
-       
 </div>
-
-  
- 
 
 {% endblock %}
