@@ -14,8 +14,8 @@
     }
 </style>
 
-<div class="col">
-    <h1 class="display-4 text-center" style="margin-top:8vw; margin-bottom:2vw;">Records within a range of dates</h1>
+<div class="col" style="background-color: rgba(255,255,255,0.5); padding-bottom: 2vw;">
+    <h1 class="display-4 text-center">Records within a range of dates</h1>
     <form action="{% url 'DailyRecords' %}" method="POST">
         {% csrf_token %}
 

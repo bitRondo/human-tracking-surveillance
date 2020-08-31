@@ -3,13 +3,6 @@
 
 {% block content %}
 <style>
-     html,body{
-        background-image: url("/static/background/Brick wall background.png");
-        background-size: cover;
-        background-repeat: no-repeat;
-        height: 100%;
-        font-family: 'Numans', sans-serif;
-}  
     .mode-label {
         font-size: x-large;
         text-transform: uppercase;
@@ -28,7 +21,7 @@
 
 <div class="text-black">
     <div id="system">
-        <h1 class="display-4 text-center" style="margin-top:7vw;">System Settings</h1>
+        <h1 class="display-4 text-center">System Settings</h1>
 
         <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
             {% csrf_token %}
