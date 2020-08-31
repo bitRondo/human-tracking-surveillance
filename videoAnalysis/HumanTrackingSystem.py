@@ -33,7 +33,7 @@ class HumanTrackingSystem(threading.Thread):
         kernelOp = np.ones((3,3),np.uint8)
         kernelOp2 = np.ones((5,5),np.uint8)
         kernelCl = np.ones((11,11),np.uint8)
-
+ 
         #Variables
         persons = []
         maxAge = 40

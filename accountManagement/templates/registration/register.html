@@ -1,11 +1,13 @@
 {% extends 'mainbase.html'%}
+{% load static %}
 {% block title %}Registration{% endblock %}
 
 {% block content %}
 
 <style>
     html,body{
-        background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb');
+        /* background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb'); */
+        background-image: url('{%static "background/predictionBackground.jpg" %}');
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;

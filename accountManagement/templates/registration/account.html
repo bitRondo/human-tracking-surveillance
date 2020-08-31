@@ -1,11 +1,12 @@
 {% extends 'mainbase.html' %}
-
+{% load static %}
 {% block title %}Account{% endblock %}
 
 {% block content %}
 <style>
     html,body{
-        background-image: url('https://icdn2.digitaltrends.com/image/digitaltrends/pexels-photo-392018-2.jpg');
+        background-image: url('{%static "background/Brick wall background.png" %}');
+        /* opacity: 0.7; */
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
@@ -22,34 +23,34 @@
 </style>
 <div class="container">
     <div class="d-flex justify-content-center h-400"></div>
-    <div class="card text-white" style="margin-top:10vw; margin-left: 15%;">
-        <h2 class="display-4 text-center">{{ user.first_name }} {{ user.last_name }}</h2>
+    <div class=" text-black" style="margin-top:13vw; margin-left: 15%;">
+        <h1 class="display-4 text-center">{{ user.first_name }} {{ user.last_name }}</h1>
         <div style="margin-bottom: 2vw;"></div>
             <div class="row">
                 <div class="col-md-4" style="margin-left:5vw;">
-                    <h4>Username  : </h4>
+                    <h3>Username  : </h3>
                 </div>
                 <div class="col-md-5" style="margin-top: 0.2vw;">
-                    <h5>{{ user.username }}</h5>
+                    <h3>{{ user.username }}</h3>
                 </div>
             </div>
             <div style="margin-bottom: 2vw;"></div>
             <div class="row">
                 <div class="col-md-4"style="margin-left:5vw;">
-                    <h4>Email  : </h4>
+                    <h3>Email  : </h3>
                 </div>
                 <div class="col-md-5" style="margin-top: 0.2vw;">
-                    <h5>{{ user.email }}</h5>
+                    <h3>{{ user.email }}</h3>
                 </div>
             </div>
             <div style="margin-bottom: 2vw;"></div>
             <div class="row" style="margin-left: 5vw;">
-                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary" id="change_password">Change Password</h1></a>
+                <a href="{% url 'password_change' %}"><h1 class="btn btn-primary btn-lg btn-tooltip" data-toggle="tooltip" data-placement="top" title="Tooltip on top" data-container="body" data-animation="true" id="change_password">Change Password</h1></a>
             </div>
                    
             <div style="margin-bottom: 2vw;"></div>
             <div class="row">
-                <div class="col-md-6 " style="margin-left:5vw;">
+                <div class="col-md-5 " style="margin-left:5vw;">
                     <h4>Reception of Monthly Reports  : </h4>
                 </div>
                 
@@ -57,16 +58,17 @@
                     <form action="{% url 'account' %}" method="POST">
                         {% csrf_token %}
                         {% if user.receive_reports %}
-                            <h5 style="color:white;margin-top: 0.3vw;" title="Current ability to receive monthly reports">Enabled</h5>
-                            <button type="submit" name="receive_reports" value="off" class="btn btn-danger" id="disable">
+                            <h5 style="color:black;margin-top: 0.3vw;">Enabled</h5>
+                            <button type="submit" name="receive_reports" value="off" class="btn btn-lg btn-danger" id="disable">
                                 Disable above facility
                             </button>
                         {% else %}
-                            <h5 style="color:white; margin-top: 0.3vw;" title="Current ability to receive monthly reports">Disabled</h5>
-                            <button type="submit" name="receive_reports" value="on" class="btn btn-success" id="enable">
+                            <h5 style="color:black; margin-top: 0.3vw;">Disabled</h5>
+                            <button type="submit" name="receive_reports" value="on" class="btn btn-lg btn-success" id="enable">
                                 Enable above facility    
                             </button>
                         {% endif %}
+                        
                     </form>
                 </div>
                     
@@ -86,7 +88,7 @@
        
 </div>
 
-        
+  
  
 
 {% endblock %}
