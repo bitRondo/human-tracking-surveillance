@@ -38,13 +38,7 @@
         }
     </script>
     <style>
-       .navbar-custom { 
-            background-color:#3e2723 ;
-            font-size: 15px;
-         
-        }
         .navbar-custom-light { 
-            background-color: #d4c1ba ; 
             color: black;
         } 
         .footer {
@@ -52,12 +46,16 @@
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: #3e2723;
             color: white;
             text-align: center;
         }
-
-         
+        html,body {
+        background-image: url('{%static "background/mainBackground2.jpg" %}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+        }          
     </style>
 
 </head>
@@ -65,9 +63,9 @@
     {% if user.is_authenticated %}
     <div id="header" class="fixed-top">
 
-        <nav class="navbar navbar-expand-lg  navbar-custom">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-custom">
             <a class="navbar-brand" href="{% url 'index' %}">
-                <img width="130px" height="70px"src='{% static "background/Logo.png"%}'>
+                <img width="100px" height="50px"src='{% static "background/24SurveilLogo.png"%}'>
               </a>
             <ul class="navbar-nav ml-auto">
                 
@@ -96,7 +94,7 @@
                 <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link text-white">Logout</a></li>
             </ul>
         </nav>
-        <nav class="navbar navbar-expand-sm  navbar-custom-light">
+        <nav class="navbar navbar-expand-sm  bg-secondary navbar-custom-light">
             <ul class="navbar-nav ml-lg-auto ">
                 <li class="col"><span id="clock"></span></li>
                 
@@ -108,7 +106,7 @@
     <!-- <div class="container-fluid" style="margin-top:8vw; margin-bottom: 3vw;"> -->
         {% block content %}{% endblock %}
     </div>
-    <footer class="footer font-small">
+    <footer class="footer bg-dark font-small">
 
         <!-- Copyright -->
         <div class="col text-center py-3">
@@ -126,10 +124,10 @@
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
 
                 <!-- Links -->
-                <h6 class="text-uppercase font-weight-bold">Contact Us</h6>
+                {% comment %} <h6 class="text-uppercase font-weight-bold">Contact Us</h6>
                 <hr class="teal accent-3 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
-                <p>
-                  <i class="fas fa-home mr-3"></i> 24Servil@gmail.com</p>
+                <p> {% endcomment %}
+                  <i class="fas fa-home mr-3"></i> INFO: 24surveil@gmail.com</p>
                 <!-- <p>
                   <i class="fas fa-envelope mr-3"></i> info@example.com</p>
                 <p>
