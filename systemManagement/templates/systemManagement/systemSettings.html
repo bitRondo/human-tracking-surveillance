@@ -3,6 +3,14 @@
 
 {% block content %}
 <style>
+     html,body{
+        /* background-image: url("/static/background/Brick\ wall\ background.png"); */
+        /* background: linear-gradient(to right, #22c1c3, #fdbb2d); */
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
+}  
     .mode-label {
         font-size: x-large;
         text-transform: uppercase;
@@ -19,18 +27,17 @@
     }
 </style>
 
-<div class="text-black">
+<div class="text-black"  style="background-color: rgba(255,255,255,0.5);">
     <div id="system">
         <h1 class="display-4 text-center">System Settings</h1>
-
+        <h5 class="text-center">Admin password required to make changes in system settings:</h5>
         <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
             {% csrf_token %}
             <div class="container">
                 <div class="row ">
                     <div class="col col-md-4 col-sm-4"></div>
                     <div class="col col-md-4 col-sm-4">
-                        <div class="form-group was-validated">
-                            <h5>Admin password required to make changes in system settings:</h5>
+                        <div class="form-group was-validated text-center">
                             <input type="password" name="password" id="id_password" required class="form-control"
                                 style="width: 50%;">
                         </div>

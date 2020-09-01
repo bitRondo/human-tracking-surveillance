@@ -2,40 +2,42 @@
 {% block title %}UserSetting{% endblock %}
 
 {% block content %}
-<style>  
-.btn3D{
-     /* background-color: #2e1c16;  */
-    box-shadow: -10px 10px red, -9px 9px red, -8px 8px red, -7px 7px red, -6px 6px red, -5px 5px red, -4px 4px red, -3px 3px red, -2px 2px red, -1px 1px red;
-    /* border: 1px solid orange; */
-
+<style>
+body,html{
+        /* background-image: url("/static/background/mainBackground.jpg"); */
+        /* background: linear-gradient(to right, #22c1c3, #fdbb2d); */
+        background-size: cover;
+        background-repeat: no-repeat;
+        height: 100%;
+        font-family: 'Numans', sans-serif;
 } 
-.btn:hover{
-}
+
 </style>
 <div id="user">
-    <div class="container">
-        <div class="d-flex justify-content-center">
-            <div class="col-md-4"></div>
-            <div class="col-md-8">
-                <h1 class="display-3">Manage Users</h1>
-            <div style="margin-bottom: 3vw;"></div>
-           
-            
-           
-            <a href="{% url 'all_users' %}" class="col-md-6 btn btn-secondary text-center" name="view_user"> View Users</a>
-            <div style="margin-bottom: 3vw;"></div>
-            <a href="{% url 'register' %}" class="col-md-6 btn btn-secondary text-center"name="add_user"> Add New User</a>
-            <div style="margin-bottom: 3vw;"></div>        
+    <div class="container"  style="background-color: rgba(255,255,255,0.5);">
+            <h1 class="display-3 text-center">User Settings</h1><br><br>
+                <div class="row text-center">
+                    <div class="col col-md-3">
+                        <div style="margin-bottom: 3vw;"></div>
+                        <a href="{% url 'all_users' %}" class="text-center" name="view_user" title="view currently registered user accounts" data-toggle="tooltip"> <button class="btn btn-danger" style="border-radius: 100%; width: 200px; height: 200px;"><img src="/static/images/view-user.png" style="height: 75px; width: 75px; " alt="Null"> <br><p style="font-size: 23px;">View users</p> </button></a> 
+                    </div>
                     
-               
-              
-            <a href="{% url 'Security' %}" class="col-md-6 btn btn-secondary text-center" name="view_recipient">View Recipients of Security Alerts</a>
-            <div style="margin-bottom: 3vw;"></div>
-            <a href="{% url 'RecipientAdd' %}" class="col-md-6 btn btn-secondary text-center" name="add_recipient">Add New Recipient of Security Alerts</a>
-        
-            </div>
-        </div>
-        
+                    <div class="col col-md-3">
+                        <div style="margin-bottom: 3vw;"></div>
+                        <a href="{% url 'register' %}" class="text-center"name="add_user" title="Add new user account" data-toggle="tooltip"> <button class="btn btn-danger"  style="border-radius: 100%; width: 200px; height: 200px;"><img src="/static/images/add-user.png" style="height: 75px; width: 75px; " alt="Null"><br><p style="font-size: 23px;">Add users</p> </button></a>
+                    </div>
+
+                    <div class="col col-md-3"> 
+                        <div style="margin-bottom: 3vw;"></div>        
+                        <a href="{% url 'Security' %}" class="text-center" name="view_recipient" title="View all security recipients" data-toggle="tooltip"> <button class="btn btn-danger" style="border-radius: 100%; width: 200px; height: 200px;"><img src="/static/images/view-recipients.png" style="height: 75px; width: 75px;" alt="Null"><br><p style="font-size: 23px;">View Recipients</p> </button></a>
+                    </div>
+
+                    <div class="col col-md-3">
+                        <div style="margin-bottom: 3vw;"></div>
+                        <a href="{% url 'RecipientAdd' %}" class="text-center" name="add_recipient" title="Add new security recipient" data-toggle="tooltip"> <button class="btn btn-danger" style="border-radius: 100%; width: 200px; height: 200px;"><img src="/static/images/add-recipients.png" style="height: 75px; width: 75px;" alt="Null"><br><p style="font-size: 23px;">Add Recipients</p></button></a>
+                    </div>
+
+                </div>
     </div>
     
 </div>

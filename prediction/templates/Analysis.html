@@ -3,225 +3,42 @@
 {% block title %}Prediction{% endblock %}
 
 {% block content %}
-<link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+
+
 <style>
-
-.box {
-	background: linear-gradient(to right, gold, darkorange);
-	color: white;
-	--width: 250px;
-	--height: calc(var(--width) / 3);
-	width: var(--width);
-	height: var(--height);
-	text-align: center;
-	line-height: var(--height);
-	font-size: calc(var(--height) / 2.5);
-	font-family: sans-serif;
-	letter-spacing: 0.2em;
-	border: 1px solid darkgoldenrod;
-	border-radius: 2em;
-	transform: perspective(500px) rotateY(-15deg);
-	text-shadow: 6px 3px 2px rgba(0, 0, 0, 0.2);
-	box-shadow: 2px 0 0 5px rgba(0, 0, 0, 0.2);
-	transition: 0.5s;
-	position: relative;
-	overflow: hidden;
-}
-
-.box:hover {
-	transform: perspective(500px) rotateY(15deg);
-	text-shadow: -6px 3px 2px rgba(0, 0, 0, 0.2);
-	box-shadow: -2px 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-.box::before {
-	content: '';
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(to right, transparent, white, transparent);
-	left: -100%;
-	transition: 0.5s;
-}
-
-.box:hover::before {
-	left: 100%;
-}
-body{
-  /* background-image: url("/static/background/predictionBackground.jpg"); */
-  background-size:unset;
-  background-color:#fffdfb;
-}
-
-    h1{
-      font-size: 30px;
-      color: black;
-      text-transform: uppercase;
-      font-weight: 300;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    table{
-      width:100%;
-      table-layout: fixed;
-    }
-    .tbl-header{
-      background-color:black;
-      font:status-bar;
-      border: 1px solid black;
-     }
-    .tbl-content{
-      height:300px;
-      overflow-x:auto;
-      margin-top: 0px;
-      border: 1px solid black;
-    }
-    th{
-      padding: 20px 15px;
-      text-align: left;
-      font-weight: 500;
-      font-size: 12px;
-      color: white;
-      text-transform: uppercase;
-    }
-    td{
-      padding: 15px;
-      text-align: left;
-      vertical-align:middle;
-      font-weight: 300;
-      font-size: 12px;
-      color: black;
-      border-bottom: solid 1px rgba(255,255,255,0.1);
-    }
-    
-    
-    /* demo styles */
-    
-    @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
-    body{
-      /* background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-      background: linear-gradient(to right, #25c481, #25b7c4); */
-      font-family: 'Roboto', sans-serif;
-    }
-    section{
-      margin: 50px;
-    }
-    
-    
-    /* follow me template */
-    .made-with-love {
-      margin-top: 40px;
-      padding: 10px;
-      clear: left;
-      text-align: center;
-      font-size: 10px;
-      font-family: arial;
-      color: black;
-    }
-    .made-with-love i {
-      font-style: normal;
-      color: #F50057;
-      font-size: 14px;
-      position: relative;
-      top: 2px;
-    }
-    .made-with-love a {
-      color: black;
-      text-decoration: none;
-    }
-    .made-with-love a:hover {
-      text-decoration: underline;
-    }
-    
-    
-    /* for custom scrollbar for webkit browser*/
-    
-    ::-webkit-scrollbar {
-        width: 6px;
-    } 
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    } 
-    ::-webkit-scrollbar-thumb {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    }
+html,body{
+  /* background-image: url("/static/background/mainBackground.jpg"); */
+        
+}  
 </style>
-
-<br><br><br><br><br><br>
-<div >
-    {% if Data %}
-    <div class="row">
-    <div class="col col-md-6">
-        <section>
-            <h1>Daily record</h1>
-            <div class="tbl-header">
-              <table cellpadding="0" cellspacing="0" border="0">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Total count</th>
-                    <th>Peak hour</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            <div class="tbl-content">
-                <table cellpadding="0" cellspacing="0" border="0">
-                    <tbody>
-                        {% for each in Data %}
-                        <tr>
-                            <td style="padding-left: 5px;">{{ each.record_date|date:"Y-m-d" }}</td>
-                            <td>{{ each.total_count }}</td>
-                            <td>{{ each.peak_hour_start|date:"H:i" }} to
-                            {{ each.peak_hour_end|date:"H:i" }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>>
-                </table>
-            </div>
-        </section>
-         
-    </div>
-    <div class="col col-md-6">
-    
-    {% if data %}
-        <form action="{% url 'training' %}" method="POST">
-            {% csrf_token %}
-            <input type="submit" value="Analys Data" class="box" style="width: fit-content;">
-        </form> <br>
-        <!-- <img src="data:image/png;base64,{{ fig }}" alt=""> -->
-        {% include "chart.html" with caption="Daily Record" %}
-    {% else %}
-    <div>
-        <strong>Select a date range within next 14 days</strong><hr>
+<div class="container"  style="background-color: rgba(255,255,255,0.5);">
+        <h1 class="text-center">Prediction</h1>
+        <br><br><br><br><br>
+        <h4 class="text-center">Select a date range within next two weeks</h4>
         <form action="{% url 'getPre' %}" method="POST">
             {% csrf_token %}
+            <br><br>
             <div class="row" >
-                <div class="form-group" style="margin-right: 178px;">
-                    <label for="Sdate"><strong>Starting date:</strong></label>
+              <div class="col col-md-6 col-sm-6">
+                <div class="form-group">
+                    <div class="text-center"><label for="Sdate"><h5>Start date</h5></label></div>
                     <input type="date"  onchange="myFun()" class="form-control" min={{nowDate}} id="Sdate" name="startDate" required>
                 </div>
+              </div>
+              <div class="col col-md-6 col-sm-6">
                 <div class="form-group">
-                    <label for="Edate"><strong>Ending date:</strong></label>
-                    <input type="date" class="form-control" min={{nowDate}} id="Edate" name="endDate" required>
+                    <div class="text-center"><label for="Edate"><h5>End date</h5></label></div>
+                    <input type="date" onchange="myFun1()" class="form-control" min={{nowDate}} id="Edate" name="endDate" required>
+                </div>
+              </div>
+            </div><br>
+            <div class="row text-center">
+                <div class="col col-md-4 col-sm-4"></div>
+                <div class="col col-md-4 col-sm-4">
+                  <input type="submit" value="Get prediction" class="btn btn-primary" style="margin-top: 2vw;">
                 </div>
             </div>
-            <div class="row" style="margin-right: 100px;">
-                <input type="submit" value="Get prediction" class="col btn btn-dark" style="margin-top: 2vw; ">
-            </div>
         </form>
-    </div>
-    {% endif %}
-
-    <div id="parentID">
-
-    </div>
-    </div>
-    </div>
-    {% else %}
-        <p>Sorry, No Results </p>
-    {% endif %}  
-    <br>
 </div>
 
 <script type='text/javascript'>
@@ -237,6 +54,10 @@ body{
     function myFun(){
         var startDate = document.getElementById('Sdate').value
         document.getElementById("Edate").min = startDate
+    }
+    function myFun1(){
+        var endDate = document.getElementById('Edate').value
+        document.getElementById("Sdate").max = endDate
     }
     
 </script>

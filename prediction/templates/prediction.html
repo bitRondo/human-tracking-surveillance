@@ -4,145 +4,95 @@
 
 {% block content %}
 <style>
- body{
-  /* background-image: url("/static/background/predictionBackground.jpg"); */
-  background-size:unset;
-  background-color:#fffdfb;
-}
-
-    h1{
-      font-size: 30px;
-      color: black;
-      text-transform: uppercase;
-      font-weight: 300;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    table{
-      width:100%;
-      table-layout: fixed;
-    }
-    .tbl-header{
-      background-color:black;
-      font:status-bar;
-      border: 1px solid black;
-     }
-    .tbl-content{
-      height:300px;
-      overflow-x:auto;
-      margin-top: 0px;
-      border: 1px solid black;
-    }
-    th{
-      padding: 20px 15px;
-      text-align: left;
-      font-weight: 500;
-      font-size: 12px;
-      color: white;
-      text-transform: uppercase;
-    }
-    td{
-      padding: 15px;
-      text-align: left;
-      vertical-align:middle;
-      font-weight: 300;
-      font-size: 12px;
-      color: black;
-      border-bottom: solid 1px rgba(255,255,255,0.1);
-    }
-    
-    
-    /* demo styles */
-    
-    @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,300,700);
-    body{
-      /* background: -webkit-linear-gradient(left, #25c481, #25b7c4);
-      background: linear-gradient(to right, #25c481, #25b7c4); */
-      font-family: 'Roboto', sans-serif;
-    }
-    section{
-      margin: 50px;
-    }
-    
-    
-    /* follow me template */
-    .made-with-love {
-      margin-top: 40px;
-      padding: 10px;
-      clear: left;
-      text-align: center;
-      font-size: 10px;
-      font-family: arial;
-      color: black;
-    }
-    .made-with-love i {
-      font-style: normal;
-      color: #F50057;
-      font-size: 14px;
-      position: relative;
-      top: 2px;
-    }
-    .made-with-love a {
-      color: black;
-      text-decoration: none;
-    }
-    .made-with-love a:hover {
-      text-decoration: underline;
-    }
-    
-    
-    /* for custom scrollbar for webkit browser*/
-    
-    ::-webkit-scrollbar {
-        width: 6px;
-    } 
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    } 
-    ::-webkit-scrollbar-thumb {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-    }
+html,body{
+        /* background-image: url("/static/background/mainBackground.jpg"); */
+        
+}  
 </style>
 
-<br><br><br><br><br><br>
-<div>
+<div class="container" style="background-color: rgba(255,255,255,0.5);">
     {% if predictions %}
+    <div class="text-center"> 
+      <h1>Predicted daily record</h1>
+    </div><br><br><br>
     <div class="row">
         <div class="col col-md-6">
-            <!-- <img src="data:image/png;base64,{{ fig }}" alt=""> -->
-            {% include "chart.html" with caption="Predictions" %}
+          <canvas id="myChart"></canvas>
+                <script>
+
+                    const label = [{% for i in category %}'{{i}}', {% endfor %}];
+                    const data1 = [{% for i in data %}'{{i}}', {% endfor %}]
+
+
+
+
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: label,
+                            datasets: [{
+                                label: 'count',
+                                data: data1,
+                                backgroundColor:'brown',
+                                borderWidth: 4,
+                                fill: false,
+                                lineTension: 0
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        fontColor: "black",
+                                        fontSize: 10,
+                                        beginAtZero: true
+                                        
+                                    },
+                                    // scaleLabel: {
+                                    //     display: true,
+                                    //     labelString: 'Count',
+                                    //     fontColor: "black",
+                                    //     fontSize: 15,
+                                    // },
+                                }],
+                                xAxes: [{
+                                    ticks: {
+                                        fontColor: "black",
+                                        fontSize: 10,
+                                        beginAtZero: true
+                                    },
+                                    // scaleLabel: {
+                                    //     display: true,
+                                    //     labelString: 'Time',
+                                    //     fontColor: "black",
+                                    //     fontSize: 15,
+                                    // },
+                                }]
+                            }
+                        }
+                    });
+                </script>
+              <h5 class="text-center">Peak count: {{max}}</h5><hr>
+              <h5 class="text-center" style="color: red;">Peak day(s)</h5>
+              {% for each in peakDates%}
+                <h5 class="text-center"> {{each}} </h5><br>
+              {% endfor %}
         </div>
         <div class="col col-md-6">
           <section>
-            <h1>Predicted daily record</h1>
-            <h1>Peak count: {{max}}</h1>
-            <div class="tbl-header">
-              <table cellpadding="0" cellspacing="0" border="0">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Total count</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-            <div class="tbl-content">
-                <table cellpadding="0" cellspacing="0" border="0">
-                    <tbody>
-                        {% for key, value in predictions.items %}
-                        <tr>
-                            <td >{{ key|date:"Y-m-d" }}</td>
-                            <td>{{ value }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>>
-                </table>
-            </div>
-            <br>
-            <h1 style="float: left;">Peak days: </h1>
-            {% for each in peakDates%}
-            <h1 style="float: left; margin-left: 10px;"> {{each}} </h1>
-            {% endfor %}
+            <table  class="table table-borderless table-hover table-striped">
+              <tr style="background-color:gray;">
+                  <th>Date</th>
+                  <th>Total count</th>
+              </tr>
+              {% for key, value in predictions.items %}
+              <tr>
+                  <td>{{ key|date:"Y-m-d" }}</td>
+                  <td>{{ value }}</td>
+              </tr>
+              {% endfor %}
+            </table>
         </section>
        
         </div>
