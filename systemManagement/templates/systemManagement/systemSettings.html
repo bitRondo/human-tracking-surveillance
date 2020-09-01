@@ -3,108 +3,92 @@
 
 {% block content %}
 <style>
-     html,body{
-        /* background-image: url("/static/background/Brick\ wall\ background.png"); */
-        /* background: linear-gradient(to right, #22c1c3, #fdbb2d); */
-        background-size: cover;
-        background-repeat: no-repeat;
-        height: 100%;
-        font-family: 'Numans', sans-serif;
-}  
     .mode-label {
         font-size: x-large;
         text-transform: uppercase;
         margin-left: 1vw;
     }
+
     .mode-selected {
-        background-color: rgba(0,0,0, 0.3);
+        background-color: rgba(0, 0, 0, 0.3);
         border-radius: 1vw;
     }
+
     .current-mode {
-        background-color: rgba(255,0,0,0.4);
+        background-color: rgba(255, 0, 0, 0.4);
         padding: 0.4vw;
         border-radius: 1vw;
     }
 </style>
 
-<div class="text-black"  style="background-color: rgba(255,255,255,0.5);">
+<div class="container text-black" style="background-color: rgba(255,255,255,0.5);">
     <div id="system">
-        <h1 class="display-4 text-center">System Settings</h1>
-        <h5 class="text-center">Admin password required to make changes in system settings:</h5>
+        <h1 class="display-4">System Settings</h1>
+        <h3>Current mode: <span class="current-mode">{{ mode }}</span></h3>
         <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
             {% csrf_token %}
-            <div class="container">
-                <div class="row ">
-                    <div class="col col-md-4 col-sm-4"></div>
-                    <div class="col col-md-4 col-sm-4">
-                        <div class="form-group was-validated text-center">
-                            <input type="password" name="password" id="id_password" required class="form-control"
-                                style="width: 50%;">
-                        </div>
-                        <p class="invalid-feedback">{{ verification_failed }}</p>
-                        <h3>Current mode: <span class="current-mode">{{ mode }}</span></h3>
-                        <hr>
-                    </div>
-                </div>
+            <div class="">
                 <div class="row">
-                    <div class="col col-md-1 col-sm-1"></div>
-                    <div class="col col-md-5 col-sm-5">
+                    <div class="col-md-6" style="padding-top: 5vw;">
+                        <div class="form-group">
+                            <h3>Manual Switching</h3>
+                            <div style="font-size: large;">
+                                <label for="id_change_mode">Change Mode to </label>
+                                <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}
+                                    class="btn btn-success">
+                                    {{ validMode }}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group">
                             <h3>Automatic Switching</h3>
                             <div class="form-check-inline">
                                 {% for mode in form.auto_switching %}
                                 <div id="div-of-{{ mode.choice_label }}">
-                                    <label for="{{ mode.id_for_label }}" class="mode-label">{{ mode.choice_label }}</label>
+                                    <label for="{{ mode.id_for_label }}"
+                                        class="mode-label">{{ mode.choice_label }}</label>
                                     <span>{{ mode.tag }}</span>
                                 </div>
                                 {% endfor %}
                             </div>
-                            <h3 style="margin-top: 2vw;">Business Mode</h3><span id="business_error" style="color: red;"></span>
+                            <h3 style="margin-top: 2vw;">Business Mode</h3><span id="business_error"
+                                style="color: red;"></span>
                             <div class="form-inline" style="font-size: large;">
                                 {{ form.business_start.label }}{{ form.business_start }}
                                 {{ form.business_end.label }}{{ form.business_end }}
                             </div>
 
 
-                            <h3 style="margin-top: 1vw;">Security Mode</h3><span id="security_error" style="color: red;"></span>
+                            <h3 style="margin-top: 1vw;">Security Mode</h3><span id="security_error"
+                                style="color: red;"></span>
                             <div class="form-inline" style="font-size: large;">
                                 {{ form.security_start.label }}{{ form.security_start }}
                                 {{ form.security_end.label }}{{ form.security_end }}
                             </div>
 
                             <br>
-                            
-                        </div>
-                    </div>
-                    <div class="col col-md-1 col-sm-1"></div>
-                    <div class="col col-md-5 col-sm-5">
-                        <br><br><br><br><br>
-                        <div class="form-group">
-                            <h3>Manual Switching</h3>
-                            <div style="font-size: large;">
-                            <label for="id_change_mode">Change Mode to </label>
-                            <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}
-                                class="btn btn-success">
-                                {{ validMode }}</button>
-                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col col-md-4 col-sm-4"></div>
-                    <div class="col col-md-4 col-sm-4 text-center">
-                        <span id="errors" style="color: red;"></span>
 
-                            <p><button type="submit" id="id_auto_switch" name="auto_switch" value="Save Changes"
-                                    class="btn btn-primary">
-                                    Save Changes</button>
-                                <input type="reset" value="Cancel" id="id_cancel" onclick="location.reload(true)" class="btn btn-secondary">
-                            </p>
-                    </div>
-                    
+                <div class="form-inline form-group was-validated">
+                    <label for="id_password" style="margin-right: 1vw; font-size: medium; font-weight: bold;">
+                        Admin password is required to make changes in system settings:</label>
+                    <input type="password" name="password" id="id_password" required class="form-control">
+                    <p class="invalid-feedback">{{ verification_failed }}</p>
+                </div>
+                <div>
+                    <span id="errors" style="color: red;"></span>
+                    <p><button type="submit" id="id_auto_switch" name="auto_switch" value="Save Changes"
+                            class="btn btn-primary">
+                            Save Changes</button>
+                        <input type="reset" value="Cancel" id="id_cancel" onclick="location.reload(true)"
+                            class="btn btn-secondary">
+                    </p>
                 </div>
             </div>
-
         </form>
     </div>
 
