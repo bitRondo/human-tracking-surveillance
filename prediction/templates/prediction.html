@@ -34,7 +34,7 @@ html,body{
                             datasets: [{
                                 label: 'count',
                                 data: data1,
-                                backgroundColor:'brown',
+                                backgroundColor:'rgb(9, 73, 129)',
                                 borderWidth: 4,
                                 fill: false,
                                 lineTension: 0
@@ -82,9 +82,9 @@ html,body{
         <div class="col col-md-6">
           <section>
             <table  class="table table-borderless table-hover table-striped">
-              <tr style="background-color:gray;">
-                  <th>Date</th>
-                  <th>Total count</th>
+              <tr style="background-color:rgb(9, 73, 129);">
+                  <th style="color:aliceblue">Date</th>
+                  <th style="color:aliceblue">Total count</th>
               </tr>
               {% for key, value in predictions.items %}
               <tr>
