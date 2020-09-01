@@ -24,15 +24,18 @@
 <div class="container text-black" style="background-color: rgba(255,255,255,0.5);">
     <div id="system">
         <h1 class="display-4">System Settings</h1>
-        <h3>Current mode: <span class="current-mode">{{ mode }}</span></h3>
+        <h3 style="width: 50%;" title="Currently operating mode" data-toggle="tooltip">Current mode: <span
+                class="current-mode">{{ mode }}</span></h3>
         <form action="{% url 'system_settings' %}" method="POST" id="system_settings" onsubmit="return validate()">
             {% csrf_token %}
-            <div class="">
+            <div>
                 <div class="row">
                     <div class="col-md-6" style="padding-top: 5vw;">
                         <div class="form-group">
                             <h3>Manual Switching</h3>
-                            <div style="font-size: large;">
+                            <div style="font-size: large;"
+                                title="Change to the other mode immediately. This will be disabled when Auto-Switching is enabled."
+                                data-toggle="tooltip">
                                 <label for="id_change_mode">Change Mode to </label>
                                 <button type="submit" id="id_change_mode" name="change_mode" value={{ validMode }}
                                     class="btn btn-success">
@@ -45,7 +48,9 @@
                             <h3>Automatic Switching</h3>
                             <div class="form-check-inline">
                                 {% for mode in form.auto_switching %}
-                                <div id="div-of-{{ mode.choice_label }}">
+                                <div id="div-of-{{ mode.choice_label }}" data-toggle="tooltip"
+                                    {% if mode.choice_label == "On"%} title="Enable Auto-Switching" {% else %}
+                                    title="Disable Auto-Switching" {% endif %}>
                                     <label for="{{ mode.id_for_label }}"
                                         class="mode-label">{{ mode.choice_label }}</label>
                                     <span>{{ mode.tag }}</span>
@@ -54,7 +59,9 @@
                             </div>
                             <h3 style="margin-top: 2vw;">Business Mode</h3><span id="business_error"
                                 style="color: red;"></span>
-                            <div class="form-inline" style="font-size: large;">
+                            <div class="form-inline" style="font-size: large;" title="Operating time of Business mode. 
+        This should not overlap with operating time of Security mode. 
+        However, enabling only one mode to operate is allowed." data-toggle="tooltip">
                                 {{ form.business_start.label }}{{ form.business_start }}
                                 {{ form.business_end.label }}{{ form.business_end }}
                             </div>
@@ -62,7 +69,9 @@
 
                             <h3 style="margin-top: 1vw;">Security Mode</h3><span id="security_error"
                                 style="color: red;"></span>
-                            <div class="form-inline" style="font-size: large;">
+                            <div class="form-inline" style="font-size: large;" title="Operating time of Security mode. 
+        This should not overlap with operating time of Business mode. 
+        However, enabling only one mode to operate is allowed." data-toggle="tooltip">
                                 {{ form.security_start.label }}{{ form.security_start }}
                                 {{ form.security_end.label }}{{ form.security_end }}
                             </div>
@@ -194,5 +203,10 @@
     }
 
 </script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
 
+    });
+</script>
 {% endblock %}
