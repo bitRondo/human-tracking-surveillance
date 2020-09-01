@@ -18,9 +18,24 @@
         width: 500px;
         background-color: rgba(0,0,0,0.5) !important;
         }
+    .square-1 {
+        top: 10%;
+        left: 6%;
+    }
+    .main_div { 
+        text-align:center; 
+        position: relative; 
+        top: 100px;
+        height: 50px; 
+        width: 200px; 
+    } 
 </style>
+<div class="main_div"><a type="button" class="btn btn-link text-default" href="{% url 'user_settings' %}">Back</a></div>
+
 <div class="container">
+
     <div class="d-flex justify-content-center h-400">
+
         <div class="card card-cascade narrower" style="margin-top:12vw;">
             <div class="card-header">
                 <h1 class="display-4  text-white text-center">Registration</h1>
@@ -71,7 +86,7 @@
                     <p class="col" style="color: red;">Email is already being used by a recipient.</p>
                     {% endif %}
                 
-                <div style="margin-left: 5%;">
+                <div style="margin-left: 40%;">
                     <input type="submit" name="register" value="Register" class="btn btn-primary ">
                 </div>
                 

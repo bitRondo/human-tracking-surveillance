@@ -11,6 +11,7 @@ lock = threading.Lock()
 outputFrame = None
 
 newPersons=0
+
 class HumanTrackingSystem(threading.Thread):
 
 
@@ -19,7 +20,7 @@ class HumanTrackingSystem(threading.Thread):
         
 
     def run(self):  
-        
+        people=0
         cap = cv.VideoCapture('videoAnalysis/Test Files/TestVideo.mp4')
         h = 480
         w = 640
@@ -92,13 +93,14 @@ class HumanTrackingSystem(threading.Thread):
                     if newTracker == True:
                         global lock,newPersons
                         newPersons+=1
+                        people+=1
                         p = Person(pid,cx,cy, maxAge)
                         persons.append(p)
                         pid += 1
 
                     centroid = cv.circle(frame,(cx,cy), 5, (0,0,255), -1)
                     boundingBox = cv.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-
+            cv.putText(frame,str(people),(10,30),cv.FONT_HERSHEY_SIMPLEX,1,(209, 80, 0, 255),2,cv.LINE_AA)
             #delete old trackers
             index=0
             while True:
