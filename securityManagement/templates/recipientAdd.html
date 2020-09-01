@@ -4,19 +4,19 @@
 
 {% block content %}
 <style>
-     html,body{
-        background-image: url('https://videohive.img.customer.envatousercontent.com/files/141844337/preview.jpg?auto=compress%2Cformat&fit=crop&crop=top&max-h=8000&max-w=590&s=9db15ce847a1746ae75e5048c060bdcb');
+     {% comment %} html,body{
+        
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
         font-family: 'Numans', sans-serif;
-    }
+    } {% endcomment %}
     .card{
         height: 300px;
         margin-top: auto;
         margin-bottom: auto;
         width: 500px;
-        background-color: rgba(0,0,0,0.5) !important;
+        background-color: rgba(255, 255, 255, 0.7) !important;
         }
     .square-1 {
         top: 10%;
@@ -35,12 +35,11 @@
 <div class="container">
 
     <div class="d-flex justify-content-center h-400">
-
-        <div class="card card-cascade narrower" style="margin-top:12vw;">
+        <div class="card card-cascade narrower" ">
             <div class="card-header">
-                <h1 class="display-4  text-white text-center">Registration</h1>
+                <h1 class="display-4  text- text-center">Registration</h1>
             </div>
-            <div class="card-body text-white">
+            <div class="card-body text-dark">
             <form action="" method=POST>
                 {% csrf_token %}
 
