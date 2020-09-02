@@ -157,7 +157,7 @@ def start_timer():
     else:                   # e.g. if now is 11:34, scheduling should start at 12:00
         hour, minute = (now.hour + 1)%24, 0
 
-    hour, minute = 9, 15 # VERY IMPORTANT CHANGE FOR TESTING/DEMONSTRATION PURPOSES
+    # hour, minute = 9, 15 # VERY IMPORTANT CHANGE FOR TESTING/DEMONSTRATION PURPOSES
 
     exec_time = datetime.datetime(now.year, now.month, now.day, hour = hour, minute = minute, 
     tzinfo = now.tzinfo)
