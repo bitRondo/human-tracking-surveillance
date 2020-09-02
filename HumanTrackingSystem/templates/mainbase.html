@@ -72,20 +72,23 @@
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-white" data-toggle="dropdown">Statistics</a>
                     <div class="dropdown-menu">
-                        <a href="{% url 'DailyRecords' %}" class="dropdown-item">Records within a range of dates</a>
-                        <a href="{% url 'TimelyRecords' %}" class="dropdown-item">Records on a given date</a>    
+                        <a href="{% url 'TimelyRecords' %}" class="dropdown-item">Single date</a>    
+                        <a href="{% url 'DailyRecords' %}" class="dropdown-item">Date range</a>
+                        
                     </div>
                 </li>
                 <li class="nav-item"><a href="{% url 'Prediction' %}" class="nav-link text-white">Prediction</a></li>
                 
                 {% if user.is_staff %}
-                <li class="nav-item dropdown">
+                <li class="nav-item "></li><a href="{% url 'user_settings' %}"  class="nav-link text-white">Manage users</a></li>
+                <li class="nav-item "></li><a href="{% url 'system_settings' %}"   class="nav-link text-white">System Settings</a></li>
+                <!-- <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle text-white" data-toggle="dropdown">Settings</a>
                     <div class="dropdown-menu">
                         <a href="{% url 'user_settings' %}" class="dropdown-item">Manage Users</a>
                         <a href="{% url 'system_settings' %}" class="dropdown-item">System Settings</a>    
                     </div>
-                </li>
+                </li> -->
                 {% endif %}
                 
                 <li class="nav-item"><a href="{% url 'account' %}" class="nav-link text-white">My Account</a></li>
