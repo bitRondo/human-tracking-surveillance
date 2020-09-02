@@ -16,23 +16,6 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def Analysis(request):
-    # allRecords = DailyRecord.objects.all()
-    # df = convert_to_dataframe(allRecords, fields=['record_date', 'total_count'])
-    
-    # # Json objects for data label
-    # dateList = list(df['record_date'])
-    # dateList = [date_obj.strftime('%Y/%m/%d') for date_obj in dateList]
-    # dateListJson = {'category': []}
-    # for each in dateList:
-    #     dateListJson['category'].append({'label': each})
-
-    # # Json objects for count data
-    # countList = list(df['total_count'])
-    # countListJson = {'data': []}
-    # for each in countList:
-    #     countListJson['data'].append({'value': each})
-
-    # return render(request,'Analysis.html', {'Data':allRecords, 'data':countListJson['data'], 'category':dateListJson['category']} )
     
     allRecords = DailyRecord.objects.all()
 
@@ -76,15 +59,8 @@ def getPre(request):
 
     # Json objects for date label
     dateList = list(predictions.keys())
-    # dateList = [date_obj.strftime('%Y/%m/%d') for date_obj in dateList]
-    # dateListJson = {'category': []}
-    # for each in dateList:
-    #     dateListJson['category'].append({'label': each})
 
     # Json objects for count data
     countList = list(predictions.values())
-    # countListJson = {'data': []}
-    # for each in countList:
-    #     countListJson['data'].append({'value': each})
 
     return render(request,'prediction.html',{'data':countList, 'category':dateList, 'predictions': predictions, 'max': value, 'peakDates': peakDates})
